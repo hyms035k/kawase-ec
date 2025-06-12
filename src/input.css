@@ -33,3 +33,19 @@
         }
     }
 }
+
+@screen sm { /* 640px以上で適用 */
+  .container { max-width: 640px; }
+}
+@screen md { /* 768px以上で適用 */
+  .container { max-width: 650px; }
+}
+@screen lg { /* 992px以上で適用 */
+  .container { max-width: 870px; }
+}
+@screen xl { /* 1200px以上で適用 */
+  .container { max-width: 1070px; }
+}
+@screen 2xl { /* 1367px以上で適用 */
+  .container { max-width: 1200px; }
+}

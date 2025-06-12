@@ -33,98 +33,61 @@
     },
     "main_block_container": {
       "type": "main-block-container",
-      "blocks": {
-        "topics_block_T4teHc": {
-          "type": "topics_block",
-          "settings": {
-            "show_new_arrivals": true,
-            "show_ranking": true,
-            "ranking_collection": "ランキング",
-            "products_to_show": 4
-          }
-        }
-      },
-      "block_order": [
-        "topics_block_T4teHc"
-      ],
-      "name": "メインコンテンツ",
+      "name": "TOPページ/メインコンテンツ",
       "settings": {
-        "background_image": "shopify://shop_images/top__block2nd_bg.jpg"
-      }
-    },
-    "image_banner": {
-      "type": "image-banner",
-      "blocks": {
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
-          }
-        },
-        "button": {
-          "type": "buttons",
-          "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
-      },
-      "block_order": [
-        "heading",
-        "button"
-      ],
-      "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "image_behavior": "none",
-        "desktop_content_position": "bottom-center",
-        "desktop_content_alignment": "center",
-        "show_text_box": false,
-        "color_scheme": "scheme-3",
-        "stack_images_on_mobile": false,
-        "mobile_content_alignment": "center",
-        "show_text_below": false
-      }
-    },
-    "featured_collection": {
-      "type": "featured-collection",
-      "settings": {
-        "collection": "all",
-        "products_to_show": 8,
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "columns_desktop": 4,
-        "enable_desktop_slider": false,
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "color_scheme": "scheme-1",
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "swipe_on_mobile": false,
-        "padding_top": 44,
-        "padding_bottom": 36
+        "background_image": "shopify://shop_images/top__block2nd_bg.jpg",
+        "show_new_arrivals": true,
+        "show_ranking": true,
+        "ranking_collection": "ランキング",
+        "products_to_show": 4,
+        "topics_link": "",
+        "category_banner_1_image": "shopify://shop_images/top__block2nd_category_1.jpg",
+        "category_banner_1_text_ja": "ギター",
+        "category_banner_1_text_en": "Guitar",
+        "category_banner_1_link": "",
+        "category_banner_2_image": "shopify://shop_images/top__block2nd_category_2.jpg",
+        "category_banner_2_text_ja": "アクセサリ",
+        "category_banner_2_text_en": "Accessories",
+        "category_banner_2_link": "",
+        "category_banner_3_image": "shopify://shop_images/top__block2nd_category_3.jpg",
+        "category_banner_3_text_ja": "弦",
+        "category_banner_3_text_en": "String",
+        "category_banner_3_link": "",
+        "category_banner_4_image": "shopify://shop_images/top__block2nd_category_4.jpg",
+        "category_banner_4_text_ja": "オリジナル商品",
+        "category_banner_4_text_en": "Kawase original",
+        "category_banner_4_link": "",
+        "about_text": "<p>カワセ楽器店は、1944年の創業以来、音楽愛好家の皆さまに高品質なアコースティックギターとサービスを提供してまいりました。​長年の経験と技術を活かし、楽器の販売から修理・メンテナンス、オリジナル商品の開発まで幅広く手がけています。​これからも音楽を愛するすべての方々に寄り添い、心に響く音楽体験をお届けしてまいります。</p>",
+        "about_bg_image": "shopify://shop_images/top__block2nd_about.jpg",
+        "about_link": "",
+        "news_blog": "news",
+        "news_count": 3,
+        "other_banner_5_image": "shopify://shop_images/top__block2nd_category_5.jpg",
+        "other_banner_5_text_ja": "店舗情報",
+        "other_banner_5_text_en": "About Store",
+        "other_banner_5_link": "",
+        "other_banner_6_image": "shopify://shop_images/top__block2nd_category_6.jpg",
+        "other_banner_6_text_ja": "メンテナンス",
+        "other_banner_6_text_en": "Maintenance",
+        "other_banner_6_link": "",
+        "other_banner_7_image": "shopify://shop_images/top__block2nd_category_9.jpg",
+        "other_banner_7_text_ja": "ご購入ガイド",
+        "other_banner_7_text_en": "Shopping Guide",
+        "other_banner_7_link": "",
+        "other_banner_8_image": "shopify://shop_images/top__block2nd_category_7.jpg",
+        "other_banner_8_text_ja": "楽器OEM･ODM",
+        "other_banner_8_text_en": "Instrument OEM･ODM",
+        "other_banner_8_link": "",
+        "other_banner_9_image": "shopify://shop_images/top__block2nd_category_8.jpg",
+        "other_banner_9_text_ja": "グッズOEM･ODM",
+        "other_banner_9_text_en": "Goods OEM･ODM",
+        "other_banner_9_link": ""
       }
     }
   },
   "order": [
     "hero",
     "message_section_aTjVy9",
-    "main_block_container",
-    "image_banner",
-    "featured_collection"
+    "main_block_container"
   ]
 }

@@ -6,74 +6,224 @@
 -%}
 
 <section class="isolate bg-cover bg-top" style="background-image: url('{{ bg_image }}');">
-  <div class="container block-box pt-0">
-    {%- for block in section.blocks -%}
-      <div {{ block.shopify_attributes }}>
-        {%- case block.type -%}
-          {%- when 'topics_block' -%}
-            {%- liquid
-              assign show_new_arrivals = block.settings.show_new_arrivals
-              assign ranking_collection = block.settings.ranking_collection
+  <div class="container block-box pt-0 text-[#ffe8c9]">
 
-              assign show_ranking = false
-              if block.settings.show_ranking and ranking_collection != blank and ranking_collection.products_count > 0
-                assign show_ranking = true
-              endif
-
-              assign new_arrivals_products_count = collections.all.products_count
-              if show_new_arrivals == false
-                assign new_arrivals_products_count = 0
-              endif
-
-              assign show_block_content = false
-              if show_ranking or show_new_arrivals and new_arrivals_products_count > 0
-                assign show_block_content = true
-              endif
-            -%}
-
-            {%- if show_block_content -%}
-              <div id="topics-{{ block.id }}" class="block-box pb-0 text-[#ffe8c9]">
-                <div class="max-w-6xl mx-auto">
-                  <div class="md:flex md:items-center md:justify-between">
-                    <div class="tracking-wide md:flex md:items-baseline md:gap-x-2 xl:gap-x-4 text-center md:text-left">
-                      <p class="text-4xl text-5xl xl:text-[56px] font-serif leading-tight trans-flag ani-call ani-init fromTop fadeIn">Topics</p>
-                      <h2 class="lg:text-lg xl:text-[20px] ml-2 mt-1 md:mt-0 font-sans">おすすめ商品</h2>
-                    </div>
-                    <div class="quick-tab flex justify-center md:justify-end gap-2 lg:gap-4 text-sm mt-4 md:mt-0" id="tabs-{{ block.id }}">
-                      {%- if show_ranking -%}
-                        <button data-tab="ranking-{{ block.id }}" class="topic-tab-button btn text-center active"><span><span>ランキング</span></span></button>
-                      {%- endif -%}
-                      {%- if show_new_arrivals -%}
-                        <button data-tab="new-arrivals-{{ block.id }}" class="topic-tab-button btn text-center{% unless show_ranking %} active{% endunless %}"><span><span>新着</span></span></button>
-                      {%- endif -%}
-                    </div>
-                  </div>
-                  <div class="relative mt-6 mb-11">
-                    {%- if show_ranking -%}
-                      <div id="ranking-{{ block.id }}" class="topic-tab-panel grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-3 lg:gap-6 active">
-                        {%- for product in ranking_collection.products limit: block.settings.products_to_show -%}
-                          {% render 'custom-card-product', card_product: product, count: forloop.index %}
-                        {%- endfor -%}
-                      </div>
-                    {%- endif -%}
-                    {%- if show_new_arrivals -%}
-                      <div id="new-arrivals-{{ block.id }}" class="topic-tab-panel grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-3 lg:gap-6{% unless show_ranking %} active{% endunless %}">
-                        {%- assign new_products = collections.all.products | sort: 'published_at' | reverse -%}
-                        {%- for product in new_products limit: block.settings.products_to_show -%}
-                          {% render 'custom-card-product', card_product: product, count: forloop.index %}
-                        {%- endfor -%}
-                      </div>
-                    {%- endif -%}
-                  </div>
-                  <div class="text-center">
-                    <a href="#" class="inline-block btn text-center align-middle"><span><span>詳しく見る</span></span></a>
-                  </div>
-                </div>
+    {% comment %} --- おすすめ商品ブロック --- {% endcomment %}
+    {%- liquid
+      assign show_new_arrivals = section.settings.show_new_arrivals
+      assign ranking_collection = section.settings.ranking_collection
+      assign show_ranking = false
+      if section.settings.show_ranking and ranking_collection != blank and ranking_collection.products_count > 0
+        assign show_ranking = true
+      endif
+      assign new_arrivals_products_count = collections.all.products_count
+      if show_new_arrivals == false
+        assign new_arrivals_products_count = 0
+      endif
+      assign show_topics_block = false
+      if show_ranking or show_new_arrivals and new_arrivals_products_count > 0
+        assign show_topics_block = true
+      endif
+    -%}
+    {%- if show_topics_block -%}
+      <div id="topics" class="block-box pb-0">
+        <div class="max-w-6xl mx-auto">
+          <div class="md:flex md:items-center md:justify-between">
+            <div class="tracking-wide md:flex md:items-baseline md:gap-x-2 xl:gap-x-4 text-center md:text-left">
+              <p class="text-4xl text-5xl xl:text-[56px] font-serif leading-tight trans-flag ani-call ani-init fromTop fadeIn">Topics</p>
+              <h2 class="lg:text-lg xl:text-[20px] ml-2 mt-1 md:mt-0 font-sans">おすすめ商品</h2>
+            </div>
+            <div class="quick-tab flex justify-center md:justify-end gap-2 lg:gap-4 text-sm mt-4 md:mt-0">
+              {%- if show_ranking -%}
+                <button data-tab="ranking-panel" class="topic-tab-button btn text-center active"><span><span>ランキング</span></span></button>
+              {%- endif -%}
+              {%- if show_new_arrivals -%}
+                <button data-tab="new-panel" class="topic-tab-button btn text-center{% unless show_ranking %} active{% endunless %}"><span><span>新着</span></span></button>
+              {%- endif -%}
+            </div>
+          </div>
+          <div class="relative mt-6 mb-11">
+            {%- if show_ranking -%}
+              <div id="ranking-panel" class="topic-tab-panel grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-3 lg:gap-6 active">
+                {%- for product in ranking_collection.products limit: section.settings.products_to_show -%}
+                  {% render 'custom-card-product', card_product: product %}
+                {%- endfor -%}
               </div>
             {%- endif -%}
-        {%- endcase -%}
+            {%- if show_new_arrivals -%}
+              <div id="new-panel" class="topic-tab-panel grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-3 lg:gap-6{% unless show_ranking %} active{% endunless %}">
+                {%- assign new_products = collections.all.products | sort: 'published_at' | reverse -%}
+                {%- for product in new_products limit: section.settings.products_to_show -%}
+                  {% render 'custom-card-product', card_product: product %}
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+          </div>
+          <div class="text-center">
+            <a href="{{ section.settings.topics_link | default: '#' }}" class="inline-block btn text-center align-middle"><span><span>詳しく見る</span></span></a>
+          </div>
+        </div>
       </div>
-    {%- endfor -%}
+    {%- endif -%}
+
+    {% comment %} --- 定番商品ブロック --- {% endcomment %}
+    <div id="category" class="block-box pb-0">
+      <div class="text-center mb-8 md:mb-11">
+        <h2 class="outside-double-border flex items-center mx-auto md:w-36 lg:w-48 xl:w-64 lg:text-lg xl:text-[20px] font-medium leading-tight">定番商品</h2>
+        <p class="font-serif text-4xl lg:text-5xl xl:text-[70px] leading-tight lg:leading-none trans-flag ani-call ani-init fromBottom fadeIn">Category</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8">
+        {%- for i in (1..4) -%}
+          {%- liquid
+            assign image_setting = 'category_banner_' | append: i | append: '_image'
+            assign link_setting = 'category_banner_' | append: i | append: '_link'
+            assign text_ja_setting = 'category_banner_' | append: i | append: '_text_ja'
+            assign text_en_setting = 'category_banner_' | append: i | append: '_text_en'
+            assign image = section.settings[image_setting]
+            assign text_ja = section.settings[text_ja_setting]
+          -%}
+          {% if image != blank or text_ja != blank %}
+            <a href="{{ section.settings[link_setting] | default: '#' }}" class="category-banner group relative block overflow-hidden h-[35vw] md:h-[126px] lg:h-[170px] xl:h-[238px]">
+              {%- if image != blank -%}
+                <img src="{{ image | image_url: width: 600 }}" alt="{{ image.alt | default: text_ja | escape }}" class="transition-transform duration-300 group-hover:scale-110" loading="lazy">
+              {%- else -%}
+                 <div class="w-full h-full bg-gray-700 flex items-center justify-center">{{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}</div>
+              {%- endif -%}
+              <span class="overlay-filter"></span>
+              <span class="banner-label absolute inset-0 flex items-center pl-6 md:pl-8 pb-10">
+                <span class="block">
+                  <span class="block font-medium text-sm md:text-base leading-tight mb-2">{{ text_ja }}</span>
+                  <span class="block font-serif text-[1.375rem] lg:text-3xl xl:text-[44px] leading-none tracking-wide">{{ section.settings[text_en_setting] }}</span>
+                </span>
+              </span>
+              <span class="banner-line-6"><span></span><span></span><span></span><span></span><span></span><span></span></span>
+            </a>
+          {% endif %}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    {% comment %} --- About Kawase ブロック --- {% endcomment %}
+    {%- liquid
+      assign about_bg_image = 'top__block2nd_about.jpg' | asset_url
+      if section.settings.about_bg_image != blank
+        assign about_bg_image = section.settings.about_bg_image | image_url: width: 1920
+      endif
+    %}
+    <div id="about-us" class="relative
+      pt-10
+      px-6 md:px-0
+      pb-12
+      lg:block-box
+      mt-10
+      mx-[-1.25rem] md:mx-0
+      before:absolute
+      before:block
+      before:inset-0
+      before:bg-cover
+      before:bg-center
+      before:bg-no-repeat
+      trans-flag ani-call ani-init">
+      <h2 class="relative
+        font-serif
+        text-4xl md:text-5xl xl:text-[60px]
+        text-center
+        leading-tight
+        trans-flag ani-call ani-init fromTop fadeIn">About Kawase</h2>
+      <div class="relative text-white text-justify leading-relaxed md:leading-loose mx-auto mt-6 md:w-[80%] xl:w-[60%]">{{ section.settings.about_text }}</div>
+      <div class="relative text-center mt-11">
+          <a href="{{ section.settings.about_link | default: '#' }}" class="inline-block btn text-center align-middle"><span><span>詳しく見る</span></span><span class="btn-border"></span></a>
+      </div>
+    </div>
+
+    {% comment %} --- 新着情報ブロック --- {% endcomment %}
+    {%- liquid
+      assign news_blog = section.settings.news_blog
+      assign articles_to_show = section.settings.news_count
+    -%}
+    {%- if news_blog != blank and news_blog.articles.size > 0 -%}
+    <div id="news" class="block-box pb-0">
+      <div class="max-w-6xl mx-auto">
+        <div class="md:flex md:items-center md:justify-between">
+          <div class="tracking-wide md:flex md:items-baseline md:gap-x-2 xl:gap-x-4 text-center md:text-left">
+            <p class="text-4xl text-5xl xl:text-[56px] font-serif leading-tight trans-flag ani-call ani-init fromTop fadeIn">News</p>
+            <h2 class="lg:text-lg xl:text-[20px] ml-2 mt-1 md:mt-0 font-sans">新着情報</h2>
+          </div>
+          <div class="quick-tab hidden md:flex md:justify-end md:gap-2 lg:gap-4 text-sm mt-4 md:mt-0">
+            <a href="{{ news_blog.url }}" class="btn text-center"><span><span>詳しく見る</span></span></a>
+          </div>
+        </div>
+        <ul>
+          {%- for article in news_blog.articles limit: articles_to_show -%}
+            <li class="relative overflow-hidden border-b border-[#ffe8c9] pt-8 pb-4">
+              <div class="meta-field relative flex items-center gap-2 xl:gap-4">
+                <div class="font-roboto text-xs md:text-sm whitespace-nowrap">{{ article.published_at | time_tag: format: 'date' }}</div>
+                {%- if article.tags.size > 0 -%}
+                  <a href="{{ news_blog.url }}/tagged/{{ article.tags.first | handle }}" class="inline-block text-xs md:text-sm text-[#1a2530] hover:text-[#ffe8c9] bg-[#ffe8c9] hover:bg-[#1a2530] leading-none py-2 px-4 duration-300">{{- article.tags.first -}}</a>
+                {%- endif -%}
+              </div>
+              <a href="{{ article.url }}" class="relative flex items-center text-sm md:text-base py-3 md:py-4 hover:text-white duration-300">
+                <span class="block truncate w-[calc(100%-15px)]">{{ article.title }}</span>
+                <code class="w-[15px] text-center leading-none">&gt;</code>
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+        <div class="md:hidden text-center mt-8">
+          <a href="{{ news_blog.url }}" class="inline-block btn text-center align-middle"><span><span>詳しく見る</span></span></a>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    {% comment %} --- その他バナーブロック --- {% endcomment %}
+    <div id="other-banner" class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8 mt-10 pt-8">
+      {%- for i in (5..9) -%}
+        {%- liquid
+          assign image_setting = 'other_banner_' | append: i | append: '_image'
+          assign link_setting = 'other_banner_' | append: i | append: '_link'
+          assign text_ja_setting = 'other_banner_' | append: i | append: '_text_ja'
+          assign text_en_setting = 'other_banner_' | append: i | append: '_text_en'
+          assign image = section.settings[image_setting]
+          assign text_ja = section.settings[text_ja_setting]
+          assign banner_class = "category-banner group relative block overflow-hidden h-[35vw] md:h-[126px] lg:h-[170px] xl:h-[238px]"
+          if i == 7
+            assign banner_class = "category-banner group relative block overflow-hidden h-[45vw] md:h-[200px] lg:h-[240px] xl:h-[283px] sm:col-span-2"
+          endif
+        -%}
+        {% if image != blank or text_ja != blank %}
+          <a href="{{ section.settings[link_setting] | default: '#' }}" class="{{ banner_class }}">
+            {%- if image != blank -%}
+              <img src="{{ image | image_url: width: 800 }}" alt="{{ image.alt | default: text_ja | escape }}" class="transition-transform duration-300 group-hover:scale-110" loading="lazy">
+            {%- else -%}
+              <div class="w-full h-full bg-gray-700 flex items-center justify-center">{{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}</div>
+            {%- endif -%}
+
+            {% if i == 7 %}
+              <span class="border-filter"></span>
+              <span class="banner-label !pb-0 !pl-6 md:!pl-12">
+                <span class="block">
+                  <span class="block font-medium text-sm md:text-base leading-tight mb-2">{{ text_ja }}</span>
+                  <span class="block font-serif text-[1.375rem] lg:text-3xl xl:text-[44px] leading-none tracking-wide">{{ section.settings[text_en_setting] }}</span>
+                  <span class="block text-left mt-4 md:mt-8">
+                    <span class="inline-block btn text-sm md:text-base text-center align-middle"><span><span class="!py-3 md:!py-4 !px-7 md:!px-12 leading-none">詳しく見る</span></span><span class="btn-border"></span></span>
+                  </span>
+                </span>
+              </span>
+            {% else %}
+              <span class="overlay-filter"></span>
+              <span class="banner-label absolute inset-0 flex items-center pl-6 md:pl-8 pb-10">
+                <span class="block">
+                  <span class="block font-medium text-sm md:text-base leading-tight mb-2">{{ text_ja }}</span>
+                  <span class="block font-serif text-[1.375rem] lg:text-3xl xl:text-[44px] leading-none tracking-wide">{{ section.settings[text_en_setting] }}</span>
+                </span>
+              </span>
+              <span class="banner-line-6"><span></span><span></span><span></span><span></span><span></span><span></span></span>
+            {% endif %}
+          </a>
+        {% endif %}
+      {%- endfor -%}
+    </div>
   </div>
 </section>
 
@@ -84,63 +234,127 @@
   .topic-tab-button.active > span > span {
     color: #ffe8c9 !important;
   }
+  #about-us:before {
+    background-image: url('{{ about_bg_image }}');
+  }
 {%- endstyle -%}
 
 {% schema %}
 {
-  "name": "コンテンツコンテナ",
+  "name": "TOPページ/メインコンテンツ",
   "class": "section",
   "settings": [
+    {
+      "type": "header",
+      "content": "全体設定"
+    },
     {
       "type": "image_picker",
       "id": "background_image",
       "label": "背景画像"
-    }
-  ],
-  "blocks": [
+    },
     {
-      "type": "topics_block",
-      "name": "おすすめ商品ブロック",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "header",
-          "content": "表示設定"
-        },
-        {
-          "type": "checkbox",
-          "id": "show_new_arrivals",
-          "label": "「新着」を表示する",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "id": "show_ranking",
-          "label": "「ランキング」を表示する",
-          "default": true,
-          "info": "「ランキング用コレクション」に商品が1つ以上あるコレクションを設定する必要があります。"
-        },
-        {
-          "type": "collection",
-          "id": "ranking_collection",
-          "label": "ランキング用コレクション"
-        },
-        {
-          "type": "range",
-          "id": "products_to_show",
-          "min": 2,
-          "max": 8,
-          "step": 2,
-          "default": 4,
-          "label": "表示する商品数"
-        }
-      ]
-    }
-  ],
-  "presets": [
+      "type": "header",
+      "content": "おすすめ商品 (Topics)"
+    },
     {
-      "name": "コンテンツコンテナ"
-    }
+      "type": "checkbox", "id": "show_new_arrivals", "label": "「新着」タブを表示する", "default": true
+    },
+    {
+      "type": "checkbox", "id": "show_ranking", "label": "「ランキング」タブを表示する", "default": true
+    },
+    {
+      "type": "collection", "id": "ranking_collection", "label": "ランキング用コレクション"
+    },
+    {
+      "type": "range", "id": "products_to_show", "min": 2, "max": 8, "step": 2, "default": 4, "label": "表示する商品数"
+    },
+    {
+      "type": "url", "id": "topics_link", "label": "「詳しく見る」のリンク先"
+    },
+    {
+      "type": "header",
+      "content": "定番商品 (Category)"
+    },
+    { "type": "header", "content": "▼ バナー [1]" },
+    { "type": "image_picker", "id": "category_banner_1_image", "label": "画像" },
+    { "type": "text", "id": "category_banner_1_text_ja", "label": "ラベル", "default": "ギター" },
+    { "type": "text", "id": "category_banner_1_text_en", "label": "英語表記", "default": "Guitar" },
+    { "type": "url", "id": "category_banner_1_link", "label": "リンク先" },
+    { "type": "header", "content": "▼ バナー [2]" },
+    { "type": "image_picker", "id": "category_banner_2_image", "label": "画像" },
+    { "type": "text", "id": "category_banner_2_text_ja", "label": "ラベル", "default": "アクセサリ" },
+    { "type": "text", "id": "category_banner_2_text_en", "label": "英語表記", "default": "Accessories" },
+    { "type": "url", "id": "category_banner_2_link", "label": "リンク先" },
+    { "type": "header", "content": "▼ バナー [3]" },
+    { "type": "image_picker", "id": "category_banner_3_image", "label": "画像" },
+    { "type": "text", "id": "category_banner_3_text_ja", "label": "ラベル", "default": "弦" },
+    { "type": "text", "id": "category_banner_3_text_en", "label": "英語表記", "default": "String" },
+    { "type": "url", "id": "category_banner_3_link", "label": "リンク先" },
+    { "type": "header", "content": "▼ バナー [4]" },
+    { "type": "image_picker", "id": "category_banner_4_image", "label": "画像" },
+    { "type": "text", "id": "category_banner_4_text_ja", "label": "ラベル", "default": "オリジナル商品" },
+    { "type": "text", "id": "category_banner_4_text_en", "label": "英語表記", "default": "Kawase original" },
+    { "type": "url", "id": "category_banner_4_link", "label": "リンク先" },
+    {
+      "type": "header", "content": "About Kawase"
+    },
+    {
+      "type": "richtext", "id": "about_text", "label": "説明文", "default": "<p>カワセ楽器店は、1944年の創業以来、音楽愛好家の皆さまに高品質なアコースティックギターとサービスを提供してまいりました。​長年の経験と技術を活かし、楽器の販売から修理・メンテナンス、オリジナル商品の開発まで幅広く手がけています。​これからも音楽を愛するすべての方々に寄り添い、心に響く音楽体験をお届けしてまいります。</p>"
+    },
+    {
+      "type": "image_picker", "id": "about_bg_image", "label": "背景画像"
+    },
+    {
+      "type": "url", "id": "about_link", "label": "「詳しく見る」のリンク先"
+    },
+    {
+      "type": "header",
+      "content": "新着情報 (News)"
+    },
+    {
+      "type": "blog",
+      "id": "news_blog",
+      "label": "表示するブログを選択"
+    },
+    {
+      "type": "range",
+      "id": "news_count",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 3,
+      "label": "表示する記事の最大数"
+    },
+    {
+        "type": "header",
+        "content": "その他バナー"
+    },
+    { "type": "header", "content": "▼ バナー [1]" },
+    { "type": "image_picker", "id": "other_banner_5_image", "label": "画像" },
+    { "type": "text", "id": "other_banner_5_text_ja", "label": "ラベル", "default": "店舗情報" },
+    { "type": "text", "id": "other_banner_5_text_en", "label": "英語表記", "default": "About Store" },
+    { "type": "url", "id": "other_banner_5_link", "label": "リンク先" },
+    { "type": "header", "content": "▼ バナー [2]" },
+    { "type": "image_picker", "id": "other_banner_6_image", "label": "画像" },
+    { "type": "text", "id": "other_banner_6_text_ja", "label": "ラベル", "default": "メンテナンス" },
+    { "type": "text", "id": "other_banner_6_text_en", "label": "英語表記", "default": "Maintenance" },
+    { "type": "url", "id": "other_banner_6_link", "label": "リンク先" },
+    { "type": "header", "content": "▼ バナー [3] ※ロングバナー" },
+    { "type": "image_picker", "id": "other_banner_7_image", "label": "画像" },
+    { "type": "text", "id": "other_banner_7_text_ja", "label": "ラベル", "default": "ご購入ガイド" },
+    { "type": "text", "id": "other_banner_7_text_en", "label": "英語表記", "default": "Shopping Guide" },
+    { "type": "url", "id": "other_banner_7_link", "label": "リンク先" },
+    { "type": "header", "content": "▼ バナー [4]" },
+    { "type": "image_picker", "id": "other_banner_8_image", "label": "画像" },
+    { "type": "text", "id": "other_banner_8_text_ja", "label": "ラベル", "default": "楽器OEM･ODM" },
+    { "type": "text", "id": "other_banner_8_text_en", "label": "英語表記", "default": "Instrument OEM･ODM" },
+    { "type": "url", "id": "other_banner_8_link", "label": "リンク先" },
+    { "type": "header", "content": "▼ バナー [5]" },
+    { "type": "image_picker", "id": "other_banner_9_image", "label": "画像" },
+    { "type": "text", "id": "other_banner_9_text_ja", "label": "ラベル", "default": "グッズOEM･ODM" },
+    { "type": "text", "id": "other_banner_9_text_en", "label": "英語表記", "default": "Goods OEM･ODM" },
+    { "type": "url", "id": "other_banner_9_link", "label": "リンク先" }
   ]
 }
 {% endschema %}
