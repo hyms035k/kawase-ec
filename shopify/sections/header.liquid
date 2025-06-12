@@ -1,0 +1,107 @@
+{% comment %}
+  assetsフォルダにあるSVGアイコンをインラインで読み込むためのスニペット。
+  これにより、アイコンの色などをCSSで制御しやすくなります。
+{% endcomment %}
+{%- liquid
+  assign icon_search = 'icon_search.svg' | asset_url
+  assign icon_user = 'icon_user.svg' | asset_url
+  assign icon_cart = 'icon_cart.svg' | asset_url
+-%}
+
+<header id="main-header" class="fixed top-0 left-0 w-full z-50 before:content-[''] before:absolute before:inset-0 before:pointer-events-none before:transition-all before:duration-1000">
+  <div class="w-full mx-auto px-[1.25rem] md:px-[15px] xl:max-w-[1070px] 2xl:max-w-[1200px]">
+    <div class="flex justify-between items-center py-3 gap-x-8 xl:gap-x-0">
+      {% comment %} ロゴ画像。テーマ設定から動的に読み込む {% endcomment %}
+      <h1 class="w-[70px] md:w-[100px] xl:w-[138px] z-20">
+        <a href="{{ routes.root_url }}" class="block">
+          {%- liquid
+            assign header_logo = 'logo-min.png' | asset_url
+            assign header_alt = section.settings.logo.alt | default: shop.name | escape
+            assign header_w = 70
+            assign header_h = 41
+            if section.settings.logo != blank
+              assign header_logo = section.settings.logo | image_url: width: 280
+              assign header_h = 70 | divided_by: section.settings.logo.aspect_ratio | round
+              endif
+          -%}
+          <img 
+            src="{{ header_logo }}" 
+            alt="{{ header_alt }}"
+            class="w-full h-auto transition filter hover:brightness-150 duration-300"
+            width="{{ header_w }}"
+            height="{{ header_h }}"
+            loading="lazy">
+        </a>
+      </h1>
+
+      {% comment %} ナビゲーションメニュー。linklistから動的に生成 {% endcomment %}
+      <ul id="mobile-menu" class="xl:flex justify-center items-center gap-x-7 font-mplus">
+        {%- for link in section.settings.menu.links -%}
+          <li class="dropdown-toggle group">
+            <a href="{{ link.url }}">
+              <span class="text-sm">{{ link.title }}</span>
+              {%- if link.links != blank -%}
+                <code>&gt;</code>
+              {%- endif -%}
+            </a>
+            {%- if link.links != blank -%}
+              <div>
+                <ul class="text-sm leading-relaxed pb-4 xl:py-1 xl:px-4 xl:bg-white">
+                  {%- for child_link in link.links -%}
+                    <li><a href="{{ child_link.url }}">{{ child_link.title }}</a></li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      <ul class="flex items-center grow xl:grow-0 justify-end gap-x-6 z-20">
+        <li class="w-[20px] md:w-[23px]">
+          <a href="{{ routes.search_url }}" class="block">
+            <img src="{{ icon_search }}" alt="検索">
+          </a>
+        </li>
+        <li class="w-[20px] md:w-[23px]">
+          <a href="{{ routes.account_url }}" class="block">
+            <img src="{{ icon_user }}" alt="アカウント">
+          </a>
+        </li>
+        <li class="w-[20px] md:w-[23px]">
+          <a href="{{ routes.cart_url }}" class="block">
+            <img src="{{ icon_cart }}" alt="カート">
+          </a>
+        </li>
+      </ul>
+
+      <button id="hamburger-toggle" class="xl:hidden w-8 h-8 z-20">
+        <span class="sr-only">メニューを開閉</span>
+        <div id="icon-menu" class="space-y-2">
+            <span class="block w-full h-0.5 bg-white"></span>
+            <span class="block w-full h-0.5 bg-white"></span>
+            <span class="block w-full h-0.5 bg-white"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "ヘッダー",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "ロゴ画像"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "表示するメニューを選択",
+      "default": "main-menu"
+    }
+  ]
+}
+{% endschema %}

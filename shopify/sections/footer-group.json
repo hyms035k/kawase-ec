@@ -1,0 +1,35 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "footer_logo": "shopify://shop_images/logo-min.png",
+        "company_name": "株式会社カワセ楽器",
+        "company_address": "東京都千代田区神田小川町2-4",
+        "phone_number": "03-3291-2723",
+        "business_hours": "営業時間:10:00~19:00 (18:00日祝)\n水曜定休(祝日と重なる場合は営業)",
+        "button_label": "詳しく見る",
+        "button_link": "#",
+        "menu_1": "footer",
+        "menu_2": "2",
+        "menu_3": "3",
+        "background_image": "shopify://shop_images/footer_bg.jpg",
+        "copyright_text": "© %Y %s"
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

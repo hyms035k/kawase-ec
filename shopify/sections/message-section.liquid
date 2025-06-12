@@ -1,0 +1,133 @@
+{% comment %}
+  設定値を変数に格納して、コードを読みやすくします。
+{% endcomment %}
+{%- liquid
+  assign bg_image = section.settings.background_image
+  assign main_image = section.settings.main_image
+  assign image_layout = section.settings.image_layout
+-%}
+
+{%- style -%}
+  #message-section-{{ section.id }} {
+    {% if bg_image != blank %}
+      background-image: url('{{ bg_image | image_url: width: 1920 }}');
+    {% else %}
+      background-image: url('{{ "top__block1st_bg.jpg" | asset_url }}');
+    {% endif %}
+  }
+{%- endstyle -%}
+
+<section id="message-section-{{ section.id }}" class="bg-cover bg-center">
+  <div class="container block-box">
+    {% comment %} 
+      画像のレイアウト設定に応じて、`md:grid-cols-2` の順序を動的に変更します。
+      `image_layout` が 'right' の場合は、テキストが先 (order-first) になります。
+    {% endcomment %}
+    <div class="md:grid md:grid-cols-2 md:gap-[30px] lg:gap-[60px] items-center">
+      <div class="flex flex-col {% if image_layout == 'right' %} md:order-first {% endif %}">
+        <div class="md:flex md:items-baseline md:gap-x-2 xl:gap-x-4 text-center md:text-left">
+          {% if section.settings.heading != blank %}
+            <p class="font-serif text-4xl text-5xl xl:text-[65px] leading-tight">{{ section.settings.heading | escape }}</p>
+          {% endif %}
+          {% if section.settings.subheading != blank %}
+            <h2 class="font-sans lg:text-lg xl:text-[20px] mt-1">{{ section.settings.subheading | escape }}</h2>
+          {% endif %}
+        </div>
+        {% if main_image != blank %}
+          <div class="md:hidden my-5">
+            <img 
+              src="{{ main_image | image_url: width: 700 }}" 
+              alt="{{ main_image.alt | default: 'Message image' | escape }}"
+              width="{{ main_image.width }}"
+              height="{{ main_image.height }}"
+              loading="lazy"
+              class="w-full h-auto object-cover">
+          </div>
+        {% endif %}
+        <div class="md:mt-5 lg:mt-10">
+          {% if section.settings.content_heading != blank %}
+            <h3 class="font-sans text-[1.3rem] lg:text-[24px] font-medium">{{ section.settings.content_heading | escape }}</h3>
+          {% endif %}
+          {% if section.settings.content_text != blank %}
+            <div class="font-sans text-base text-justify mt-4 leading-relaxed">
+              {{ section.settings.content_text }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      {% if main_image != blank %}
+        <div class="hidden md:!flex items-center justify-center">
+          <img 
+            src="{{ main_image | image_url: width: 900 }}" 
+            alt="{{ main_image.alt | default: 'Message image' | escape }}"
+            width="{{ main_image.width }}"
+            height="{{ main_image.height }}"
+            loading="lazy"
+            class="w-full max-w-md h-auto object-cover">
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "メッセージセクション",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "背景画像"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "見出し (英語)",
+      "default": "Message"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "サブ見出し (日本語)",
+      "default": "メッセージ"
+    },
+    {
+      "type": "image_picker",
+      "id": "main_image",
+      "label": "メイン画像"
+    },
+    {
+      "type": "select",
+      "id": "image_layout",
+      "label": "画像レイアウト (PC)",
+      "options": [
+        {
+          "value": "left",
+          "label": "左側に画像"
+        },
+        {
+          "value": "right",
+          "label": "右側に画像"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "content_heading",
+      "label": "コンテンツ見出し",
+      "default": "音を愛し、心に寄り添う。"
+    },
+    {
+      "type": "richtext",
+      "id": "content_text",
+      "label": "コンテンツ本文",
+      "default": "<p>ここに和文のコメントが入ります。私たちのサービスや製品が、どのようにしてお客様の心に寄り添い、日常に彩りを与えるのか、その思いを込めてお伝えします。</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "メッセージセクション"
+    }
+  ]
+}
+{% endschema %}
