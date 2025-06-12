@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
     topicTabs.forEach(tab => {
         tab.addEventListener('click', () => {
             const targetTab = tab.dataset.tab;
-            const targetPanel = document.getElementById(targetTab + '-panel');
+            const targetPanel = document.getElementById(targetTab);
 
             // すでにアクティブなタブがクリックされた場合は何もしない
             if (!targetPanel || targetPanel.classList.contains('active')) {

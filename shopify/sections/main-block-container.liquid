@@ -1,0 +1,146 @@
+{%- liquid
+  assign bg_image = 'top__block2nd_bg.jpg' | asset_url
+  if section.settings.background_image != blank
+    assign bg_image = section.settings.background_image | image_url: width: 1920
+  endif
+-%}
+
+<section class="isolate bg-cover bg-top" style="background-image: url('{{ bg_image }}');">
+  <div class="container block-box pt-0">
+    {%- for block in section.blocks -%}
+      <div {{ block.shopify_attributes }}>
+        {%- case block.type -%}
+          {%- when 'topics_block' -%}
+            {%- liquid
+              assign show_new_arrivals = block.settings.show_new_arrivals
+              assign ranking_collection = block.settings.ranking_collection
+
+              assign show_ranking = false
+              if block.settings.show_ranking and ranking_collection != blank and ranking_collection.products_count > 0
+                assign show_ranking = true
+              endif
+
+              assign new_arrivals_products_count = collections.all.products_count
+              if show_new_arrivals == false
+                assign new_arrivals_products_count = 0
+              endif
+
+              assign show_block_content = false
+              if show_ranking or show_new_arrivals and new_arrivals_products_count > 0
+                assign show_block_content = true
+              endif
+            -%}
+
+            {%- if show_block_content -%}
+              <div id="topics-{{ block.id }}" class="block-box pb-0 text-[#ffe8c9]">
+                <div class="max-w-6xl mx-auto">
+                  <div class="md:flex md:items-center md:justify-between">
+                    <div class="tracking-wide md:flex md:items-baseline md:gap-x-2 xl:gap-x-4 text-center md:text-left">
+                      <p class="text-4xl text-5xl xl:text-[56px] font-serif leading-tight trans-flag ani-call ani-init fromTop fadeIn">Topics</p>
+                      <h2 class="lg:text-lg xl:text-[20px] ml-2 mt-1 md:mt-0 font-sans">おすすめ商品</h2>
+                    </div>
+                    <div class="quick-tab flex justify-center md:justify-end gap-2 lg:gap-4 text-sm mt-4 md:mt-0" id="tabs-{{ block.id }}">
+                      {%- if show_ranking -%}
+                        <button data-tab="ranking-{{ block.id }}" class="topic-tab-button btn text-center active"><span><span>ランキング</span></span></button>
+                      {%- endif -%}
+                      {%- if show_new_arrivals -%}
+                        <button data-tab="new-arrivals-{{ block.id }}" class="topic-tab-button btn text-center{% unless show_ranking %} active{% endunless %}"><span><span>新着</span></span></button>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                  <div class="relative mt-6 mb-11">
+                    {%- if show_ranking -%}
+                      <div id="ranking-{{ block.id }}" class="topic-tab-panel grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-3 lg:gap-6 active">
+                        {%- for product in ranking_collection.products limit: block.settings.products_to_show -%}
+                          {% render 'custom-card-product', card_product: product %}
+                        {%- endfor -%}
+                      </div>
+                    {%- endif -%}
+                    {%- if show_new_arrivals -%}
+                      <div id="new-arrivals-{{ block.id }}" class="topic-tab-panel grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-3 lg:gap-6{% unless show_ranking %} active{% endunless %}">
+                        {%- assign new_products = collections.all.products | sort: 'published_at' | reverse -%}
+                        {%- for product in new_products limit: block.settings.products_to_show -%}
+                          {% render 'custom-card-product', card_product: product %}
+                        {%- endfor -%}
+                      </div>
+                    {%- endif -%}
+                  </div>
+                  <div class="text-center">
+                    <a href="#" class="inline-block btn text-center align-middle"><span><span>詳しく見る</span></span></a>
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+        {%- endcase -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{%- style -%}
+  .topic-tab-button.active > span {
+    background-color: #1a2530 !important;
+  }
+  .topic-tab-button.active > span > span {
+    color: #ffe8c9 !important;
+  }
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "コンテンツコンテナ",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "背景画像"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "topics_block",
+      "name": "おすすめ商品ブロック",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "header",
+          "content": "表示設定"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_new_arrivals",
+          "label": "「新着」を表示する",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_ranking",
+          "label": "「ランキング」を表示する",
+          "default": true,
+          "info": "「ランキング用コレクション」に商品が1つ以上あるコレクションを設定する必要があります。"
+        },
+        {
+          "type": "collection",
+          "id": "ranking_collection",
+          "label": "ランキング用コレクション"
+        },
+        {
+          "type": "range",
+          "id": "products_to_show",
+          "min": 2,
+          "max": 8,
+          "step": 2,
+          "default": 4,
+          "label": "表示する商品数"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "コンテンツコンテナ"
+    }
+  ]
+}
+{% endschema %}

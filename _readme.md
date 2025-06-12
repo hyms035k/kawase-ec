@@ -76,20 +76,20 @@ shall:
 npm install -g @shopify/cli
 
 #開発サーバーを起動
-shopify theme dev --store <ストアID>.myshopify.com
+shopify theme dev --store xn-lck6azkx98l36t.myshopify.com
 
 #テーマのリスト取得
-shopify theme list --store <ストアID>.myshopify.com
+shopify theme list --store xn-lck6azkx98l36t.myshopify.com
 
 ##テーマIDを確認しダウンロード
-shopify theme pull --store <ストアID>.myshopify.com -t <テーマID>
+shopify theme pull --store xn-lck6azkx98l36t.myshopify.com -t 179028623646
 
 ##単体でのダウンロード
 shopify theme pull --only <フォルダ>/<ファイル>
 
 #デプロイ
 ##既存テーマを更新
-shopify theme push -t <テーマID>
+shopify theme push -t 179028623646
 
 ##新しい非公開テーマとしてアップ
 shopify theme push --unpublished -n "2025-06-09 リリース候補"
