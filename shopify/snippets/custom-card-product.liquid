@@ -1,14 +1,3 @@
-{% comment %}
-  【更新版】
-  `main-block-container.liquid`から呼び出される商品カード。
-  移行元のHTML構造とTailwind CSSのクラスを正確に反映し、
-  Shopifyの商品オブジェクトとメタフィールドから動的に情報を表示する。
-
-  引数:
-  - card_product: 表示する商品オブジェクト
-  - is_placeholder: (任意) プレースホルダーとして表示するか
-{% endcomment %}
-
 {%- if is_placeholder -%}
   <div class="product-card-placeholder">
     <div class="relative bg-gray-200 pt-[124.8697916%] mb-4"></div>
