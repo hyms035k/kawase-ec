@@ -1,86 +1,45 @@
 {% comment %}
-  【新規ファイル】
-  商品をカード形式で表示するためのカスタムスニペット（部品）。
-  custom-featured-products.liquid から呼び出されます。
-  「モデルNo」のメタフィールド表示ロジックを含みます。
+  【更新版】
+  `main-block-container.liquid`から呼び出される商品カード。
+  移行元のHTML構造とTailwind CSSのクラスを正確に反映し、
+  Shopifyの商品オブジェクトとメタフィールドから動的に情報を表示する。
+
+  引数:
+  - card_product: 表示する商品オブジェクト
+  - is_placeholder: (任意) プレースホルダーとして表示するか
 {% endcomment %}
 
-<div class="card-wrapper product-card-wrapper underline-links-hover">
-  <div class="
-    card
-    card--{{ settings.card_style }}
-    {% if card_product.featured_media %}
-      card--media
-    {% else %}
-      card--text
-    {% endif %}
-    {% if settings.card_style == 'card' %}
-      color-{{ settings.card_color_scheme }} gradient
-    {% endif %}
-  ">
-    <div class="card__inner">
-      <div class="card__media">
-        {%- if card_product.featured_media -%}
-          <div class="media media--transparent media--hover-effect">
-            <a href="{{ card_product.url | default: '#' }}">
-              <img
-                srcset="
-                  {%- if card_product.featured_media.width >= 165 -%}{{ card_product.featured_media | image_url: width: 165 }} 165w,{%- endif -%}
-                  {%- if card_product.featured_media.width >= 360 -%}{{ card_product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
-                  {%- if card_product.featured_media.width >= 533 -%}{{ card_product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
-                  {%- if card_product.featured_media.width >= 720 -%}{{ card_product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}
-                  {{ card_product.featured_media | image_url }} {{ card_product.featured_media.width }}w
-                "
-                src="{{ card_product.featured_media | image_url: width: 533 }}"
-                sizes="(min-width: 1100px) 535px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)"
-                alt="{{ card_product.featured_media.alt | escape }}"
-                class="motion-reduce"
-                {% if lazy_load %}
-                  loading="lazy"
-                {% endif %}
-                width="{{ card_product.featured_media.width }}"
-                height="{{ card_product.featured_media.height }}"
-              >
-            </a>
-          </div>
-        {%- else -%}
-          <div class="media media--transparent">
-            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
-          </div>
-        {%- endif -%}
-      </div>
-      <div class="card__content">
-        <div class="card__information">
-          <h3 class="card-information__text h5">
-            <a href="{{ card_product.url | default: '#' }}" class="full-unstyled-link">
-              {{ card_product.title | escape }}
-            </a>
-          </h3>
-
-          {%- comment %}
-            「モデルNo」のメタフィールドを表示するロジック。
-            - card_product.metafields.custom.product_model_no に値が存在する場合のみ表示します。
-          {% endcomment -%}
-          {%- if card_product.metafields.custom.product_model_no.value != blank -%}
-            <p class="text-sm text-gray-600 mt-1">{{ card_product.metafields.custom.product_model_no.value }}</p>
-          {%- endif -%}
-
-          <div class="card-information__price">
-            {%- render 'price', product: card_product, price_class: '' -%}
-          </div>
-        </div>
-        <div class="card__badge {{ settings.badge_position }}">
-          {%- if card_product.available == false -%}
-            <span class="badge badge--bottom-left color-{{ settings.sold_out_badge_color_scheme }}">
-              {{ 'products.product.sold_out' | t }}
-            </span>
-          {%- elsif card_product.compare_at_price > card_product.price and card_product.available -%}
-            <span class="badge badge--bottom-left color-{{ settings.sale_badge_color_scheme }}">
-              {{ 'products.product.on_sale' | t }}
-            </span>
-          {%- endif -%}
-        </div>
-      </div>
-    </div>
+{%- if is_placeholder -%}
+  <div class="product-card-placeholder">
+    <div class="relative bg-gray-200 pt-[124.8697916%] mb-4"></div>
+    <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+    <div class="h-4 bg-gray-200 rounded w-1/2"></div>
   </div>
-</div>
+{%- else -%}
+  <a href="{{ card_product.url | default: '#' }}" class="card-anchor relative text-left block group">
+    <div class="group relative block pt-[124.8697916%] overflow-hidden mb-4">
+      {%- if card_product.featured_media -%}
+        <img
+          src="{{ card_product.featured_media | image_url: width: 530 }}"
+          alt="{{ card_product.featured_media.alt | escape }}"
+          class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+          width="{{ card_product.featured_media.width }}"
+          height="{{ card_product.featured_media.height }}"
+          loading="lazy"
+        >
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+    </div>
+    <span class="block text-xs sm:text-sm">
+      {{ card_product.title | escape }}
+      {%- if card_product.metafields.custom.product_model_no.value != blank -%}
+        <br>
+        モデルNo: {{ card_product.metafields.custom.product_model_no.value }}
+      {%- endif -%}
+    </span>
+    <span class="block mt-1 font-medium">
+      {{- card_product.price | money -}}
+    </span>
+  </a>
+{%- endif -%}

@@ -52,7 +52,7 @@
                     {%- if show_ranking -%}
                       <div id="ranking-{{ block.id }}" class="topic-tab-panel grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-3 lg:gap-6 active">
                         {%- for product in ranking_collection.products limit: block.settings.products_to_show -%}
-                          {% render 'custom-card-product', card_product: product %}
+                          {% render 'custom-card-product', card_product: product, count: forloop.index %}
                         {%- endfor -%}
                       </div>
                     {%- endif -%}
@@ -60,7 +60,7 @@
                       <div id="new-arrivals-{{ block.id }}" class="topic-tab-panel grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-3 lg:gap-6{% unless show_ranking %} active{% endunless %}">
                         {%- assign new_products = collections.all.products | sort: 'published_at' | reverse -%}
                         {%- for product in new_products limit: block.settings.products_to_show -%}
-                          {% render 'custom-card-product', card_product: product %}
+                          {% render 'custom-card-product', card_product: product, count: forloop.index %}
                         {%- endfor -%}
                       </div>
                     {%- endif -%}
