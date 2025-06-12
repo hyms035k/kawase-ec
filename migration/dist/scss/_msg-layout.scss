@@ -1,0 +1,90 @@
+@charset "UTF-8";
+@use "msg-config" as conf;
+
+#hero {
+	&-section {
+		&:before {
+			transition: 1s;
+		}
+		&.init {
+			&:before {
+				filter: blur(1rem);
+			}
+			#hero {
+				&-logo, &-heading {
+				}
+				&-logo {
+					transform: translateX(-15%);
+					> img {
+						opacity: 0;
+						transform: translateX(-15%);
+					}
+				}
+				&-heading {
+					transform: translateX(15%);
+					> span {
+						opacity: 0;
+						transform: translateX(15%);
+					}
+				}
+			}
+		}
+	}
+	&-logo, &-heading {
+		transition: 0.5s;
+		transition-delay: 0.3s;
+	}
+	&-logo {
+		> img {
+			transition: 1.0s;
+			transition-delay: 0.3s;
+		}
+	}
+	&-heading {
+		> span {
+			transition: 1.0s;
+			transition-delay: 0.3s;
+		}
+	}
+}
+
+#block {
+	&-2nd {
+		.quick-tab {
+			> .btn {
+				&.active {
+					color: conf.$light !important;
+					> span {
+						background-color: conf.$base !important;
+					}
+				}
+			}
+		}
+	}
+}
+
+.topic-tab-panel {
+	transition: opacity 0.5s;
+	&.active {
+		z-index: 10;
+	}
+	&:not(.active) {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		opacity: 0;
+		pointer-events: none !important;
+	}
+}
+
+#about-us {
+	&:before {
+		transition: 1s;
+	}
+	&.ani-init {
+		&:before {
+			filter: blur(1rem);
+		}
+	}
+}

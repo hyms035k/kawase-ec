@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .container {
+        @apply relative;
+    }
+
+    .block-box {
+        @apply py-10 md:py-20 xl:py-32;
+    }
+
+    .remove {
+        @apply
+            relative
+            overflow-hidden
+            block
+            w-full
+            h-0
+            text-[0.5em]
+            text-left
+            indent-[-9999px]
+            bg-center
+            bg-no-repeat
+            bg-cover
+    }
+}
+@layer utilities {
+    @screen md {
+        .leading-relaxed {
+            line-height: 1.84;
+        }
+    }
+}
