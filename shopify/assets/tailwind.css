@@ -1028,6 +1028,10 @@ video {
      object-fit: cover;
 }
 
+.p-20 {
+  padding: 5rem;
+}
+
 .\!px-7 {
   padding-left: 1.75rem !important;
   padding-right: 1.75rem !important;
@@ -1120,6 +1124,10 @@ video {
 
 .pt-\[124\.8697916\%\] {
   padding-top: 124.8697916%;
+}
+
+.pt-\[45px\] {
+  padding-top: 45px;
 }
 
 .text-left {
@@ -1654,6 +1662,10 @@ video {
     padding-left: 2rem;
   }
 
+  .md\:pt-\[55px\] {
+    padding-top: 55px;
+  }
+
   .md\:text-left {
     text-align: left;
   }
@@ -1816,6 +1828,10 @@ video {
   .xl\:py-1 {
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
+  }
+
+  .xl\:pt-\[65px\] {
+    padding-top: 65px;
   }
 
   .xl\:text-\[20px\] {

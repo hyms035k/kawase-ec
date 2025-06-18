@@ -1,11 +1,154 @@
+{% comment %} ヒーローセクション {% endcomment %}
+{% for block in section.blocks %}
+  {%- liquid
+    assign use_main_visual = block.settings.use_main_visual
+    assign hero_class = 'relative bg-cover bg-center'
+    assign hero_container_class = 'pt-[45px] md:pt-[55px] xl:pt-[65px]'
+    assign hero_bg = 'top__hero_bg.jpg' | asset_url
+    assign hero_bg_sp = ''
+
+    if use_main_visual
+      assign hero_class = 'init h-screen md:h-[56.25vw] lg:h-screen flex flex-col items-center justify-center text-white relative before:absolute before:block before:inset-0 before:bg-cover before:bg-center'
+      assign hero_container_class = 'h-full flex flex-col items-center justify-center relative z-10'
+      assign hero_bg_sp = 'top__hero_bg_sp.jpg' | asset_url
+    endif
+
+    if block.settings.background_image_desktop != blank
+      assign hero_bg = block.settings.background_image_desktop | image_url: width: 1920
+    endif
+    if block.settings.background_image_mobile != blank
+      assign hero_bg_sp = block.settings.background_image_mobile | image_url: width: 1920
+    endif
+  %}
+  {%- style -%}
+    #hero-section-{{ section.id }}{% if use_main_visual %}:before{% endif %} {
+      background-image: url('{{ hero_bg }}');
+    }
+    {% if hero_bg_sp != '' %}
+    @media screen and (max-width: 767px) {
+      #hero-section-{{ section.id }}{% if use_main_visual %}:before{% endif %} {
+        background-image: url('{{ hero_bg_sp }}');
+      }
+    }
+    {% endif %}
+  {%- endstyle -%}
+<section 
+  id="hero-section-{{ section.id }}" class="hero-section -mx-2 md:-mx-[30px] {{ hero_class}}" aria-labelledby="hero-heading-{{ section.id }}">
+  <div class="container {{ hero_container_class }}">
+
+    {% if use_main_visual %}
+      <div class="hero-section__logo w-[80%] md:w-[46.1538461%] mx-auto">
+        {%- liquid
+          assign hero_logo = 'top__hero_logo-min.png' | asset_url
+          assign hero_alt = block.settings.logo_image.alt | default: 'Hero logo' | escape
+          assign hero_w = 248
+          assign hero_h = 73
+          if block.settings.logo_image != blank
+            assign hero_logo = block.settings.logo_image | image_url: width: 800
+            assign hero_h = 248 | divided_by: block.settings.logo_image.aspect_ratio | round
+            endif
+        -%}
+        <img 
+          src="{{ hero_logo }}" 
+          alt="{{ hero_alt }}"
+          class="w-full h-auto"
+          width="{{ hero_w }}"
+          height="{{ hero_h }}"
+          loading="eager">
+      </div>
+      {% if block.settings.heading_text != blank %}
+        <div id="hero-heading-{{ block.id }}" class="hero-section__heading text-2xl xl:text-[33px] text-center text-[#ffe1be] leading-[1.4] mt-6">
+          <div class="relative block">{{ block.settings.heading_text | newline_to_br }}</div>
+        </div>
+      {% endif %}
+    {% else %}
+      <div class="text-center p-20 text-[#ffe8c9]">
+        <p class="font-serif text-4xl lg:text-5xl xl:text-[70px] leading-tight lg:leading-none trans-flag ani-call ani-init fromBottom fadeIn">{{ block.settings.heading_english }}</p>
+        <h2 class="outside-double-border flex items-center mx-auto md:w-36 lg:w-48 xl:w-64 lg:text-lg xl:text-[20px] font-medium leading-tight mt-8">{{ block.settings.title }}</h2>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endfor %}
+
+{% comment %} メッセージセクション {% endcomment %}
+{%- liquid
+  assign message_background_image = section.settings.message_background_image
+  assign message_main_image = section.settings.message_main_image
+  assign message_image_layout = section.settings.message_image_layout
+-%}
+
+{%- style -%}
+  #message-section-{{ section.id }} {
+    {% if message_background_image != blank %}
+      background-image: url('{{ message_background_image | image_url: width: 1920 }}');
+    {% else %}
+      background-image: url('{{ "top__block1st_bg.jpg" | asset_url }}');
+    {% endif %}
+  }
+{%- endstyle -%}
+
+<section id="message-section-{{ section.id }}" class="bg-cover bg-center">
+  <div class="container block-box">
+    <div class="md:grid md:grid-cols-2 md:gap-[30px] lg:gap-[60px] items-center">
+      <div class="flex flex-col {% if message_image_layout == 'right' %} md:order-first {% endif %}">
+        <div class="md:flex md:items-baseline md:gap-x-2 xl:gap-x-4 text-center md:text-left">
+          {% if section.settings.message_heading != blank %}
+            <p class="font-serif text-4xl text-5xl xl:text-[65px] leading-tight">{{ section.settings.message_heading | escape }}</p>
+          {% endif %}
+          {% if section.settings.message_subheading != blank %}
+            <h2 class="font-sans lg:text-lg xl:text-[20px] mt-1">{{ section.settings.message_subheading | escape }}</h2>
+          {% endif %}
+        </div>
+        {% if message_main_image != blank %}
+          <div class="md:hidden my-5">
+            <img 
+              src="{{ message_main_image | image_url: width: 700 }}" 
+              alt="{{ message_main_image.alt | default: 'Message image' | escape }}"
+              width="{{ message_main_image.width }}"
+              height="{{ message_main_image.height }}"
+              loading="lazy"
+              class="w-full h-auto object-cover">
+          </div>
+        {% endif %}
+        <div class="md:mt-5 lg:mt-10">
+          {% if section.settings.message_content_heading != blank %}
+            <h3 class="font-sans text-[1.3rem] lg:text-[24px] font-medium">{{ section.settings.message_content_heading | escape }}</h3>
+          {% endif %}
+          {% if section.settings.message_content_text != blank %}
+            <div class="font-sans text-base text-justify mt-4 leading-relaxed">
+              {{ section.settings.message_content_text }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      {% if message_main_image != blank %}
+        <div class="hidden md:!flex items-center justify-center">
+          <img 
+            src="{{ message_main_image | image_url: width: 900 }}" 
+            alt="{{ message_main_image.alt | default: 'Message image' | escape }}"
+            width="{{ message_main_image.width }}"
+            height="{{ message_main_image.height }}"
+            loading="lazy"
+            class="w-full max-w-md h-auto object-cover">
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
 {%- liquid
   assign bg_image = 'top__block2nd_bg.jpg' | asset_url
   if section.settings.background_image != blank
     assign bg_image = section.settings.background_image | image_url: width: 1920
   endif
 -%}
-
-<section class="isolate bg-cover bg-top" style="background-image: url('{{ bg_image }}');">
+{%- style -%}
+  #MainContent-{{ section.id }} {
+    background-image: url('{{ bg_image }}');
+  }
+{%- endstyle -%}
+<section id="MainContent-{{ section.id }}" class="MainContent-body bg-cover bg-top">
   <div class="container block-box pt-0 text-[#ffe8c9]">
 
     {% comment %} --- おすすめ商品ブロック --- {% endcomment %}
@@ -243,19 +386,81 @@
 {
   "name": "TOPページ/メインコンテンツ",
   "class": "section",
+  "max_blocks": 1,
   "settings": [
     {
       "type": "header",
       "content": "全体設定"
     },
     {
+      "type": "checkbox",
+      "id": "background_image_switch",
+      "label": "背景画像を設定する",
+      "default": true
+    },
+    {
       "type": "image_picker",
       "id": "background_image",
-      "label": "背景画像"
+      "label": "背景画像",
+      "info": "※背景画像を設定する場合のみ有効です。※背景画像が未指定の場合はデフォルト画像が設定されます。"
     },
     {
       "type": "header",
-      "content": "おすすめ商品 (Topics)"
+      "content": "メッセージ"
+    },
+    {
+      "type": "image_picker",
+      "id": "message_background_image",
+      "label": "背景画像"
+    },
+    {
+      "type": "text",
+      "id": "message_heading",
+      "label": "見出し (英語)",
+      "default": "Message"
+    },
+    {
+      "type": "text",
+      "id": "message_subheading",
+      "label": "サブ見出し (日本語)",
+      "default": "メッセージ"
+    },
+    {
+      "type": "image_picker",
+      "id": "message_main_image",
+      "label": "メイン画像"
+    },
+    {
+      "type": "select",
+      "id": "message_image_layout",
+      "label": "画像レイアウト (PC)",
+      "options": [
+        {
+          "value": "left",
+          "label": "左側に画像"
+        },
+        {
+          "value": "right",
+          "label": "右側に画像"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "message_content_heading",
+      "label": "コンテンツ見出し",
+      "default": "音を愛し、心に寄り添う。"
+    },
+    {
+      "type": "richtext",
+      "id": "message_content_text",
+      "label": "コンテンツ本文",
+      "default": "<p>ここに和文のコメントが入ります。私たちのサービスや製品が、どのようにしてお客様の心に寄り添い、日常に彩りを与えるのか、その思いを込めてお伝えします。</p>"
+    },
+    {
+      "type": "header",
+      "content": "おすすめ商品&ランキング"
     },
     {
       "type": "checkbox", "id": "show_new_arrivals", "label": "「新着」タブを表示する", "default": true
@@ -355,6 +560,61 @@
     { "type": "text", "id": "other_banner_9_text_ja", "label": "ラベル", "default": "グッズOEM･ODM" },
     { "type": "text", "id": "other_banner_9_text_en", "label": "英語表記", "default": "Goods OEM･ODM" },
     { "type": "url", "id": "other_banner_9_link", "label": "リンク先" }
+  ],
+  "blocks": [
+    {
+      "type": "hero_section",
+      "name": "ヒーローセクション",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "background_image_desktop",
+          "label": "背景画像（PC）"
+        },
+        {
+          "type": "image_picker",
+          "id": "background_image_mobile",
+          "label": "背景画像（スマホ）"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_main_visual",
+          "label": "メインビジュアルとして使用",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "メインビジュアル用の設定"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo_image",
+          "label": "中央のロゴ画像"
+        },
+        {
+          "type": "textarea",
+          "id": "heading_text",
+          "label": "見出しテキスト",
+          "default": "<p>あらゆる場面に対処できる<br>長年の経験と技術</p>"
+        },
+        {
+          "type": "header",
+          "content": "下層ページ用の設定"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "ページタイトル",
+          "default": "ページタイトル"
+        },
+        {
+          "type": "text",
+          "id": "heading_english",
+          "label": "英語表記",
+          "default": "Page Title"
+        }
+      ]
+    }
   ]
 }
 {% endschema %}

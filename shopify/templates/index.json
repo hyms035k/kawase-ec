@@ -9,33 +9,36 @@
  */
 {
   "sections": {
-    "hero": {
-      "type": "hero-section",
-      "settings": {
-        "background_image_desktop": "shopify://shop_images/top__hero_bg.jpg",
-        "background_image_mobile": "shopify://shop_images/top__hero_bg_sp.jpg",
-        "logo_image": "shopify://shop_images/top__hero_logo-min.png",
-        "heading_text": "<p>あらゆる場面に対処できる<br/>長年の経験と技術</p>"
-      }
-    },
-    "message_section_aTjVy9": {
-      "type": "message-section",
-      "name": "メッセージセクション",
-      "settings": {
-        "background_image": "shopify://shop_images/top__block1st_bg.jpg",
-        "heading": "Message",
-        "subheading": "メッセージ",
-        "main_image": "shopify://shop_images/top__block1st_image.jpg",
-        "image_layout": "left",
-        "content_heading": "音を愛し、心に寄り添う。",
-        "content_text": "<p>ここに和文のコメントが入ります。私たちのサービスや製品が、どのようにしてお客様の心に寄り添い、日常に彩りを与えるのか、その思いを込めてお伝えします。</p>"
-      }
-    },
     "main_block_container": {
       "type": "main-block-container",
+      "blocks": {
+        "hero_section_9d7MBK": {
+          "type": "hero_section",
+          "settings": {
+            "background_image_desktop": "shopify://shop_images/top__hero_bg.jpg",
+            "background_image_mobile": "shopify://shop_images/top__hero_bg_sp.jpg",
+            "use_main_visual": true,
+            "logo_image": "shopify://shop_images/logo-min.png",
+            "heading_text": "あらゆる場面に対処できる\n長年の経験と技術",
+            "title": "ページタイトル",
+            "heading_english": "Page Title"
+          }
+        }
+      },
+      "block_order": [
+        "hero_section_9d7MBK"
+      ],
       "name": "TOPページ/メインコンテンツ",
       "settings": {
+        "background_image_switch": true,
         "background_image": "shopify://shop_images/top__block2nd_bg.jpg",
+        "message_background_image": "shopify://shop_images/top__block1st_bg.jpg",
+        "message_heading": "Message",
+        "message_subheading": "メッセージ",
+        "message_main_image": "shopify://shop_images/top__block1st_image.jpg",
+        "message_image_layout": "left",
+        "message_content_heading": "音を愛し、心に寄り添う。",
+        "message_content_text": "<p>ここに和文のコメントが入ります。私たちのサービスや製品が、どのようにしてお客様の心に寄り添い、日常に彩りを与えるのか、その思いを込めてお伝えします。</p>",
         "show_new_arrivals": true,
         "show_ranking": true,
         "ranking_collection": "ランキング",
@@ -86,8 +89,6 @@
     }
   },
   "order": [
-    "hero",
-    "message_section_aTjVy9",
     "main_block_container"
   ]
 }

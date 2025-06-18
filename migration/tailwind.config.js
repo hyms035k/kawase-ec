@@ -20,14 +20,7 @@ module.exports = {
       padding: {
         DEFAULT: '1.25rem',
         md: '15px'
-      },
-      screens: {
-        sm: '640px',
-        md: '650px',
-        lg: '870px',
-        xl: '1070px',
-        '2xl': '1200px',
-      },
+      }
     },
     extend: {
       fontFamily: {
