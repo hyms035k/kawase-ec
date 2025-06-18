@@ -125,143 +125,342 @@
         </div>
     </header>
 
-    <style>
-        #page-hero {
-            background-image: url('./img/hero_products.jpg');
-        }
-    </style>
-    <section id="page-hero" class="relative bg-cover bg-center" aria-labelledby="page-hero-heading">
-        <div class="container pt-[45px] md:pt-[55px] xl:pt-[65px]">
-            <div class="text-center p-20 text-[#ffe8c9]">
-                <p class="font-serif text-4xl lg:text-5xl xl:text-[70px] leading-tight lg:leading-none trans-flag ani-call ani-init fromBottom fadeIn">Catalog Details</p>
-                <h2 class="outside-double-border flex items-center mx-auto md:w-36 lg:w-48 xl:w-64 lg:text-lg xl:text-[20px] font-medium leading-tight mt-8">商品一覧</h2>
-            </div>
-        </div>
-    </section>
+    <main id="MainContent" class="px-2 md:px-[30px]">
 
-    <style>
-        #MainContent {
-            background: url('./img/main_bg_default.jpg') top center repeat-y;
-            background-size: 100% auto;
-        }
-    </style>
-    <main id="MainContent" class="px-2 pd:mx-[30px]">
-        <section class="block-box pb-0">
-            <div class="container">
-                <div class="md:grid md:grid-cols-2 md:gap-[30px] lg:gap-[60px] items-center">
-                    <div class="flex flex-col">
-                        <div class="md:flex md:items-baseline md:gap-x-2 xl:gap-x-4 text-center md:text-left">
-                            <p class="font-serif text-4xl text-5xl xl:text-[65px] leading-tight trans-flag ani-call ani-init fromTop fadeIn">String</p>
-                            <h2 class="font-sans lg:text-lg xl:text-[20px] mt-1">ギター弦</h2>
-                        </div>
-                        <div class="md:hidden my-5">
-                            <img src="./img/string_intro_sp.jpg" alt="ギター弦の紹介イメージ (スマホ)" class="w-full h-auto object-cover">
-                        </div>
-                        <div class="md:mt-5 lg:mt-10">
-                            <h3 class="font-sans text-[1.3rem] lg:text-[24px] font-medium trans-flag ani-call ani-init fromRight fadeIn">最適な音色を追求するプレイヤーへ</h3>
-                            <p class="font-sans text-base text-justify mt-4 leading-relaxed">
-                                私たちの厳選したギター弦は、あらゆるジャンルのギタリストに最高の演奏体験を提供します。
-                                豊かな倍音、優れた耐久性、そして心地よいフィンガリング。
-                                あなたのギターが持つポテンシャルを最大限に引き出し、理想のサウンドを実現するための最適な選択肢をご用意しています。
-                            </p>
-                        </div>
-                    </div>
-                    <div class="hidden md:flex items-center justify-center">
-                        <img src="./img/string_intro_pc.jpg" alt="ギター弦の紹介イメージ (PC)" class="w-full max-w-md h-auto object-cover">
-                    </div>
+        <!-- ヒーローセクション -->
+        <style>
+            #page-hero {
+                background-image: url('./img/hero_products.jpg');
+            }
+        </style>
+        <section id="page-hero" class="relative bg-cover bg-center -mx-2 md:-mx-[30px] pt-[45px] md:pt-[55px] xl:pt-[65px]" aria-labelledby="page-hero-heading">
+            <div class="container py-20">
+                <div class="text-center text-[#ffe8c9]">
+                    <p class="font-serif text-4xl lg:text-5xl xl:text-[70px] leading-tight lg:leading-none trans-flag ani-call ani-init fromBottom fadeIn">Catalog List</p>
+                    <h2 class="outside-double-border flex items-center mx-auto w-48 md:w-36 lg:w-48 xl:w-64 lg:text-lg xl:text-[20px] font-medium leading-tight mt-8">商品一覧</h2>
                 </div>
             </div>
         </section>
 
-        <section id="product-list-wrapper" class="block-box">
-            <div class="container">
-                <div class="flex flex-col lg:flex-row lg:gap-x-8">
-                    <aside class="w-full lg:w-[280px] xl:w-[300px] mb-8 lg:mb-0 lg:flex-shrink-0">
-                        <div class="bg-[#2a3744] p-6 rounded-lg shadow-lg">
-                            <h3 class="text-xl font-mplus font-bold mb-4">カテゴリー</h3>
-                            <ul class="space-y-2">
-                                <li><a href="#" class="block py-2 px-3 rounded hover:bg-[#3d4c5c] transition-colors duration-200">エレキギター弦</a></li>
-                                <li><a href="#" class="block py-2 px-3 rounded hover:bg-[#3d4c5c] transition-colors duration-200">アコースティックギター弦</a></li>
-                                <li><a href="#" class="block py-2 px-3 rounded hover:bg-[#3d4c5c] transition-colors duration-200">ベース弦</a></li>
-                                <li><a href="#" class="block py-2 px-3 rounded hover:bg-[#3d4c5c] transition-colors duration-200">クラシックギター弦</a></li>
-                                <li><a href="#" class="block py-2 px-3 rounded hover:bg-[#3d4c5c] transition-colors duration-200">その他弦</a></li>
-                            </ul>
-                            <h3 class="text-xl font-mplus font-bold mt-8 mb-4">ブランド</h3>
-                            <ul class="space-y-2">
-                                <li><a href="#" class="block py-2 px-3 rounded hover:bg-[#3d4c5c] transition-colors duration-200">エリクサー</a></li>
-                                <li><a href="#" class="block py-2 px-3 rounded hover:bg-[#3d4c5c] transition-colors duration-200">ダダリオ</a></li>
-                                <li><a href="#" class="block py-2 px-3 rounded hover:bg-[#3d4c5c] transition-colors duration-200">アーニーボール</a></li>
-                                <li><a href="#" class="block py-2 px-3 rounded hover:bg-[#3d4c5c] transition-colors duration-200">フェンダー</a></li>
-                            </ul>
+        <!-- メインコンテンツセクション (全ページ共通) -->
+        <style>
+            #MainContent-body {
+                background-image: url('./img/main_bg_default.jpg');
+            }
+        </style>
+        <section id="MainContent-body" class="MainContent-body bg-cover bg-top">
+            <div class="container block-box pt-0">
+
+                <div class="block-box pb-0 md:flex md:items-baseline md:gap-x-2 xl:gap-x-4 text-center md:text-left">
+                    <p class="font-serif text-4xl lg:text-5xl xl:text-[65px] leading-tight">String</p>
+                    <h2 class="font-sans lg:text-lg xl:text-[20px] mt-1">弦</h2>
+                </div>
+                <div class="mt-5 lg:mt-10">
+                    <div class="font-sans text-base text-justify leading-relaxed">
+                        KAWASEのアコースティックギターは、選び抜かれた木材と熟練された職人の技術によって、豊かな音色と確かな品質を実現しています。初心者からプロフェッショナルまで、全てのプレイヤーに満足いただける一本が見つかります。
+                    </div>
+                </div>
+
+                <div class="flex justify-end items-center mt-8 md:mt-12">
+                    <div class="w-[14px]">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 24">
+                            <path d="M20,14c2.42,0,4.44,1.72,4.9,4h3.1v2h-3.1c-.46,2.28-2.48,4-4.9,4s-4.44-1.72-4.9-4H0v-2h15.1c.46-2.28,2.48-4,4.9-4ZM19.72,16.01s-.07,0-.11.01c-.05,0-.1.01-.15.02-.04,0-.08.01-.12.02-.06.01-.12.03-.18.05-.03,0-.05.01-.08.02-.16.05-.32.12-.46.19-.05.02-.09.05-.14.08-.03.02-.05.03-.08.05-.04.03-.09.05-.13.08-.04.02-.07.05-.1.08-.13.1-.25.21-.36.32-.03.03-.06.07-.09.1-.03.04-.06.07-.09.11-.02.02-.03.04-.05.07-.37.5-.59,1.11-.59,1.78s.22,1.28.59,1.77c.01.02.02.04.04.05.03.04.07.08.1.12.03.04.06.07.09.1.11.12.23.23.36.32.03.03.07.05.1.08.04.03.09.06.13.08.03.02.05.03.08.05.05.03.09.05.14.08.15.08.3.14.46.19.03,0,.05.02.08.02.06.02.12.03.18.05.04,0,.08.02.12.02.05,0,.1.02.15.02.04,0,.07.01.11.01.09,0,.18.02.28.02s.19,0,.28-.02c.04,0,.07,0,.11-.01.05,0,.1-.01.15-.02.04,0,.08-.01.12-.02.06-.01.12-.03.18-.05.03,0,.05-.01.08-.02.16-.05.32-.12.46-.19.05-.02.09-.05.14-.08.03-.02.05-.03.08-.05.04-.03.09-.05.13-.08.04-.02.07-.05.1-.08.13-.1.25-.21.36-.32.03-.03.06-.07.09-.1.03-.04.07-.08.1-.12.01-.02.03-.04.04-.05.37-.5.58-1.11.58-1.77s-.22-1.28-.58-1.78c-.02-.02-.03-.04-.05-.07-.03-.04-.06-.07-.09-.11-.03-.04-.06-.07-.09-.1-.11-.12-.23-.23-.36-.32-.03-.03-.07-.05-.1-.08-.04-.03-.09-.06-.13-.08-.03-.02-.05-.03-.08-.05-.03-.02-.06-.04-.08-.05l-.07-.04c-.14-.07-.28-.13-.43-.18h-.04s-.04-.02-.06-.03c-.06-.02-.12-.03-.18-.05-.04,0-.08-.02-.12-.02-.05,0-.1-.02-.15-.02-.04,0-.07-.01-.11-.01-.09,0-.18-.01-.28-.01s-.19,0-.28.01ZM8,0c2.42,0,4.44,1.72,4.9,4h15.1v2h-15.1c-.46,2.28-2.48,4-4.9,4s-4.44-1.72-4.9-4H0v-2h3.1C3.56,1.72,5.58,0,8,0ZM7.72,2.01s-.07,0-.11.01c-.05,0-.1.01-.15.02-.04,0-.08.01-.12.02-.06.01-.12.03-.18.05-.02,0-.04,0-.06.02h-.04c-.15.06-.29.12-.43.19l-.07.04s-.06.03-.08.05c-.03.02-.06.03-.08.05-.04.03-.09.05-.13.08-.04.02-.07.05-.1.08-.13.1-.25.21-.36.32-.03.03-.06.07-.09.1-.03.04-.06.07-.09.11-.02.02-.03.04-.05.07-.37.5-.58,1.11-.58,1.78s.22,1.28.58,1.77c.01.02.03.04.04.05.03.04.06.08.1.12.03.04.06.07.09.1.11.12.23.23.36.32.03.03.07.05.1.08.04.03.09.06.13.08.03.02.05.03.08.05.05.03.09.05.14.08.15.08.3.14.46.19.03,0,.05.02.08.02.06.02.12.03.18.05.04,0,.08.02.12.02.05,0,.1.02.15.02.04,0,.07.01.11.01.09,0,.19.02.28.02s.19,0,.28-.02c.04,0,.07,0,.11-.01.05,0,.1-.01.15-.02.04,0,.08-.01.12-.02.06-.01.12-.03.18-.05.03,0,.05-.01.08-.02.16-.05.32-.12.46-.19.05-.02.09-.05.14-.08.03-.02.05-.03.08-.05.04-.03.09-.05.13-.08.04-.02.07-.05.1-.08.13-.1.25-.21.36-.32.03-.03.06-.07.09-.1.03-.04.07-.08.1-.12.01-.02.02-.04.04-.05.37-.5.59-1.11.59-1.77s-.22-1.28-.59-1.78c-.02-.02-.03-.04-.05-.07-.03-.04-.06-.07-.09-.11-.03-.04-.06-.07-.09-.1-.11-.12-.23-.23-.36-.32-.03-.03-.07-.05-.1-.08-.04-.03-.09-.06-.13-.08-.03-.02-.05-.03-.08-.05-.04-.03-.09-.05-.14-.08-.15-.08-.3-.14-.46-.19-.03,0-.05-.02-.08-.02-.06-.02-.12-.03-.18-.05-.04,0-.08-.02-.12-.02-.05,0-.1-.02-.15-.02-.04,0-.07-.01-.11-.01-.09,0-.18-.01-.28-.01s-.19,0-.28.01Z"/>
+                        </svg>
+                    </div>
+                    <select name="sort_by" class="bg-transparent rounded-md text-sm py-1 px-3">
+                        <option>並び順</option>
+                        <option>並び順</option>
+                        <option>並び順</option>
+                    </select>
+                </div>
+
+                <div class="flex flex-col lg:flex-row lg:gap-8 xl:gap-12 mt-4">
+
+                    <aside class="order-2 lg:order-1 lg:w-1/4 lg:flex-shrink-0 mt-12 lg:mt-0">
+                        <div class="bg-white border-l-4 border-[#4d667f]">
+                            <h3 class="text-lg font-medium text-[#1a2530] px-4 py-2">絞り込み</h3>
                         </div>
+
+                        <!-- アコーディオンメニュー -->
+                        <ul class="mt-4">
+
+                            <li class="accordion-item group border-b border-black/50">
+                                <button class="accordion-toggle flex justify-between items-center w-full px-1 py-4 text-lg">
+                                    <span>製造タイプ</span>
+                                    <span class="block w-[11px]">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23.15 13.45" class="rotate-180 group-[.is-open]:rotate-0 transition-transform duration-300">
+                                            <path fill-rule="evenodd" class="fill-[#1a2530]" d="M0,11.57l1.88,1.88L11.57,3.76l9.69,9.69,1.88-1.88L11.57,0,0,11.57Z"/>
+                                        </svg>
+                                    </span>
+                                </button>
+                                <div class="accordion-panel overflow-hidden max-h-0 transition-[max-height] duration-500">
+                                    <ul class="pl-4 pt-1 pb-6 space-y-2 font-light">
+                                        <li>
+                                            <label class="flex items-center gap-x-2 cursor-pointer hover:text-[#4d667f] duration-300">
+                                                <input type="checkbox" class="w-4 h-4 bg-transparent border-current/50 rounded-sm accent-[#ffe8c9]">
+                                                <span>アコースティックギター</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="flex items-center gap-x-2 cursor-pointer hover:text-[#4d667f] duration-300">
+                                                <input type="checkbox" class="w-4 h-4 bg-transparent border-current/50 rounded-sm accent-[#ffe8c9]">
+                                                <span>ウクレレ</span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="accordion-item group border-b border-black/50">
+                                <button class="accordion-toggle flex justify-between items-center w-full px-1 py-4 text-lg">
+                                    <span>ブランド</span>
+                                    <span class="block w-[11px]">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23.15 13.45" class="rotate-180 group-[.is-open]:rotate-0 transition-transform duration-300">
+                                            <path fill-rule="evenodd" class="fill-[#1a2530]" d="M0,11.57l1.88,1.88L11.57,3.76l9.69,9.69,1.88-1.88L11.57,0,0,11.57Z"/>
+                                        </svg>
+                                    </span>
+                                </button>
+                                <div class="accordion-panel overflow-hidden max-h-0 transition-[max-height] duration-500">
+                                    <ul class="pl-4 pt-1 pb-6 space-y-2 font-light">
+                                        <li>
+                                            <label class="flex items-center gap-x-2 cursor-pointer hover:text-[#4d667f] duration-300">
+                                                <input type="checkbox" class="w-4 h-4 bg-transparent border-current/50 rounded-sm accent-[#ffe8c9]">
+                                                <span>マーティン</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="flex items-center gap-x-2 cursor-pointer hover:text-[#4d667f] duration-300">
+                                                <input type="checkbox" class="w-4 h-4 bg-transparent border-current/50 rounded-sm accent-[#ffe8c9]">
+                                                <span>ギブソン</span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="accordion-item group border-b border-black/50">
+                                <button class="accordion-toggle flex justify-between items-center w-full px-1 py-4 text-lg">
+                                    <span>製造国</span>
+                                    <span class="block w-[11px]">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23.15 13.45" class="rotate-180 group-[.is-open]:rotate-0 transition-transform duration-300">
+                                            <path fill-rule="evenodd" class="fill-[#1a2530]" d="M0,11.57l1.88,1.88L11.57,3.76l9.69,9.69,1.88-1.88L11.57,0,0,11.57Z"/>
+                                        </svg>
+                                    </span>
+                                </button>
+                                <div class="accordion-panel overflow-hidden max-h-0 transition-[max-height] duration-500">
+                                    <ul class="pl-4 pt-1 pb-6 space-y-2 font-light">
+                                        <li>
+                                            <label class="flex items-center gap-x-2 cursor-pointer hover:text-[#4d667f] duration-300">
+                                                <input type="checkbox" class="w-4 h-4 bg-transparent border-current/50 rounded-sm accent-[#ffe8c9]">
+                                                <span>アメリカ</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="flex items-center gap-x-2 cursor-pointer hover:text-[#4d667f] duration-300">
+                                                <input type="checkbox" class="w-4 h-4 bg-transparent border-current/50 rounded-sm accent-[#ffe8c9]">
+                                                <span>日本</span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="accordion-item group border-b border-black/50">
+                                <button class="accordion-toggle flex justify-between items-center w-full px-1 py-4 text-lg">
+                                    <span>カラー</span>
+                                    <span class="block w-[11px]">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23.15 13.45" class="rotate-180 group-[.is-open]:rotate-0 transition-transform duration-300">
+                                            <path fill-rule="evenodd" class="fill-[#1a2530]" d="M0,11.57l1.88,1.88L11.57,3.76l9.69,9.69,1.88-1.88L11.57,0,0,11.57Z"/>
+                                        </svg>
+                                    </span>
+                                </button>
+                                <div class="accordion-panel overflow-hidden max-h-0 transition-[max-height] duration-500">
+                                    <ul class="pl-4 pt-1 pb-6 space-y-2 font-light">
+                                        <li>
+                                            <label class="flex items-center gap-x-2 cursor-pointer hover:text-[#4d667f] duration-300">
+                                                <input type="checkbox" class="w-4 h-4 bg-transparent border-current/50 rounded-sm accent-[#ffe8c9]">
+                                                <span>黒</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="flex items-center gap-x-2 cursor-pointer hover:text-[#4d667f] duration-300">
+                                                <input type="checkbox" class="w-4 h-4 bg-transparent border-current/50 rounded-sm accent-[#ffe8c9]">
+                                                <span>チェリーサンバースト</span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="accordion-item group border-b border-black/50">
+                                <button class="accordion-toggle flex justify-between items-center w-full px-1 py-4 text-lg">
+                                    <span>利き手</span>
+                                    <span class="block w-[11px]">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23.15 13.45" class="rotate-180 group-[.is-open]:rotate-0 transition-transform duration-300">
+                                            <path fill-rule="evenodd" class="fill-[#1a2530]" d="M0,11.57l1.88,1.88L11.57,3.76l9.69,9.69,1.88-1.88L11.57,0,0,11.57Z"/>
+                                        </svg>
+                                    </span>
+                                </button>
+                                <div class="accordion-panel overflow-hidden max-h-0 transition-[max-height] duration-500">
+                                    <ul class="pl-4 pt-1 pb-6 space-y-2 font-light">
+                                        <li>
+                                            <label class="flex items-center gap-x-2 cursor-pointer hover:text-[#4d667f] duration-300">
+                                                <input type="checkbox" class="w-4 h-4 bg-transparent border-current/50 rounded-sm accent-[#ffe8c9]">
+                                                <span>右</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="flex items-center gap-x-2 cursor-pointer hover:text-[#4d667f] duration-300">
+                                                <input type="checkbox" class="w-4 h-4 bg-transparent border-current/50 rounded-sm accent-[#ffe8c9]">
+                                                <span>左</span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="accordion-item group border-b border-black/50">
+                                <button class="accordion-toggle flex justify-between items-center w-full px-1 py-4 text-lg">
+                                    <span>コラボシリーズ</span>
+                                    <span class="block w-[11px]">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23.15 13.45" class="rotate-180 group-[.is-open]:rotate-0 transition-transform duration-300">
+                                            <path fill-rule="evenodd" class="fill-[#1a2530]" d="M0,11.57l1.88,1.88L11.57,3.76l9.69,9.69,1.88-1.88L11.57,0,0,11.57Z"/>
+                                        </svg>
+                                    </span>
+                                </button>
+                                <div class="accordion-panel overflow-hidden max-h-0 transition-[max-height] duration-500">
+                                    <ul class="pl-4 pt-1 pb-6 space-y-2 font-light">
+                                        <li>
+                                            <label class="flex items-center gap-x-2 cursor-pointer hover:text-[#4d667f] duration-300">
+                                                <input type="checkbox" class="w-4 h-4 bg-transparent border-current/50 rounded-sm accent-[#ffe8c9]">
+                                                <span>コラボA</span>
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="flex items-center gap-x-2 cursor-pointer hover:text-[#4d667f] duration-300">
+                                                <input type="checkbox" class="w-4 h-4 bg-transparent border-current/50 rounded-sm accent-[#ffe8c9]">
+                                                <span>コラボB</span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                        </ul>
                     </aside>
 
-                    <div class="lg:flex-grow">
-                        <div class="bg-[#2a3744] p-6 rounded-lg shadow-lg min-h-[400px]">
-                            <h3 class="text-xl font-mplus font-bold mb-4">商品リスト</h3>
-                            <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
-                                <a href="" class="text-left block text-white">
-                                    <span class="card group relative block pt-[124.8697916%] overflow-hidden mb-4">
-                                        <img src="./img/top__block2nd_topics_guiter_1.jpg" alt="Limited Dreadnought Bass" class="absolute inset-0 object-cover transition-transform duration-300 group-hover:scale-110">
-                                    </span>
-                                    <span class="block text-xs sm:text-sm">
-                                        Limited Dreadnought Bass®<br>
-                                        モデルNo: G0041026789
-                                    </span>
-                                    <span class="block mt-1 font-medium">¥101,500</span>
-                                </a>
-                                <a href="" class="text-left block text-white">
-                                    <span class="card group relative block pt-[124.8697916%] overflow-hidden mb-4">
-                                        <img src="./img/top__block2nd_topics_guiter_2.jpg" alt="Limited Dreadnought Bass" class="absolute inset-0 object-cover transition-transform duration-300 group-hover:scale-110">
-                                    </span>
-                                    <span class="block text-xs sm:text-sm">
-                                        Limited Dreadnought Bass®<br>
-                                        モデルNo: G0041026790
-                                    </span>
-                                    <span class="block mt-1 font-medium">¥119,500</span>
-                                </a>
-                                <a href="" class="text-left block text-white">
-                                    <span class="card group relative block pt-[124.8697916%] overflow-hidden mb-4">
-                                        <img src="./img/top__block2nd_topics_guiter_3.jpg" alt="Limited Dreadnought Bass" class="absolute inset-0 object-cover transition-transform duration-300 group-hover:scale-110">
-                                    </span>
-                                    <span class="block text-xs sm:text-sm">
-                                        Limited Dreadnought Bass®<br>
-                                        モデルNo: G0041026791
-                                    </span>
-                                    <span class="block mt-1 font-medium">¥110,500</span>
-                                </a>
-                                <a href="" class="text-left block text-white">
-                                    <span class="card group relative block pt-[124.8697916%] overflow-hidden mb-4">
-                                        <img src="./img/top__block2nd_topics_guiter_4.jpg" alt="Limited Dreadnought Bass" class="absolute inset-0 object-cover transition-transform duration-300 group-hover:scale-110">
-                                    </span>
-                                    <span class="block text-xs sm:text-sm">
-                                        Limited Dreadnought Bass®<br>
-                                        モデルNo: G0041026792
-                                    </span>
-                                    <span class="block mt-1 font-medium">¥113,500</span>
-                                </a>
-                                </div>
+                    <div class="order-1 lg:order-2 lg:w-3/4">
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 md:gap-x-8 md:gap-y-12">
+                            <a href="#" class="text-left block">
+                                <span class="card group relative block pt-[124%] overflow-hidden mb-4">
+                                    <img src="./img/top__block2nd_topics_guiter_1.jpg" alt="商品名" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                                </span>
+                                <span class="block text-xs sm:text-sm">Limited Dreadnought Bass®</span>
+                                <span class="block mt-1 font-medium">¥101,500</span>
+                            </a>
+                            <a href="#" class="text-left block">
+                                <span class="card group relative block pt-[124%] overflow-hidden mb-4">
+                                    <img src="./img/top__block2nd_topics_guiter_2.jpg" alt="商品名" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                                </span>
+                                <span class="block text-xs sm:text-sm">Limited Dreadnought Bass®</span>
+                                <span class="block mt-1 font-medium">¥101,500</span>
+                            </a>
+                            <a href="#" class="text-left block">
+                                <span class="card group relative block pt-[124%] overflow-hidden mb-4">
+                                    <img src="./img/top__block2nd_topics_guiter_3.jpg" alt="商品名" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                                </span>
+                                <span class="block text-xs sm:text-sm">Limited Dreadnought Bass®</span>
+                                <span class="block mt-1 font-medium">¥101,500</span>
+                            </a>
+                            <a href="#" class="text-left block">
+                                <span class="card group relative block pt-[124%] overflow-hidden mb-4">
+                                    <img src="./img/top__block2nd_topics_guiter_4.jpg" alt="商品名" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                                </span>
+                                <span class="block text-xs sm:text-sm">Limited Dreadnought Bass®</span>
+                                <span class="block mt-1 font-medium">¥101,500</span>
+                            </a>
+                            <a href="#" class="text-left block">
+                                <span class="card group relative block pt-[124%] overflow-hidden mb-4">
+                                    <img src="./img/top__block2nd_topics_guiter_1.jpg" alt="商品名" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                                </span>
+                                <span class="block text-xs sm:text-sm">Limited Dreadnought Bass®</span>
+                                <span class="block mt-1 font-medium">¥101,500</span>
+                            </a>
+                            <a href="#" class="text-left block">
+                                <span class="card group relative block pt-[124%] overflow-hidden mb-4">
+                                    <img src="./img/top__block2nd_topics_guiter_2.jpg" alt="商品名" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                                </span>
+                                <span class="block text-xs sm:text-sm">Limited Dreadnought Bass®</span>
+                                <span class="block mt-1 font-medium">¥101,500</span>
+                            </a>
+                            <a href="#" class="text-left block">
+                                <span class="card group relative block pt-[124%] overflow-hidden mb-4">
+                                    <img src="./img/top__block2nd_topics_guiter_3.jpg" alt="商品名" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                                </span>
+                                <span class="block text-xs sm:text-sm">Limited Dreadnought Bass®</span>
+                                <span class="block mt-1 font-medium">¥101,500</span>
+                            </a>
+                            <a href="#" class="text-left block">
+                                <span class="card group relative block pt-[124%] overflow-hidden mb-4">
+                                    <img src="./img/top__block2nd_topics_guiter_4.jpg" alt="商品名" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                                </span>
+                                <span class="block text-xs sm:text-sm">Limited Dreadnought Bass®</span>
+                                <span class="block mt-1 font-medium">¥101,500</span>
+                            </a>
+                            <a href="#" class="text-left block">
+                                <span class="card group relative block pt-[124%] overflow-hidden mb-4">
+                                    <img src="./img/top__block2nd_topics_guiter_1.jpg" alt="商品名" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                                </span>
+                                <span class="block text-xs sm:text-sm">Limited Dreadnought Bass®</span>
+                                <span class="block mt-1 font-medium">¥101,500</span>
+                            </a>
+                            <a href="#" class="text-left block">
+                                <span class="card group relative block pt-[124%] overflow-hidden mb-4">
+                                    <img src="./img/top__block2nd_topics_guiter_2.jpg" alt="商品名" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                                </span>
+                                <span class="block text-xs sm:text-sm">Limited Dreadnought Bass®</span>
+                                <span class="block mt-1 font-medium">¥101,500</span>
+                            </a>
+                            <a href="#" class="text-left block">
+                                <span class="card group relative block pt-[124%] overflow-hidden mb-4">
+                                    <img src="./img/top__block2nd_topics_guiter_3.jpg" alt="商品名" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                                </span>
+                                <span class="block text-xs sm:text-sm">Limited Dreadnought Bass®</span>
+                                <span class="block mt-1 font-medium">¥101,500</span>
+                            </a>
+                            <a href="#" class="text-left block">
+                                <span class="card group relative block pt-[124%] overflow-hidden mb-4">
+                                    <img src="./img/top__block2nd_topics_guiter_4.jpg" alt="商品名" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                                </span>
+                                <span class="block text-xs sm:text-sm">Limited Dreadnought Bass®</span>
+                                <span class="block mt-1 font-medium">¥101,500</span>
+                            </a>
                         </div>
+
+                        <!-- ページャー -->
+                        <nav class="flex justify-center items-center gap-x-2 md:gap-x-4 mt-12 md:mt-16 text-sm">
+                            <a href="#" class="hidden md:flex items-center justify-center h-8 px-6 rounded-full border border-[#1a2530] hover:border-[#34506d] bg-[#1a2530] hover:bg-[#34506d] text-[#ffe8c9] transition-colors duration-300">前へ</a>
+                            <a href="#" class="flex items-center justify-center w-8 h-8 rounded-full border border-[#1a2530] hover:border-[#34506d] hover:bg-[#34506d] hover:text-[#ffe8c9] transition-colors duration-300">1</a>
+                            <span class="flex items-center justify-center w-8 h-8 rounded-full border border-[#1a2530] bg-[#1a2530] text-[#ffe8c9]">2</span>
+                            <a href="#" class="flex items-center justify-center w-8 h-8 rounded-full border border-[#1a2530] hover:border-[#34506d] hover:bg-[#34506d] hover:text-[#ffe8c9] transition-colors duration-300">3</a>
+                            <span>･･･</span>
+                            <a href="#" class="flex items-center justify-center w-8 h-8 rounded-full border border-[#1a2530] hover:border-[#34506d] hover:bg-[#34506d] hover:text-[#ffe8c9] transition-colors duration-300">10</a>
+                            <a href="#" class="hidden md:flex items-center justify-center h-8 px-6 rounded-full border border-[#1a2530] hover:border-[#34506d] bg-[#1a2530] hover:bg-[#34506d] text-[#ffe8c9] transition-colors duration-300">次へ</a>
+                        </nav>
+                        <nav class="flex md:hidden justify-center items-center gap-x-2 mt-4 text-sm">
+                            <a href="#" class="flex items-center justify-center h-8 px-6 rounded-full border border-[#1a2530] hover:border-[#34506d] bg-[#1a2530] hover:bg-[#34506d] text-[#ffe8c9] transition-colors duration-300">前へ</a>
+                            <a href="#" class="flex items-center justify-center h-8 px-6 rounded-full border border-[#1a2530] hover:border-[#34506d] bg-[#1a2530] hover:bg-[#34506d] text-[#ffe8c9] transition-colors duration-300">次へ</a>
+                        </nav>
+
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <section id="bottom-banner" class="block-box pt-0">
-            <div class="container">
-                <a href="#" class="category-banner group relative block overflow-hidden h-[45vw] md:h-[200px] lg:h-[240px] xl:h-[283px]">
-                    <img src="./img/page__bottom_banner.jpg" alt="ご購入ガイドバナー" class="transition-transform duration-300 group-hover:scale-110">
-                    <span class="border-filter"></span>
-                    <span class="banner-label !pb-0 !pl-6 md:!pl-12">
-                        <span class="block">
-                            <span class="block font-medium text-sm md:text-base leading-tight mb-2">ご購入ガイド</span>
-                            <span class="block font-serif text-[1.375rem] lg:text-3xl xl:text-[44px] leading-none tracking-wide">Shopping Guide</span>
-                            <span class="block text-left mt-4 md:mt-8">
-                                <span class="inline-block btn text-sm md:text-base text-center align-middle"><span><span class="!py-3 md:!py-4 !px-7 md:!px-12 leading-none">詳しく見る</span></span><span class="btn-border"></span></span>
-                            </span>
-                        </span>
-                    </span>
-                </a>
+                <div id="other-banner" class="block-box pb-0 md:flex justify-center">
+                    <a href="#" class="block group basis-7/12 bg-white">
+                        <img src="./img/eva_guiter.jpg" alt="" class="duration-300 group-hover:opacity-50">
+                    </a>
+                </div>
+
             </div>
         </section>
 

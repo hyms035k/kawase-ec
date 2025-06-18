@@ -125,57 +125,81 @@
         </div>
     </header>
 
-    <!-- ヒーローセクション -->
-    <section id="hero-section" class="init
-        h-screen md:h-[56.25vw] lg:h-screen
-        flex
-        flex-col
-        items-center
-        justify-center
-        text-white
-        before:absolute
-        before:block
-        before:inset-0
-        before:bg-cover
-        before:bg-center
-        before:bg-[url('./img/top__hero_bg_sp.jpg')] before:md:bg-[url('./img/top__hero_bg.jpg')]" aria-labelledby="hero-heading">
-        <div class="container h-full flex flex-col items-center justify-center">
-            <!-- ロゴのプレースホルダー -->
-            <h1 id="hero-logo" class="w-[80%] md:w-[46.1538461%] mx-auto"><img src="./img/top__hero_logo-min.png" alt=""></h1>
-            <h2 id="hero-heading" class="text-2xl xl:text-[33px] text-center text-[#ffe1be] leading-[1.4] mt-6">
-                <span class="relative block">あらゆる場面に対処できる<br>長年の経験と技術</span>
-            </h2>
-        </div>
-    </section>
+    <main id="MainContent" class="px-2 md:px-[30px]">
 
-    <main class="px-2 md:px-[30px]">
-        <section id="block-1st" class="bg-[url('./img/top__block1st_bg.jpg')] bg-cover bg-center">
+        <!-- ヒーローセクション -->
+        <style>
+            #hero-section:before {
+                background-image: url('./img/top__hero_bg.jpg');
+            }
+            @media screen and (max-width: 767px) {
+                #hero-section:before {
+                    background-image: url('./img/top__hero_bg_sp.jpg');
+                }
+            }
+        </style>
+        <section id="hero-section" class="init
+            relative
+            -mx-2 md:-mx-[30px]
+            h-screen md:h-[56.25vw] lg:h-screen
+            flex
+            flex-col
+            items-center
+            justify-center
+            text-white
+            before:absolute
+            before:block
+            before:inset-0
+            before:bg-cover
+            before:bg-center" aria-labelledby="hero-heading">
+            <div class="container h-full flex flex-col items-center justify-center relative z-10">
+                <!-- ロゴのプレースホルダー -->
+                <h1 id="hero-logo" class="w-[80%] md:w-[46.1538461%] mx-auto"><img src="./img/top__hero_logo-min.png" alt=""></h1>
+                <h2 id="hero-heading" class="text-2xl xl:text-[33px] text-center text-[#ffe1be] leading-[1.4] mt-6">
+                    <span class="relative block">あらゆる場面に対処できる<br>長年の経験と技術</span>
+                </h2>
+            </div>
+        </section>
+
+        <!-- メッセージセクション -->
+        <style>
+            #message-section {
+                background-image: url('./img/top__block1st_bg.jpg');
+            }
+        </style>
+        <section id="message-section" class="bg-cover bg-center">
             <div class="container block-box">
                 <div class="md:grid md:grid-cols-2 md:gap-[30px] lg:gap-[60px] items-center">
-                    <div class="flex flex-col">
+                    <div class="flex flex-col md:order-first">
                         <div class="md:flex md:items-baseline md:gap-x-2 xl:gap-x-4 text-center md:text-left">
-                            <p class="font-serif text-4xl text-5xl xl:text-[65px] leading-tight trans-flag ani-call ani-init fromTop fadeIn">Message</p>
+                            <p class="font-serif text-4xl text-5xl xl:text-[65px] leading-tight">Message</p>
                             <h2 class="font-sans lg:text-lg xl:text-[20px] mt-1">メッセージ</h2>
                         </div>
                         <div class="md:hidden my-5">
-                            <img src="./img/top__block1st_image.jpg" alt="メッセージのイメージ (スマホ)" class="w-full h-auto object-cover">
+                            <img src="./img/top__block1st_image.jpg" alt="" class="w-full h-auto object-cover">
                         </div>
                         <div class="md:mt-5 lg:mt-10">
-                            <h3 class="font-sans text-[1.3rem] lg:text-[24px] font-medium trans-flag ani-call ani-init fromRight fadeIn">音を愛し、心に寄り添う。</h3>
-                            <p class="font-sans text-base text-justify mt-4 leading-relaxed">
+                            <h3 class="font-sans text-[1.3rem] lg:text-[24px] font-medium">音を愛し、心に寄り添う。</h3>
+                            <div class="font-sans text-base text-justify mt-4 leading-relaxed">
                                 ここに和文のコメントが入ります。私たちのサービスや製品が、どのようにしてお客様の心に寄り添い、日常に彩りを与えるのか、その思いを込めてお伝えします。
                                 音楽のように、私たちの提供する価値が皆様の生活に調和をもたらすことを願っています。
-                            </p>
+                            </div>
                         </div>
                     </div>
-                    <div class="hidden md:flex items-center justify-center">
-                        <img src="./img/top__block1st_image.jpg" alt="メッセージのイメージ (PC)" class="w-full max-w-md h-auto object-cover">
+                    <div class="hidden md:!flex items-center justify-center">
+                        <img src="./img/top__block1st_image.jpg" alt="" class="w-full max-w-md h-auto object-cover">
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="block-2nd" class="bg-[url('./img/top__block2nd_bg.jpg')] bg-cover bg-top">
+        <!-- メインコンテンツセクション (全ページ共通) -->
+        <style>
+            #MainContent-body {
+                background-image: url('./img/top__block2nd_bg.jpg');
+            }
+        </style>
+        <section id="MainContent-body" class="MainContent-body bg-cover bg-top">
             <div class="container block-box pt-0">
 
                 <!-- おすすめ商品 / Topics -->
