@@ -138,18 +138,6 @@
         "settings": {
           "color_scheme": "scheme-1"
         }
-      },
-      "hero-section": {
-        "type": "hero-section",
-        "settings": {
-          "background_image_desktop": "shopify://shop_images/top__hero_bg.jpg",
-          "background_image_mobile": "shopify://shop_images/top__hero_bg_sp.jpg",
-          "use_main_visual": true,
-          "logo_image": "shopify://shop_images/logo-min.png",
-          "heading_text": "あらゆる場面に対処できる\n長年の経験と技術",
-          "title": "商品一覧",
-          "heading_english": "Catalog List"
-        }
       }
     },
     "content_for_index": [],

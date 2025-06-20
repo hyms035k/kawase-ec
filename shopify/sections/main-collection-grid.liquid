@@ -1,0 +1,371 @@
+{% comment %}
+  `custom-card-product` スニペットを再利用するため、
+  関連するCSSを読み込みます。
+{% endcomment %}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-facets.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign products_per_page = section.settings.products_per_page
+  assign columns_desktop = section.settings.columns_desktop
+-%}
+
+{% for block in section.blocks %}
+  {%- case block.type -%}
+    {%- when 'hero' -%}
+      {%- liquid
+        assign use_main_visual = block.settings.use_main_visual
+        assign hero_class = 'relative bg-cover bg-center -mx-2 md:-mx-[30px] pt-[45px] md:pt-[55px] xl:pt-[65px]'
+        assign hero_container_class = 'py-20'
+        assign hero_bg = 'hero_products.jpg' | asset_url
+        assign hero_bg_sp = ''
+
+        if use_main_visual
+          assign hero_class = 'init h-screen md:h-[56.25vw] lg:h-screen flex flex-col items-center justify-center text-white relative before:absolute before:block before:inset-0 before:bg-cover before:bg-center'
+          assign hero_container_class = 'h-full flex flex-col items-center justify-center relative z-10'
+          assign hero_bg_sp = 'top__hero_bg_sp.jpg' | asset_url
+        endif
+
+        if block.settings.background_image_desktop != blank
+          assign hero_bg = block.settings.background_image_desktop | image_url: width: 1920
+        elsif collection.image != blank
+          assign hero_bg = collection.image | image_url: width: 1920
+        endif
+
+        if block.settings.background_image_mobile != blank
+          assign hero_bg_sp = block.settings.background_image_mobile | image_url: width: 750
+        endif
+      -%}
+      {%- style -%}
+        #hero-section-{{ block.id }}{% if use_main_visual %}:before{% endif %} {
+          background-image: url('{{ hero_bg }}');
+        }
+        {% if hero_bg_sp != '' %}
+          @media screen and (max-width: 767px) {
+            #hero-section-{{ block.id }}{% if use_main_visual %}:before{% endif %} {
+              background-image: url('{{ hero_bg_sp }}');
+            }
+          }
+        {% endif %}
+      {%- endstyle -%}
+      <section
+        id="hero-section-{{ block.id }}"
+        class="hero-section {{ hero_class }}"
+        {{ block.shopify_attributes }}
+      >
+        <div class="container {{ hero_container_class }}">
+          {% if use_main_visual %}
+            <div class="hero-section__logo w-[80%] md:w-[46.1538461%] mx-auto">
+              {%- liquid
+                assign hero_logo = 'top__hero_logo-min.png' | asset_url
+                assign hero_alt = block.settings.logo_image.alt | default: 'Hero logo' | escape
+                assign hero_w = 248
+                assign hero_h = 73
+                if block.settings.logo_image != blank
+                  assign hero_logo = block.settings.logo_image | image_url: width: 800
+                  assign hero_h = 248 | divided_by: block.settings.logo_image.aspect_ratio | round
+                endif
+              -%}
+              <img
+                src="{{ hero_logo }}"
+                alt="{{ hero_alt }}"
+                class="w-full h-auto"
+                width="{{ hero_w }}"
+                height="{{ hero_h }}"
+                loading="eager"
+              >
+            </div>
+            {% if block.settings.heading_text != blank %}
+              <div class="hero-section__heading text-2xl xl:text-[33px] text-center text-[#ffe1be] leading-[1.4] mt-6">
+                <div class="relative block">{{ block.settings.heading_text | newline_to_br }}</div>
+              </div>
+            {% endif %}
+          {% else %}
+            <div class="text-center text-[#ffe8c9]">
+              <p class="font-serif text-4xl lg:text-5xl xl:text-[70px] leading-tight lg:leading-none">{{ block.settings.heading_english | default: collection.title }}</p>
+              <h2 class="outside-double-border flex items-center mx-auto md:w-36 lg:w-48 xl:w-64 lg:text-lg xl:text-[20px] font-medium leading-tight mt-8">{{ block.settings.title | default: '商品一覧' }}</h2>
+            </div>
+          {% endif %}
+        </div>
+      </section>
+  {%- endcase -%}
+{% endfor %}
+
+{%- style -%}
+  #MainContent-body-{{ section.id }} {
+    background-image: url('{{ "main_bg_default.jpg" | asset_url }}');
+  }
+{%- endstyle -%}
+
+<section id="MainContent-body-{{ section.id }}" class="MainContent-body bg-cover bg-top">
+  <div class="container block-box pt-0">
+    <div class="block-box pb-0 md:flex md:items-baseline md:gap-x-2 xl:gap-x-4 text-center md:text-left">
+        {%- if collection.metafields.collection.sub_title.value != blank -%}
+          <p class="font-serif text-4xl lg:text-5xl xl:text-[65px] leading-tight">{{ collection.metafields.collection.sub_title.value | capitalize | escape }}</p>
+          <h2 class="lg:text-lg xl:text-[20px] mt-1">{{ collection.title | escape }}</h2>
+        {% else %}
+          <h2 class="text-4xl lg:text-5xl xl:text-[65px] leading-tight">{{ collection.title | escape }}</h2>
+        {% endif %}
+    </div>
+    {% if collection.metafields.collection.description.value != blank %}
+      <div class="mt-5 lg:mt-10">
+          <div class="font-sans text-base text-justify leading-loose">
+            {{ collection.metafields.collection.description.value | newline_to_br }}
+          </div>
+      </div>
+    {% endif %}
+
+    {%- paginate collection.products by products_per_page -%}
+      <div class="mt-8 md:mt-12">
+        <facet-filters-form class="facets">
+          <form id="FacetSortForm" class="facets__form">
+            <div class="lg:col-span-full flex justify-end items-center mb-4 md:mb-6">
+              <input type="hidden" name="sort_by" value="{{ collection.sort_by | default: collection.default_sort_by }}">
+              {%- if section.settings.enable_sorting -%}
+                <div class="flex items-center gap-x-2 text-sm">
+                  <div class="w-[14px]">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 24" fill="currentColor">
+                      <path d="M20,14c2.42,0,4.44,1.72,4.9,4h3.1v2h-3.1c-.46,2.28-2.48,4-4.9,4s-4.44-1.72-4.9-4H0v-2h15.1c.46-2.28,2.48-4,4.9-4ZM19.72,16.01s-.07,0-.11.01c-.05,0-.1.01-.15.02-.04,0-.08.01-.12.02-.06.01-.12.03-.18.05-.03,0-.05.01-.08.02-.16.05-.32.12-.46.19-.05.02-.09.05-.14.08-.03.02-.05.03-.08.05-.04.03-.09.05-.13.08-.04.02-.07.05-.1.08-.13.1-.25.21-.36.32-.03.03-.06.07-.09.1-.03.04-.06.07-.09.11-.02.02-.03.04-.05.07-.37.5-.59,1.11-.59,1.78s.22,1.28.59,1.77c.01.02.02.04.04.05.03.04.07.08.1.12.03.04.06.07.09.1.11.12.23.23.36.32.03.03.07.05.1.08.04.03.09.06.13.08.03.02.05.03.08.05.05.03.09.05.14.08.15.08.3.14.46.19.03,0,.05.02.08.02.06.02.12.03.18.05.04,0,.08.02.12.02.05,0,.1.02.15.02.04,0,.07.01.11.01.09,0,.18.02.28.02s.19,0,.28-.02c.04,0,.07,0,.11-.01.05,0,.1-.01.15-.02.04,0,.08-.01.12-.02.06-.01.12-.03.18-.05.03,0,.05-.01.08-.02.16-.05.32-.12.46-.19.05-.02.09-.05.14-.08.03-.02.05-.03.08-.05.04-.03.09-.05-.13-.08.04-.02.07-.05-.1-.08.13-.1.25-.21-.36-.32-.03-.03-.06-.07-.09-.1.03-.04.07-.08.1-.12.01-.02.03-.04.04-.05.37-.5.58-1.11.58-1.77s-.22-1.28-.58-1.78c-.02-.02-.03-.04-.05-.07-.03-.04-.06-.07-.09-.11-.03-.04-.06-.07-.09-.1-.11-.12-.23-.23-.36-.32-.03-.03-.07-.05-.1-.08-.04-.03-.09-.06-.13-.08-.03-.02-.05-.03-.08-.05-.03-.02-.06-.04-.08-.05l-.07-.04c-.14-.07-.28-.13-.43-.18h-.04s-.04-.02-.06-.03c-.06-.02-.12-.03-.18-.05-.04,0-.08-.02-.12-.02-.05,0-.1-.02-.15-.02-.04,0-.07-.01-.11-.01-.09,0-.18-.01-.28-.01s-.19,0-.28.01ZM8,0c2.42,0,4.44,1.72,4.9,4h15.1v2h-15.1c-.46,2.28-2.48,4-4.9,4s-4.44-1.72-4.9-4H0v-2h3.1C3.56,1.72,5.58,0,8,0ZM7.72,2.01s-.07,0-.11.01c-.05,0-.1.01-.15.02-.04,0-.08.01-.12.02-.06.01-.12.03-.18.05-.02,0-.04,0-.06.02h-.04c-.15.06-.29.12-.43.19l-.07.04s-.06.03-.08.05c-.03.02-.06.03-.08.05-.04.03-.09.05-.13.08-.04.02-.07.05-.1.08-.13.1-.25.21-.36.32-.03.03-.06.07-.09.1-.03.04-.06.07-.09.11-.02.02-.03.04-.05.07-.37.5-.58,1.11-.58,1.78s.22,1.28.58,1.77c.01.02.03.04.04.05.03.04.06.08.1.12.03.04.06.07.09.1.11.12.23.23.36.32.03.03.07.05.1.08.04.03.09.06.13.08.03.02.05.03.08.05.05.03.09.05.14.08.15.08.3.14.46.19.03,0,.05.02.08.02.06.02.12.03.18.05.04,0,.08.02.12.02.05,0,.1.02.15.02.04,0,.07.01.11.01.09,0,.19.02.28.02s.19,0,.28-.02c.04,0,.07,0,.11-.01.05,0,.1-.01.15-.02.04,0,.08-.01.12-.02.06-.01.12-.03.18-.05.03,0,.05-.01.08-.02.16-.05.32-.12.46-.19.05-.02.09-.05.14-.08.03-.02.05-.03.08-.05.04-.03.09-.05-.13-.08.04-.02.07-.05-.1-.08.13-.1.25-.21-.36-.32-.03-.03-.06-.07-.09-.1.03-.04.07-.08.1-.12.01-.02.02-.04.04-.05.37-.5.59-1.11.59-1.77s-.22-1.28-.59-1.78c-.02-.02-.03-.04-.05-.07-.03-.04-.06-.07-.09-.11-.03-.04-.06-.07-.09-.1-.11-.12-.23-.23-.36-.32-.03-.03-.07-.05-.1-.08-.04-.03-.09-.06-.13-.08-.03-.02-.05-.03-.08-.05-.04-.03-.09-.05-.14-.08-.15-.08-.3-.14-.46-.19-.03,0-.05-.02-.08-.02-.06-.02-.12-.03-.18-.05-.04,0-.08-.02-.12-.02-.05,0-.1-.02-.15-.02-.04,0-.07-.01-.11-.01-.09,0-.18-.01-.28-.01s-.19,0-.28.01Z"/>
+                    </svg>
+                  </div>
+                  <select name="sort_by" class="bg-transparent rounded-md text-sm py-1 px-3">
+                    {%- for option in collection.sort_options -%}
+                      <option value="{{ option.value | escape }}" {% if option.value == collection.sort_by %}selected="selected"{% endif %}>
+                        {{ option.name | escape }}
+                      </option>
+                    {%- endfor -%}
+                  </select>
+                </div>
+              {%- endif -%}
+            </div>
+
+            <div class="flex flex-col lg:flex-row lg:gap-8 xl:gap-12 mt-4">
+              {%- if section.settings.enable_filtering -%}
+                <aside class="order-2 lg:order-1 lg:w-1/4 lg:flex-shrink-0 mt-12 lg:mt-0">
+                  <div id="FacetFiltersForm">
+                      <div class="bg-white border-l-4 border-[#4d667f]">
+                        <h3 class="text-lg font-medium text-[#1a2530] px-4 py-2">絞り込み</h3>
+                      </div>
+                      <ul class="mt-4">
+                        {%- for filter in collection.filters -%}
+                          {%- if filter.type == 'price_range' -%}
+                            <li class="accordion-item group border-b border-black/50">
+                               <button class="accordion-toggle flex justify-between items-center w-full px-1 py-4 text-lg">
+                                  <span>{{ filter.label | escape }}</span>
+                                  <span class="block w-[11px]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23.15 13.45" class="rotate-180 group-[.is-open]:rotate-0 transition-transform duration-300">
+                                      <path fill-rule="evenodd" class="fill-[#1a2530]" d="M0,11.57l1.88,1.88L11.57,3.76l9.69,9.69,1.88-1.88L11.57,0,0,11.57Z"/>
+                                    </svg>
+                                  </span>
+                               </button>
+                               <div class="accordion-panel overflow-hidden max-h-0 transition-[max-height] duration-500">
+                                  <div class="pl-4 pt-1 pb-6 space-y-4 font-light">
+                                    <price-range class="flex justify-between items-center">
+                                      <div class="flex items-center gap-x-2">
+                                        <label for="Filter-{{ filter.label | escape }}-GTE">{{ 'products.facets.from' | t }}</label>
+                                        <div class="relative">
+                                          <span class="absolute top-1/2 -translate-y-1/2 left-2 text-sm">{{ cart.currency.symbol }}</span>
+                                          <input name="{{ filter.min_value.param_name }}" id="Filter-{{ filter.label | escape }}-GTE" type="number" placeholder="0" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" class="w-24 bg-transparent border border-white/50 rounded pl-5 pr-2 py-1">
+                                        </div>
+                                      </div>
+                                       <div class="flex items-center gap-x-2">
+                                        <label for="Filter-{{ filter.label | escape }}-LTE">{{ 'products.facets.to' | t }}</label>
+                                        <div class="relative">
+                                           <span class="absolute top-1/2 -translate-y-1/2 left-2 text-sm">{{ cart.currency.symbol }}</span>
+                                           <input name="{{ filter.max_value.param_name }}" id="Filter-{{ filter.label | escape }}-LTE" type="number" placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" class="w-24 bg-transparent border border-white/50 rounded pl-5 pr-2 py-1">
+                                        </div>
+                                      </div>
+                                    </price-range>
+                                  </div>
+                               </div>
+                            </li>
+                          {%- else -%}
+                             <li class="accordion-item group border-b border-black/50">
+                               <button class="accordion-toggle flex justify-between items-center w-full px-1 py-4 text-lg">
+                                  <span>{{ filter.label | escape }}</span>
+                                   <span class="block w-[11px]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23.15 13.45" class="rotate-180 group-[.is-open]:rotate-0 transition-transform duration-300">
+                                      <path fill-rule="evenodd" class="fill-[#1a2530]" d="M0,11.57l1.88,1.88L11.57,3.76l9.69,9.69,1.88-1.88L11.57,0,0,11.57Z"/>
+                                    </svg>
+                                  </span>
+                               </button>
+                               <div class="accordion-panel overflow-hidden max-h-0 transition-[max-height] duration-500">
+                                  <ul class="pl-4 pt-1 pb-6 space-y-2 font-light">
+                                    {%- for value in filter.values -%}
+                                      <li>
+                                        <label for="Filter-{{ filter.label | escape }}-{{ forloop.index }}" class="flex items-center gap-x-2 cursor-pointer hover:text-white duration-300">
+                                          <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" id="Filter-{{ filter.label | escape }}-{{ forloop.index }}" {% if value.active %}checked{% endif %} {% if value.count == 0 and value.active == false %}disabled{% endif %} class="w-4 h-4 bg-transparent border-current/50 rounded-sm accent-[#1a2530]">
+                                          <span>{{ value.label | escape }} ({{ value.count }})</span>
+                                        </label>
+                                      </li>
+                                    {%- endfor -%}
+                                  </ul>
+                               </div>
+                            </li>
+                          {%- endif -%}
+                        {%- endfor -%}
+                      </ul>
+                      <noscript>
+                        <button type="submit" class="button mt-4">絞り込む</button>
+                      </noscript>
+                  </div>
+                </aside>
+              {%- endif -%}
+
+              <div class="order-1 lg:order-2 lg:w-3/4" id="ProductGrid">
+                <div class="grid grid-cols-2 md:grid-cols-{{ columns_desktop }} gap-x-4 gap-y-8 md:gap-x-8 md:gap-y-12">
+                  {%- for product in collection.products -%}
+                    {% render 'custom-card-product', card_product: product %}
+                  {%- else -%}
+                    <div class="col-span-full text-center">
+                      <p>{{ 'collections.general.no_matches' | t }}</p>
+                    </div>
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          </form>
+        </facet-filters-form>
+
+        {%- if paginate.pages > 1 -%}
+          {% render 'pagination', paginate: paginate %}
+        {%- endif -%}
+      </div>
+    {%- endpaginate -%}
+
+    <div id="other-banner" class="block-box pb-0 md:flex justify-center">
+      <a href="{{ section.settings.bottom_banner_link | default: "#" }}" class="block group basis-7/12 bg-white">
+        {% if section.settings.bottom_banner_image != blank %}
+          <img src="{{ section.settings.bottom_banner_image | image_url: width: 800 }}" alt="{{ section.settings.bottom_banner_image.alt | default: 'Banner' | escape }}" class="duration-300 group-hover:opacity-50">
+        {% else %}
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg w-full h-auto' }}
+        {% endif %}
+      </a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "コレクション商品グリッド",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 24,
+      "step": 4,
+      "default": 12,
+      "label": "1ページあたりの商品数"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "label": "PCでの列数"
+    },
+    {
+      "type": "header",
+      "content": "絞り込みと並び替え"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "default": true,
+      "label": "絞り込みを有効にする"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "default": true,
+      "label": "並び替えを有効にする"
+    },
+    {
+      "type": "header",
+      "content": "末尾のバナー"
+    },
+    {
+      "type": "image_picker",
+      "id": "bottom_banner_image",
+      "label": "バナー画像"
+    },
+    {
+      "type": "url",
+      "id": "bottom_banner_link",
+      "label": "バナーのリンク先"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "hero",
+      "name": "ヒーローセクション",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "background_image_desktop",
+          "label": "背景画像（PC）",
+          "info": "未設定の場合はコレクションの画像が適用されます。"
+        },
+        {
+          "type": "image_picker",
+          "id": "background_image_mobile",
+          "label": "背景画像（スマホ）"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_main_visual",
+          "label": "メインビジュアルとして使用",
+          "default": false,
+          "info": "チェックを入れると、ロゴと見出しテキストが表示されるトップページ仕様のレイアウトになります。"
+        },
+        {
+          "type": "header",
+          "content": "メインビジュアル用の設定"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo_image",
+          "label": "中央のロゴ画像"
+        },
+        {
+          "type": "textarea",
+          "id": "heading_text",
+          "label": "見出しテキスト",
+          "default": "テキストを入力"
+        },
+        {
+          "type": "header",
+          "content": "下層ページ用の設定"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "ページタイトル",
+          "info": "未設定の場合はコレクション名が適用されます。"
+        },
+        {
+          "type": "text",
+          "id": "heading_english",
+          "label": "英語表記",
+          "info": "未設定の場合はコレクション名が適用されます。"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "コレクション商品グリッド",
+      "blocks": [
+        {
+          "type": "hero"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

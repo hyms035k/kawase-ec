@@ -2,8 +2,8 @@
 {% for block in section.blocks %}
   {%- liquid
     assign use_main_visual = block.settings.use_main_visual
-    assign hero_class = 'relative bg-cover bg-center'
-    assign hero_container_class = 'pt-[45px] md:pt-[55px] xl:pt-[65px]'
+    assign hero_class = 'relative bg-cover bg-center -mx-2 md:-mx-[30px] pt-[45px] md:pt-[55px] xl:pt-[65px]'
+    assign hero_container_class = 'py-20'
     assign hero_bg = 'top__hero_bg.jpg' | asset_url
     assign hero_bg_sp = ''
 
@@ -62,7 +62,7 @@
         </div>
       {% endif %}
     {% else %}
-      <div class="text-center p-20 text-[#ffe8c9]">
+      <div class="text-center text-[#ffe8c9]">
         <p class="font-serif text-4xl lg:text-5xl xl:text-[70px] leading-tight lg:leading-none trans-flag ani-call ani-init fromBottom fadeIn">{{ block.settings.heading_english }}</p>
         <h2 class="outside-double-border flex items-center mx-auto md:w-36 lg:w-48 xl:w-64 lg:text-lg xl:text-[20px] font-medium leading-tight mt-8">{{ block.settings.title }}</h2>
       </div>
