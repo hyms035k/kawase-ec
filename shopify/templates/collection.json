@@ -31,7 +31,8 @@
         "columns_desktop": 3,
         "enable_filtering": true,
         "enable_sorting": true,
-        "bottom_banner_link": ""
+        "bottom_banner_image": "shopify://shop_images/eva_guiter.jpg",
+        "bottom_banner_link": "#"
       }
     }
   },

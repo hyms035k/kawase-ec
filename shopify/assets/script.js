@@ -168,4 +168,32 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+
+    // ===== サイドバーのアコーディオンメニュー制御 =====
+    const accordionItems = document.querySelectorAll('.accordion-item');
+
+    accordionItems.forEach(item => {
+        const toggle = item.querySelector('.accordion-toggle');
+        const panel = item.querySelector('.accordion-panel');
+
+        if (toggle && panel) {
+            toggle.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                // is-open クラスを親のli要素で付け外しする
+                item.classList.toggle('is-open');
+
+                // パネルが開いているかチェック
+                if (item.classList.contains('is-open')) {
+                    // パネルをコンテンツの実際の高さに合わせて開く
+                    panel.style.maxHeight = panel.scrollHeight + 'px';
+                } else {
+                    // パネルを閉じる
+                    panel.style.maxHeight = '0px';
+                }
+            });
+        }
+    });
+
 });
