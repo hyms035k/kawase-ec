@@ -33,6 +33,8 @@ module.exports = {
       },
     }
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/aspect-ratio'), // ← この行を追加
+  ]
 }
 

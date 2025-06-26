@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カワセ楽器（デモ）</title>
+
+    <link rel="stylesheet" href="./output.css">
+    <!-- GoogleFonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@100..900&display=swap" rel="stylesheet">
+
+    <link href="./css/style.min.css" rel="stylesheet">
+</head>
+<body class="font-sans antialiased text-[#1a2530] bg-[#1a2530] tracking-wider">
+
+    <header id="main-header" class="fixed top-0 left-0 w-full z-50 before:content-[''] before:absolute before:inset-0 before:pointer-events-none before:transition-all before:duration-1000">
+        <div class="w-full mx-auto px-[1.25rem] md:px-[15px] xl:max-w-[1070px] 2xl:max-w-[1200px]">
+            <div class="flex justify-between items-center py-3 gap-x-8 xl:gap-x-0">
+                <h1 class="w-[70px] md:w-[100px] xl:w-[138px] z-20"><a href="" class="block"><img src="./img/logo-min.png" alt="" class="transition filter hover:brightness-150 duration-300"></a></h1>
+                <ul id="mobile-menu" class="xl:flex justify-center items-center gap-x-7 font-mplus">
+                    <li class="dropdown-toggle group">
+                        <a href="">
+                            <span class="text-sm">ギター</span>
+                            <code>&gt;</code>
+                        </a>
+                        <div>
+                            <ul class="text-sm leading-relaxed pb-4 xl:py-1 xl:px-4 xl:bg-white">
+                                <li><a href="">サブメニュー</a></li>
+                                <li><a href="">サブメニュー</a></li>
+                                <li><a href="">サブメニュー</a></li>
+                                <li><a href="">サブメニュー</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="dropdown-toggle group">
+                        <a href="">
+                            <span class="text-sm">アクセサリ</span>
+                            <code>&gt;</code>
+                        </a>
+                        <div>
+                            <ul class="text-sm leading-relaxed pb-4 xl:py-1 xl:px-4 xl:bg-white">
+                                <li><a href="">サブメニュー</a></li>
+                                <li><a href="">サブメニュー</a></li>
+                                <li><a href="">サブメニュー</a></li>
+                                <li><a href="">サブメニュー</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="dropdown-toggle group">
+                        <a href="">
+                            <span class="text-sm">弦</span>
+                            <code>&gt;</code>
+                        </a>
+                        <div>
+                            <ul class="text-sm leading-relaxed pb-4 xl:py-1 xl:px-4 xl:bg-white">
+                                <li><a href="">サブメニュー</a></li>
+                                <li><a href="">サブメニュー</a></li>
+                                <li><a href="">サブメニュー</a></li>
+                                <li><a href="">サブメニュー</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="dropdown-toggle group">
+                        <a href="">
+                            <span class="text-sm">オリジナル</span>
+                            <code>&gt;</code>
+                        </a>
+                        <div>
+                            <ul class="text-sm leading-relaxed pb-4 xl:py-1 xl:px-4 xl:bg-white">
+                                <li><a href="">サブメニュー</a></li>
+                                <li><a href="">サブメニュー</a></li>
+                                <li><a href="">サブメニュー</a></li>
+                                <li><a href="">サブメニュー</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="dropdown-toggle group">
+                        <a href="">
+                            <span class="text-sm">ショッピングガイド</span>
+                            <code>&gt;</code>
+                        </a>
+                        <div>
+                            <ul class="text-sm leading-relaxed pb-4 xl:py-1 xl:px-4 xl:bg-white">
+                                <li><a href="">サブメニュー</a></li>
+                                <li><a href="">サブメニュー</a></li>
+                                <li><a href="">サブメニュー</a></li>
+                                <li><a href="">サブメニュー</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="dropdown-toggle group">
+                        <a href="">
+                            <span class="text-sm">KAWASEについて</span>
+                            <code>&gt;</code>
+                        </a>
+                        <div>
+                            <ul class="text-sm leading-relaxed pb-4 xl:py-1 xl:px-4 xl:bg-white">
+                                <li><a href="">サブメニュー</a></li>
+                                <li><a href="">サブメニュー</a></li>
+                                <li><a href="">サブメニュー</a></li>
+                                <li><a href="">サブメニュー</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="flex items-center grow xl:grow-0 justify-end gap-x-6 z-20">
+                    <li class="w-[20px] md:w-[23px]"><a href="" class="block"><img src="./img/icon_search.svg" alt=""></a></li>
+                    <li class="w-[20px] md:w-[23px]"><a href="" class="block"><img src="./img/icon_user.svg" alt=""></a></li>
+                    <li class="w-[20px] md:w-[23px]"><a href="" class="block"><img src="./img/icon_cart.svg" alt=""></a></li>
+                </ul>
+                <button id="hamburger-toggle" class="xl:hidden w-8 h-8 z-20">
+                    <span class="sr-only">メニューを開閉</span>
+                    <div id="icon-menu" class="space-y-2">
+                        <span class="block w-full h-0.5 bg-white"></span>
+                        <span class="block w-full h-0.5 bg-white"></span>
+                        <span class="block w-full h-0.5 bg-white"></span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="MainContent" class="px-2 md:px-[30px]">
+
+        <!-- ヒーローセクション -->
+        <style>
+            #page-hero {
+                background-image: url('./img/hero_products.jpg');
+            }
+        </style>
+        <section id="page-hero" class="relative bg-cover bg-center -mx-2 md:-mx-[30px] pt-[45px] md:pt-[55px] xl:pt-[65px]" aria-labelledby="page-hero-heading">
+            <div class="container py-20">
+                <div class="text-center text-[#ffe8c9]">
+                    <p class="font-serif text-4xl lg:text-5xl xl:text-[70px] leading-tight lg:leading-none trans-flag ani-call ani-init fromBottom fadeIn">Catalog List</p>
+                    <h2 class="outside-double-border flex items-center mx-auto w-48 md:w-36 lg:w-48 xl:w-64 lg:text-lg xl:text-[20px] font-medium leading-tight mt-8">商品一覧</h2>
+                </div>
+            </div>
+        </section>
+
+        <!-- メインコンテンツセクション (全ページ共通) -->
+        <style>
+            #MainContent-body {
+                background-image: url('./img/main_bg_default.jpg');
+            }
+        </style>
+        <section id="MainContent-body" class="MainContent-body bg-cover bg-top">
+            <div class="container block-box">
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 lg:items-start">
+                    
+                    <div class="product-details lg:col-span-7">
+                        <!-- アイキャッチ -->
+                        <div class="relative group cursor-pointer">
+                            <!-- アスペクト比を強制するコンテナ -->
+                            <div class="relative w-full pt-[81.3802083%] bg-white overflow-hidden">
+                                <img src="./img/detail_sample.jpg" alt="商品名" class="absolute inset-0 w-full h-full object-contain p-4">
+                            </div>
+                            <button class="absolute top-4 right-4 w-12 h-12 bg-white/50 rounded-full flex items-center justify-center border border-[#1A2530]-500 group-hover:border-[#1A2530] group-hover:bg-white duration-300">
+                                <span class="sr-only">拡大表示</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 group-hover:w-6 group-hover:h-6 duration-300"><path fill-rule="evenodd" d="M13.8,6.6c.3,0,.6.3.6.6v6.6c0,.3-.3.6-.6.6-.3,0-.6-.3-.6-.6v-6.6c0-.3.3-.6.6-.6ZM17.8,10.5c0,.3-.3.6-.6.6h-6.6c-.3,0-.6-.3-.6-.6,0-.3.3-.6.6-.6h6.6c.3,0,.6.3.6.6ZM19.7,16.4c3.3-3.2,3.3-8.5,0-11.8-3.2-3.3-8.5-3.3-11.8,0-3.3,3.2-3.3,8.5,0,11.8,3.2,3.3,8.5,3.3,11.8,0ZM20.6,3.8c3.7,3.7,3.7,9.7,0,13.5-3.7,3.7-9.6,3.7-13.4,0l-5.6,5.5c-.2.2-.6.2-.8,0-.2-.2-.2-.6,0-.8l5.6-5.6c-3-3.7-2.7-9.2.7-12.7C10.9,0,16.9,0,20.6,3.8Z"  clip-rule="evenodd" /></svg>
+                            </button>
+                        </div>
+                        <!-- アイキャッチ切り替え用サムネイル -->
+                        <div class="grid grid-cols-4 gap-2 mt-6">
+                            <a href="#" class="block border-2 border-sky-500"><span class="relative block aspect-1 bg-white"><img src="./img/detail_sample.jpg" alt="サムネイル1" class="absolute inset-0 w-full h-full object-contain"></span></a>
+                            <a href="#" class="block border-2 border-transparent hover:border-sky-500 transition"><span class="relative block aspect-1 bg-white"><img src="./img/detail_sample.jpg" alt="サムネイル2" class="absolute inset-0 w-full h-full object-contain"></span></a>
+                            <a href="#" class="block border-2 border-transparent hover:border-sky-500 transition"><span class="relative block aspect-1 bg-white"><img src="./img/detail_sample.jpg" alt="サムネイル3" class="absolute inset-0 w-full h-full object-contain"></span></a>
+                            <a href="#" class="block border-2 border-transparent hover:border-sky-500 transition"><span class="relative block aspect-1 bg-white"><img src="./img/detail_sample.jpg" alt="サムネイル4" class="absolute inset-0 w-full h-full object-contain"></span></a>
+                        </div>
+                        <div class="mt-8 border-t border-white/20 pt-8">
+                            <h3 class="text-xl mb-6 bg-[#1a2530] text-white px-4 py-2">製品説明</h3>
+                            <p class="text-sm leading-relaxed">ここに詳細な製品説明が入ります。サウンドの特性、使用されている木材のこだわり、製造プロセスにおける特筆すべき点などを記述します。</p>
+                        </div>
+                        <div class="mt-8 border-t border-white/20 pt-8">
+                            <h3 class="text-xl mb-6 bg-[#1a2530] text-white px-4 py-2">特徴</h3>
+                            <ul class="list-disc text-sm space-y-2 pl-6">
+                                <li>特徴1：ハンドメイドによる精巧な作り</li>
+                                <li>特徴2：長年使い込まれたような豊かな響き</li>
+                                <li>特徴3：演奏性に優れたスリムなネック形状</li>
+                            </ul>
+                        </div>
+                        <div class="mt-8 border-t border-white/20 pt-8">
+                            <h3 class="text-xl mb-6 bg-[#1a2530] text-white px-4 py-2">ハイライト</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-4">
+                                <div>
+                                    <div class="relative block aspect-1 bg-white"><img src="./img/detail_sample.jpg" alt="ハイライト1" class="absolute inset-0 w-full h-full object-contain"></div>
+                                    <h4 class="font-semibold mt-3">見出しが入ります</h4>
+                                    <p class="text-xs mt-1">ここにハイライトのコメントが入ります。</p>
+                                </div>
+                                <div>
+                                    <div class="relative block aspect-1 bg-white"><img src="./img/detail_sample.jpg" alt="ハイライト2" class="absolute inset-0 w-full h-full object-contain"></div>
+                                    <h4 class="font-semibold mt-3">見出しが入ります</h4>
+                                    <p class="text-xs mt-1">ここにハイライトのコメントが入ります。</p>
+                                </div>
+                                <div>
+                                    <div class="relative block aspect-1 bg-white"><img src="./img/detail_sample.jpg" alt="ハイライト3" class="absolute inset-0 w-full h-full object-contain"></div>
+                                    <h4 class="font-semibold mt-3">見出しが入ります</h4>
+                                    <p class="text-xs mt-1">ここにハイライトのコメントが入ります。</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-12">
+                            <div class="aspect-w-16 aspect-h-9 bg-black overflow-hidden">
+                               <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="product-info lg:col-span-5 lg:sticky lg:top-24 bg-white pb-4 !pb-6 md:!px-8 md:!pt-10 md:!pb-12">
+                        <div class="px-3">
+                            <h2 class="text-3xl lg:text-4xl leading-tight">Limited Precision Bass®</h2>
+                            <p class="mt-2 text-sm text-gray-500">モデルNo: G0041026789</p>
+                            <p class="mt-6 text-3xl font-medium">¥181,500 <span class="text-base font-normal">(税込)</span></p>
+                            <p class="mt-6 text-base leading-relaxed">ここに商品の簡単な説明文が入ります。このギターの特徴や、サウンドの傾向、おすすめの音楽ジャンルなどを簡潔に記述します。</p>
+
+                            <!-- スペック詳細へのリンク -->
+                            <div class="mt-6">
+                                <a href="#specs-section" class="inline-flex items-center gap-x-2 text-sm underline hover:text-sky-600 transition-colors">
+                                    <span>詳細について</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                                    <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                            </div>
+                        
+                            <div class="mt-6">
+                                <h3 class="text-sm font-semibold mb-2">カラー</h3>
+                                <div class="flex items-center gap-x-2">
+                                    <button class="w-8 h-8 rounded-full bg-blue-500 ring-2 ring-offset-2 ring-offset-white ring-sky-500"></button>
+                                    <button class="w-8 h-8 rounded-full bg-red-500 hover:ring-2 hover:ring-offset-2 hover:ring-offset-white hover:ring-sky-500"></button>
+                                    <button class="w-8 h-8 rounded-full bg-green-500 hover:ring-2 hover:ring-offset-2 hover:ring-offset-white hover:ring-sky-500"></button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- カートに入れるボタン -->
+                        <div class="mt-8">
+                            <button href="#" class="btn block w-full text-center align-middle !text-white">
+                                <span class="py-2 !bg-[#0071BE] before:!bg-white before:opacity-50">
+                                    <span class="before:!border-white after:!border-white">カートに入れる</span>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-16 md:mt-24 border-t border-white/20">
+                    <h3 class="text-xl font-semibold mb-6 bg-[#1a2530] text-white px-4 py-2 text-center">こちらもいかがですか？</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-3 lg:gap-6 mt-4">
+                        <a href="#" class="text-left block text-black">
+                            <span class="card group relative block pt-[124%] overflow-hidden mb-4 bg-white">
+                                <img src="./img/top__block2nd_topics_guiter_1.jpg" alt="商品名" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                            </span>
+                            <span class="block text-xs sm:text-sm">商品名が入ります</span>
+                            <span class="block mt-1 font-medium">¥000,000</span>
+                        </a>
+                        <a href="#" class="text-left block text-black">
+                            <span class="card group relative block pt-[124%] overflow-hidden mb-4 bg-white">
+                                <img src="./img/top__block2nd_topics_guiter_2.jpg" alt="商品名" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                            </span>
+                            <span class="block text-xs sm:text-sm">商品名が入ります</span>
+                            <span class="block mt-1 font-medium">¥000,000</span>
+                        </a>
+                        <a href="#" class="text-left block text-black">
+                            <span class="card group relative block pt-[124%] overflow-hidden mb-4 bg-white">
+                                <img src="./img/top__block2nd_topics_guiter_3.jpg" alt="商品名" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                            </span>
+                            <span class="block text-xs sm:text-sm">商品名が入ります</span>
+                            <span class="block mt-1 font-medium">¥000,000</span>
+                        </a>
+                        <a href="#" class="text-left block text-black">
+                            <span class="card group relative block pt-[124%] overflow-hidden mb-4 bg-white">
+                                <img src="./img/top__block2nd_topics_guiter_4.jpg" alt="商品名" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                            </span>
+                            <span class="block text-xs sm:text-sm">商品名が入ります</span>
+                            <span class="block mt-1 font-medium">¥000,000</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mt-16 md:mt-24 border-t border-white/20">
+                    <h3 class="text-xl font-semibold mb-6 bg-[#1a2530] text-white px-4 py-2 text-center">この製品を購入した人はこちらも購入しています</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-3 lg:gap-6 mt-4">
+                        <a href="#" class="text-left block text-black">
+                            <span class="card group relative block pt-[124%] overflow-hidden mb-4 bg-white">
+                                <img src="./img/top__block2nd_topics_guiter_1.jpg" alt="商品名" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                            </span>
+                            <span class="block text-xs sm:text-sm">商品名が入ります</span>
+                            <span class="block mt-1 font-medium">¥000,000</span>
+                        </a>
+                        <a href="#" class="text-left block text-black">
+                            <span class="card group relative block pt-[124%] overflow-hidden mb-4 bg-white">
+                                <img src="./img/top__block2nd_topics_guiter_2.jpg" alt="商品名" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                            </span>
+                            <span class="block text-xs sm:text-sm">商品名が入ります</span>
+                            <span class="block mt-1 font-medium">¥000,000</span>
+                        </a>
+                        <a href="#" class="text-left block text-black">
+                            <span class="card group relative block pt-[124%] overflow-hidden mb-4 bg-white">
+                                <img src="./img/top__block2nd_topics_guiter_3.jpg" alt="商品名" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                            </span>
+                            <span class="block text-xs sm:text-sm">商品名が入ります</span>
+                            <span class="block mt-1 font-medium">¥000,000</span>
+                        </a>
+                        <a href="#" class="text-left block text-black">
+                            <span class="card group relative block pt-[124%] overflow-hidden mb-4 bg-white">
+                                <img src="./img/top__block2nd_topics_guiter_4.jpg" alt="商品名" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                            </span>
+                            <span class="block text-xs sm:text-sm">商品名が入ります</span>
+                            <span class="block mt-1 font-medium">¥000,000</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 4. バナー -->
+                <div id="other-banner" class="block-box pb-0 md:flex justify-center">
+                    <a href="#" class="block group basis-7/12 bg-white"><img src="./img/eva_guiter.jpg" alt="キャンペーンバナー" class="duration-300 group-hover:opacity-50"></a>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-white px-2 md:px-[30px]">
+        <div class="bg-[url(./img/footer_bg.jpg)] bg-cover bg-center w-full block-box">
+            <div class="container">
+                <div class="lg:flex justify-between items-start">
+                    <div class="lg:basis-4/12 text-center lg:text-left">
+                        <a href="" class="block w-36 md:w-[190px] mx-auto lg:mx-0">
+                            <img src="./img/logo-min.png" alt="Kawase Gakki Logo">
+                        </a>
+                        <div class="mt-6 leading-relaxed">
+                            株式会社カワセ楽器<br><span class="text-sm">東京都千代田区神田小川町2-4</span>
+                        </div>
+                        <div class="mt-3 leading-relaxed text-sm">
+                            <a href="tel:0332912723">03-3291-2723</a>
+                        </div>
+                        <div class="mt-3 leading-relaxed text-sm">
+                            営業時間:10:00~19:00 (18:00日祝)<br>水曜定休(祝日と重なる場合は営業)
+                        </div>
+                        <div class="mt-8 text-center lg:text-left">
+                            <a href="#" class="inline-block btn text-center align-middle"><span><span class="!py-4 !px-7 md:!px-12 leading-none">詳しく見る</span></span><span class="btn-border"></span></a>
+                        </div>
+                    </div>
+
+                    <!-- ナビゲーションリンク -->
+                    <div class="footer-link flex flex-wrap md:flex-nowrap md:justify-center md:justify-end gap-x-5 md:gap-x-12 !leading-loose whitespace-nowrap text-xs md:text-base mt-8 md:md-0">
+                        <ul class="grow md:grow-0">
+                            <li>
+                                <a href="#" class="hover:underline">商品一覧</a>
+                                <ul>
+                                    <li><code>&gt;</code><a href="#" class="hover:underline">ギター</a></li>
+                                    <li><code>&gt;</code><a href="#" class="hover:underline">アクセサリ</a></li>
+                                    <li><code>&gt;</code><a href="#" class="hover:underline">弦</a></li>
+                                    <li><code>&gt;</code><a href="#" class="hover:underline">オリジナル</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <ul class="grow md:grow-0">
+                            <li><a href="#" class="hover:underline">会社情報</a></li>
+                            <li><a href="#" class="hover:underline">直営店情報</a></li>
+                            <li><a href="#" class="hover:underline">KAWASEの想い</a></li>
+                        </ul>
+                        <ul class="w-full md:w-auto mt-3 md:mt-0 columns-2 md:columns-1">
+                            <li class="w-[50%] md:w-auto"><a href="#" class="hover:underline">買物ガイド</a></li>
+                            <li class="w-[50%] md:w-auto"><a href="#" class="hover:underline">特定商取引法</a></li>
+                            <li class="w-[50%] md:w-auto"><a href="#" class="hover:underline">保証規定</a></li>
+                            <li class="w-[50%] md:w-auto"><a href="#" class="hover:underline">メンテナンス情報</a></li>
+                            <li class="w-[50%] md:w-auto"><a href="#" class="hover:underline">新規会員登録</a></li>
+                            <li class="w-[50%] md:w-auto"><a href="#" class="hover:underline">ログイン</a></li>
+                            <li class="w-[50%] md:w-auto"><a href="#" class="hover:underline">カート</a></li>
+                            <li class="w-[50%] md:w-auto"><a href="#" class="hover:underline">プライバシーポリシー</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- コピーライト -->
+    <div class="w-full bg-[#1a2530] py-6 font-serif text-sm text-white text-center leading-tight">&copy;2025 KAWASE</div>
+
+    <script src="./js/script.min.js"></script>
+</body>
+</html>
