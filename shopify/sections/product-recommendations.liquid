@@ -1,0 +1,54 @@
+{%- if section.settings.show_product_recommendations -%}
+  <div class="product-recommendations-wrapper" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_to_show }}">
+    {%- if recommendations.products_count > 0 -%}
+      <div class="mt-16 md:mt-24 border-t border-white/20">
+        <h3 class="text-xl font-semibold mb-6 bg-[#1a2530] text-white px-4 py-2 text-center">{{ section.settings.heading | escape }}</h3>
+        <div class="grid grid-cols-2 md:grid-cols-{{ section.settings.columns_desktop }} gap-6 md:gap-3 lg:gap-6 mt-4">
+          {%- for product in recommendations.products -%}
+            <a href="{{ product.url }}" class="text-left block text-[#ffe8c9]">
+              {% render 'custom-card-product', card_product: product %}
+            </a>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "関連商品",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_product_recommendations",
+      "label": "関連商品を表示する",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "こちらもいかがですか？",
+      "label": "見出し"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "label": "表示する商品数"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4,
+      "label": "PCでの列数"
+    }
+  ]
+}
+{% endschema %}
