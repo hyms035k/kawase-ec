@@ -196,4 +196,68 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+
+    // ===== 商品詳細ページ：サムネイル画像切り替え機能 =====
+    // ページ上のすべてのサムネイルギャラリーを対象にする
+    // 商品詳細の左カラムコンテナを取得
+    const galleryContainer = document.querySelector('.product__media-gallery');
+
+    if (galleryContainer) {
+        const thumbnails = galleryContainer.querySelectorAll('.product-thumbnail');
+        const mainImageContainer = galleryContainer.querySelector('[id^="main-product-image-container-"]');
+
+        if (!mainImageContainer || thumbnails.length === 0) return;
+
+        thumbnails.forEach(thumb => {
+            thumb.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                // すでにアクティブなサムネイルがクリックされた場合は何もしない
+                if (this.classList.contains('border-sky-500')) {
+                    return;
+                }
+
+                // --- ボーダーの切り替え ---
+                const currentActiveThumb = galleryContainer.querySelector('.product-thumbnail.border-sky-500');
+                if (currentActiveThumb) {
+                    currentActiveThumb.classList.remove('border-sky-500');
+                    currentActiveThumb.classList.add('border-transparent');
+                }
+                this.classList.remove('border-transparent');
+                this.classList.add('border-sky-500');
+
+                // --- 画像のクロスフェード処理 ---
+                const newImageSrc = this.href;
+                const oldImage = mainImageContainer.querySelector('img');
+
+                // ② 新しいimg要素を動的に作成
+                const newImage = new Image();
+                newImage.src = newImageSrc;
+                // 既存の画像のクラスをコピーしてスタイルを維持
+                newImage.className = oldImage.className;
+                // 初期状態として透明にするためのクラスをユーティリティで付与
+                newImage.classList.add('opacity-0');
+
+                // 新しい画像の読み込みが完了したら処理を開始
+                newImage.onload = () => {
+                    // メインエリアに新しい画像を追加（この時点では透明）
+                    mainImageContainer.appendChild(newImage);
+
+                    // ブラウザの次の描画フレームでフェードインを開始
+                    requestAnimationFrame(() => {
+                        newImage.classList.remove('opacity-0');
+                    });
+
+                    // ③ フェードイン完了後（0.3秒後）に古い画像を削除
+                    setTimeout(() => {
+                        // oldImageがまだ存在すれば削除
+                        if (oldImage && oldImage.parentNode === mainImageContainer) {
+                            mainImageContainer.removeChild(oldImage);
+                        }
+                    }, 500); // CSSのdurationと合わせる
+                };
+            });
+        });
+    }
+
 });

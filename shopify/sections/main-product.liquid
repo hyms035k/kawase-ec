@@ -29,7 +29,7 @@
   <section id="page-hero-{{ section.id }}" class="relative bg-cover bg-center -mx-2 md:-mx-[30px] pt-[45px] md:pt-[55px] xl:pt-[65px]">
     <div class="container py-20">
       <div class="text-center text-[#ffe8c9]">
-        <p class="font-serif text-4xl lg:text-5xl xl:text-[70px] leading-tight lg:leading-none">{{ product.type | default: "Products" }}</p>
+        <p class="font-serif text-4xl lg:text-5xl xl:text-[70px] leading-tight lg:leading-none">{{ product.type | default: "Catalog Details" }}</p>
         <h2 class="outside-double-border flex items-center mx-auto w-48 md:w-36 lg:w-48 xl:w-64 lg:text-lg xl:text-[20px] font-medium leading-tight mt-8">商品詳細</h2>
       </div>
     </div>
@@ -38,36 +38,36 @@
   <section id="MainContent-body-{{ section.id }}" class="MainContent-body bg-cover bg-top">
     <div class="container block-box">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 lg:items-start">
-        
+
         <div class="product-details lg:col-span-7">
           <product-media-gallery
-            class="block"
+            class="block product__media-gallery"
             data-desktop-layout="thumbnail"
             data-mobile-layout="slider"
           >
             <div class="relative group cursor-pointer">
               <div id="main-product-image-container-{{ section.id }}" class="relative w-full pt-[81.3802083%] bg-white overflow-hidden">
-                <img src="{{ product.featured_media | image_url }}" alt="{{ product.featured_media.alt | escape }}" class="absolute inset-0 w-full h-full object-contain p-4">
+                <img src="{{ product.featured_media | image_url }}" alt="{{ product.featured_media.alt | escape }}" class="product-main-image is-active absolute inset-0 w-full h-full bg-white object-contain p-4 transition-opacity duration-500 ease-in-out">
               </div>
-              <button class="absolute top-4 right-4 w-12 h-12 bg-white/50 rounded-full flex items-center justify-center border border-transparent group-hover:border-[#1A2530] group-hover:bg-white duration-300">
+              <button class="absolute top-4 right-4 w-12 h-12 bg-white/50 rounded-full flex items-center justify-center border border-[#cccccc] group-hover:border-[#1A2530] group-hover:bg-white duration-300">
                 <span class="sr-only">拡大表示</span>
                 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 group-hover:w-6 group-hover:h-6 duration-300"><path fill-rule="evenodd" d="M13.8,6.6c.3,0,.6.3.6.6v6.6c0,.3-.3.6-.6.6-.3,0-.6-.3-.6-.6v-6.6c0-.3.3-.6.6-.6ZM17.8,10.5c0,.3-.3.6-.6.6h-6.6c-.3,0-.6-.3-.6-.6,0-.3.3-.6.6-.6h6.6c.3,0,.6.3.6.6ZM19.7,16.4c3.3-3.2,3.3-8.5,0-11.8-3.2-3.3-8.5-3.3-11.8,0-3.3,3.2-3.3,8.5,0,11.8,3.2,3.3,8.5,3.3,11.8,0ZM20.6,3.8c3.7,3.7,3.7,9.7,0,13.5-3.7,3.7-9.6,3.7-13.4,0l-5.6,5.5c-.2.2-.6.2-.8,0-.2-.2-.2-.6,0-.8l5.6-5.6c-3-3.7-2.7-9.2.7-12.7C10.9,0,16.9,0,20.6,3.8Z"  clip-rule="evenodd" /></svg>
               </button>
             </div>
-            
+
             {%- if product.media.size > 1 -%}
-              <div class="grid grid-cols-4 gap-2 mt-6">
+              <div class="grid grid-cols-4 gap-1 md:gap-2 mt-3 md:mt-6">
                 {%- for media in product.media -%}
                   <a href="{{ media.preview_image | image_url }}" class="product-thumbnail block border-2 {% if forloop.first %}border-sky-500{% else %}border-transparent{% endif %} hover:border-sky-500 transition" data-media-id="{{ media.id }}">
-                    <span class="relative block aspect-1 bg-white">
-                      <img src="{{ media.preview_image | image_url: width: 200, height: 200 }}" alt="{{ media.alt | escape }}" class="absolute inset-0 w-full h-full object-contain">
+                    <span class="relative block aspect-square overflow-hidden bg-white">
+                      <img src="{{ media.preview_image | image_url: width: 200, height: 200, crop: false }}" alt="{{ media.alt | escape }}" class="absolute inset-0 w-full h-full object-contain">
                     </span>
                   </a>
                 {%- endfor -%}
               </div>
             {%- endif -%}
           </product-media-gallery>
-          
+
           {%- comment -%}
             商品説明や特徴などのタブコンテンツはここにレンダリングされます。
             実際のタブ切り替えロジックは別途JavaScriptで実装が必要です。
@@ -97,7 +97,7 @@
                   <div {{ block.shopify_attributes }}>
                   {%- case block.type -%}
                     {%- when 'title' -%}
-                      <h2 class="text-3xl lg:text-4xl leading-tight">{{ product.title | escape }}</h2>
+                      <h2 class="text-xl md:text-2xl lg:text-3xl leading-tight">{{ product.title | escape }}</h2>
                       <p class="mt-2 text-sm text-gray-500">モデルNo: {{ current_variant.sku | default: 'N/A' }}</p>
                     {%- when 'price' -%}
                        <div class="mt-6">
@@ -149,6 +149,9 @@
   </section>
 </div>
 
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-media-gallery.js' | asset_url }}" defer="defer"></script>
+
 {% schema %}
 {
   "name": "商品ページ",
@@ -157,14 +160,20 @@
     { "type": "price", "name": "価格", "limit": 1 },
     { "type": "variant_picker", "name": "バリエーション選択", "limit": 1 },
     { "type": "quantity_selector", "name": "数量セレクター", "limit": 1 },
-    { "type": "buy_buttons", "name": "購入ボタン", "limit": 1 },
+    { "type": "buy_buttons", "name": "購入ボタン", "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_dynamic_checkout",
+          "default": false,
+          "label": "動的チェックアウトボタンを表示"
+        }
+      ]
+    },
     { "type": "description", "name": "商品説明(右カラム)", "limit": 1 },
-    { "type": "share", "name": "共有ボタン", "limit": 1 },
     { "type": "vendor", "name": "販売元", "limit": 1 },
-    { "type": "description_tab", "name": "製品説明(タブ)", "limit": 1 },
-    { "type": "feature_tab", "name": "特徴(タブ)", "limit": 1 },
-    { "type": "highlight_tab", "name": "ハイライト(タブ)", "limit": 1 },
-    { "type": "video_tab", "name": "動画(タブ)", "limit": 1 }
+    { "type": "share", "name": "共有ボタン", "limit": 1 },
+    { "type": "description_tab", "name": "製品説明(タブ)", "limit": 1 }
   ],
   "settings": [
     {
