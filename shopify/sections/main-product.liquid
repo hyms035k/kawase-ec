@@ -3,150 +3,357 @@
 {{ 'component-slider.css' | asset_url | stylesheet_tag }}
 {{ 'component-modal-video.css' | asset_url | stylesheet_tag }}
 
+{% comment %} ヒーローセクション {% endcomment %}
 {%- liquid
   assign current_variant = product.selected_or_first_available_variant
-  assign hero_bg_image = product.featured_media
-  if collection
-    assign hero_bg_image = collection.image | default: product.featured_media
+
+  assign hero_bg = "hero_products.jpg" | asset_url
+  if section.settings.hero_desktop != blank
+    assign hero_bg = section.settings.hero_desktop | image_url: width: 1920
   endif
 
-  assign hero_bg_url = "hero_products.jpg" | asset_url
-  if hero_bg_image != blank
-    assign hero_bg_url = hero_bg_image | image_url: width: 1920, format: 'pjpg'
+  if section.settings.hero_mobile != blank
+    assign hero_bg_sp = section.settings.hero_mobile | image_url: width: 750
   endif
 -%}
-
-<div class="product-page-container text-[#1a2530]">
-  {%- style -%}
-    #page-hero-{{ section.id }} {
-      background-image: url('{{ hero_bg_url }}');
+{%- style -%}
+  #hero-section-{{ block.id }} {
+    background-image: url('{{ hero_bg }}');
+  }
+  {% if hero_bg_sp != blank %}
+    @media screen and (max-width: 767px) {
+      #hero-section-{{ block.id }} {
+        background-image: url('{{ hero_bg_sp }}');
+      }
     }
-    #MainContent-body-{{ section.id }} {
-      background-image: url('{{ "main_bg_default.jpg" | asset_url }}');
-    }
-  {%- endstyle -%}
+  {% endif %}
+{%- endstyle -%}
 
-  <section id="page-hero-{{ section.id }}" class="relative bg-cover bg-center -mx-2 md:-mx-[30px] pt-[45px] md:pt-[55px] xl:pt-[65px]">
-    <div class="container py-20">
-      <div class="text-center text-[#ffe8c9]">
-        <p class="font-serif text-4xl lg:text-5xl xl:text-[70px] leading-tight lg:leading-none">{{ product.type | default: "Catalog Details" }}</p>
-        <h2 class="outside-double-border flex items-center mx-auto w-48 md:w-36 lg:w-48 xl:w-64 lg:text-lg xl:text-[20px] font-medium leading-tight mt-8">商品詳細</h2>
-      </div>
+<section
+  id="hero-section-{{ block.id }}"
+  class="hero-section relative bg-cover bg-center -mx-2 md:-mx-[30px] pt-[45px] md:pt-[55px] xl:pt-[65px]"
+>
+  <div class="container py-20">
+    <div class="text-center text-[#ffe8c9]">
+      <p class="font-serif text-4xl lg:text-5xl xl:text-[70px] leading-tight lg:leading-none">{{ section.settings.heading_english | default: 'Catalog Detail' }}</p>
+      <h2 class="outside-double-border flex items-center mx-auto md:w-36 lg:w-48 xl:w-64 lg:text-lg xl:text-[20px] font-medium leading-tight mt-8">{{ section.settings.title | default: '商品詳細' }}</h2>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="MainContent-body-{{ section.id }}" class="MainContent-body bg-cover bg-top">
-    <div class="container block-box">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 lg:items-start">
 
-        <div class="product-details lg:col-span-7">
-          <product-media-gallery
-            class="block product__media-gallery"
-            data-desktop-layout="thumbnail"
-            data-mobile-layout="slider"
-          >
-            <div class="relative group cursor-pointer">
-              <div id="main-product-image-container-{{ section.id }}" class="relative w-full pt-[81.3802083%] bg-white overflow-hidden">
-                <img src="{{ product.featured_media | image_url }}" alt="{{ product.featured_media.alt | escape }}" class="product-main-image is-active absolute inset-0 w-full h-full bg-white object-contain p-4 transition-opacity duration-500 ease-in-out">
-              </div>
-              <button class="absolute top-4 right-4 w-12 h-12 bg-white/50 rounded-full flex items-center justify-center border border-[#cccccc] group-hover:border-[#1A2530] group-hover:bg-white duration-300">
-                <span class="sr-only">拡大表示</span>
-                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 group-hover:w-6 group-hover:h-6 duration-300"><path fill-rule="evenodd" d="M13.8,6.6c.3,0,.6.3.6.6v6.6c0,.3-.3.6-.6.6-.3,0-.6-.3-.6-.6v-6.6c0-.3.3-.6.6-.6ZM17.8,10.5c0,.3-.3.6-.6.6h-6.6c-.3,0-.6-.3-.6-.6,0-.3.3-.6.6-.6h6.6c.3,0,.6.3.6.6ZM19.7,16.4c3.3-3.2,3.3-8.5,0-11.8-3.2-3.3-8.5-3.3-11.8,0-3.3,3.2-3.3,8.5,0,11.8,3.2,3.3,8.5,3.3,11.8,0ZM20.6,3.8c3.7,3.7,3.7,9.7,0,13.5-3.7,3.7-9.6,3.7-13.4,0l-5.6,5.5c-.2.2-.6.2-.8,0-.2-.2-.2-.6,0-.8l5.6-5.6c-3-3.7-2.7-9.2.7-12.7C10.9,0,16.9,0,20.6,3.8Z"  clip-rule="evenodd" /></svg>
-              </button>
-            </div>
 
-            {%- if product.media.size > 1 -%}
-              <div class="grid grid-cols-4 gap-1 md:gap-2 mt-3 md:mt-6">
-                {%- for media in product.media -%}
-                  <a href="{{ media.preview_image | image_url }}" class="product-thumbnail block border-2 {% if forloop.first %}border-sky-500{% else %}border-transparent{% endif %} hover:border-sky-500 transition" data-media-id="{{ media.id }}">
-                    <span class="relative block aspect-square overflow-hidden bg-white">
-                      <img src="{{ media.preview_image | image_url: width: 200, height: 200, crop: false }}" alt="{{ media.alt | escape }}" class="absolute inset-0 w-full h-full object-contain">
-                    </span>
-                  </a>
-                {%- endfor -%}
-              </div>
+{% comment %} メインコンテンツ {% endcomment %}
+{%- liquid
+  assign bg_image = 'main_bg_default.jpg' | asset_url
+  if section.settings.background_image_switch == true and section.settings.background_image != blank
+    assign bg_image = section.settings.background_image | image_url: width: 1920
+  endif
+-%}
+{%- style -%}
+  #MainContent-body-{{ section.id }} {
+    background-image: url('{{ bg_image }}');
+  }
+  #MainContent-body-{{ section.id }} .rte ul {
+    list-style: disc outside;
+    padding-left: 1.5rem;
+  }
+{%- endstyle -%}
+
+<section id="MainContent-body-{{ section.id }}" class="MainContent-body bg-cover bg-top">
+  <div class="container block-box">
+
+    <div class="lg:hidden mb-8">
+      {%- for block in section.blocks -%}
+        <div {{ block.shopify_attributes }}>
+        {%- case block.type -%}
+          {%- when 'title' -%}
+            <h2 class="text-2xl leading-tight">{{ product.title | escape }}</h2>
+            {%- if product.metafields.custom.product_model_no != blank -%}
+              <p class="mt-2 text-sm text-gray-500">モデルNo: {{ product.metafields.custom.product_model_no }}</p>
             {%- endif -%}
-          </product-media-gallery>
-
-          {%- comment -%}
-            商品説明や特徴などのタブコンテンツはここにレンダリングされます。
-            実際のタブ切り替えロジックは別途JavaScriptで実装が必要です。
-          {%- endcomment -%}
-          {%- for block in section.blocks -%}
-            {%- case block.type -%}
-              {%- when 'description_tab' -%}
-                 {%- if product.description != blank -%}
-                    <div class="mt-8 border-t border-white/20 pt-8 text-[#ffe8c9]">
-                        <h3 class="text-xl mb-6 bg-[#1a2530] text-white px-4 py-2">製品説明</h3>
-                        <div class="rte text-sm leading-relaxed">{{ product.description }}</div>
-                    </div>
-                 {%- endif -%}
-            {%- endcase -%}
-          {%- endfor -%}
+          {%- when 'price' -%}
+            <div class="mt-4">
+              <p class="text-xl font-medium">{{ current_variant.price | money_without_trailing_zeros }} <span class="text-sm font-normal">(税込)</span></p>
+              {%- if current_variant.compare_at_price > current_variant.price -%}
+                <s class="block text-gray-500 mt-1">{{ current_variant.compare_at_price | money }}</s>
+              {%- endif -%}
+            </div>
+        {%- endcase -%}
         </div>
+      {%- endfor -%}
+    </div>
 
-        <div class="product-info lg:col-span-5 lg:sticky lg:top-24">
-          <div class="bg-white p-6 md:p-8 lg:p-12">
-            <product-form class="product-form">
-              <form method="post" action="/cart/add" id="product-form-{{ section.id }}" accept-charset="UTF-8" class="form" enctype="multipart/form-data" novalidate="novalidate" data-type="add-to-cart-form">
-                <input type="hidden" name="form_type" value="product">
-                <input type="hidden" name="utf8" value="✓">
-                <input type="hidden" name="id" value="{{ current_variant.id }}">
 
-                {%- for block in section.blocks -%}
-                  <div {{ block.shopify_attributes }}>
-                  {%- case block.type -%}
-                    {%- when 'title' -%}
-                      <h2 class="text-xl md:text-2xl lg:text-3xl leading-tight">{{ product.title | escape }}</h2>
-                      <p class="mt-2 text-sm text-gray-500">モデルNo: {{ current_variant.sku | default: 'N/A' }}</p>
-                    {%- when 'price' -%}
-                       <div class="mt-6">
-                         {%- render 'price', product: product, use_variant: true -%}
-                       </div>
-                    {%- when 'variant_picker' -%}
-                      {%- unless product.has_only_default_variant -%}
-                        <variant-radios class="mt-6" data-section="{{ section.id }}" data-url="{{ product.url }}">
-                          {%- for option in product.options_with_values -%}
-                            <fieldset class="js-variant-input-wrapper">
-                              <h3 class="text-sm font-semibold mb-2">{{ option.name }}</h3>
-                              <div class="flex items-center gap-x-2">
-                                {%- for value in option.values -%}
-                                  <input type="radio" id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" name="{{ option.name }}" value="{{ value | escape }}" {% if option.selected_value == value %} checked {% endif %}>
-                                  <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" class="w-8 h-8 rounded-full bg-blue-500 border-2 border-transparent hover:ring-2 hover:ring-offset-2 hover:ring-offset-white hover:ring-sky-500 has-[:checked]:ring-2 has-[:checked]:ring-offset-2 has-[:checked]:ring-sky-500 cursor-pointer">
-                                    <span class="sr-only">{{ value }}</span>
-                                  </label>
-                                {%- endfor -%}
-                              </div>
-                            </fieldset>
-                          {%- endfor -%}
-                           <script type="application/json">{{ product.variants | json }}</script>
-                        </variant-radios>
-                      {%- endunless -%}
-                    {%- when 'buy_buttons' -%}
-                      <div class="mt-8">
-                        <button type="submit" name="add" class="btn block w-full text-center align-middle !text-white {% if current_variant.available == false %} disabled {% endif %}">
-                          <span class="py-2 !bg-[#0071BE] before:!bg-white before:opacity-50">
-                            <span class="before:!border-white after:!border-white">
-                              {%- if current_variant.available -%}
-                                {{ 'products.product.add_to_cart' | t }}
-                              {%- else -%}
-                                {{ 'products.product.sold_out' | t }}
-                              {%- endif -%}
-                            </span>
-                          </span>
-                        </button>
-                      </div>
-                  {%- endcase -%}
-                  </div>
-                {%- endfor -%}
-              </form>
-            </product-form>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 lg:items-start">
+
+      <div class="product-details lg:col-span-7">
+        <product-media-gallery
+          class="block product__media-gallery"
+          data-desktop-layout="thumbnail"
+          data-mobile-layout="slider"
+        >
+          <div class="relative group cursor-pointer">
+            <div id="main-product-image-container-{{ section.id }}" class="relative w-full pt-[81.3802083%] bg-white overflow-hidden">
+              <img src="{{ product.featured_media | image_url }}" alt="{{ product.featured_media.alt | escape }}" class="product-main-image is-active absolute inset-0 w-full h-full bg-white object-contain p-4 transition-opacity duration-500 ease-in-out">
+            </div>
+            <button class="absolute top-4 right-4 w-12 h-12 bg-white/50 rounded-full flex items-center justify-center border border-[#cccccc] group-hover:border-[#1A2530] group-hover:bg-white duration-300">
+              <span class="sr-only">拡大表示</span>
+              <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 group-hover:w-6 group-hover:h-6 duration-300"><path fill-rule="evenodd" d="M13.8,6.6c.3,0,.6.3.6.6v6.6c0,.3-.3.6-.6.6-.3,0-.6-.3-.6-.6v-6.6c0-.3.3-.6.6-.6ZM17.8,10.5c0,.3-.3.6-.6.6h-6.6c-.3,0-.6-.3-.6-.6,0-.3.3-.6.6-.6h6.6c.3,0,.6.3.6.6ZM19.7,16.4c3.3-3.2,3.3-8.5,0-11.8-3.2-3.3-8.5-3.3-11.8,0-3.3,3.2-3.3,8.5,0,11.8,3.2,3.3,8.5,3.3,11.8,0ZM20.6,3.8c3.7,3.7,3.7,9.7,0,13.5-3.7,3.7-9.6,3.7-13.4,0l-5.6,5.5c-.2.2-.6.2-.8,0-.2-.2-.2-.6,0-.8l5.6-5.6c-3-3.7-2.7-9.2.7-12.7C10.9,0,16.9,0,20.6,3.8Z"  clip-rule="evenodd" /></svg>
+            </button>
+          </div>
+
+          {%- liquid
+            assign main_images = product.media | where: "media_type", "image"
+          -%}
+          {%- if product.media.size > 1 -%}
+            <div class="grid grid-cols-4 gap-1 md:gap-2 mt-3 md:mt-6">
+              {%- for media in product.media -%}
+                <a href="{{ media.preview_image | image_url }}" class="product-thumbnail block border-2 {% if forloop.first %}border-sky-500{% else %}border-transparent{% endif %} hover:border-sky-500 transition" data-media-id="{{ media.id }}">
+                  <span class="relative block aspect-square overflow-hidden bg-white">
+                    <img src="{{ media.preview_image | image_url: width: 200, height: 200, crop: false }}" alt="{{ media.alt | escape }}" class="absolute inset-0 w-full h-full object-contain">
+                  </span>
+                </a>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </product-media-gallery>
+
+        {%- comment -%}
+          商品説明や特徴などのタブコンテンツはここにレンダリングされます。
+          実際のタブ切り替えロジックは別途JavaScriptで実装が必要です。
+        {%- endcomment -%}
+        {%- comment -%}
+          製品説明、特徴、ハイライト
+        {%- endcomment -%}
+        {%- if product.metafields.custom.product_note != blank -%}
+          <div class="mt-8">
+            <h3 class="text-lg md:text-xl font-medium mb-4 md:mb-6 bg-[#1a2530] text-white px-4 py-2">製品説明</h3>
+            <div class="rte text-sm leading-relaxed">
+              {{ product.metafields.custom.product_note | metafield_tag }}
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if product.metafields.custom.product_feature != blank -%}
+          <div class="mt-8">
+            <h3 class="text-lg md:text-xl font-medium mb-4 md:mb-6 bg-[#1a2530] text-white px-4 py-2">特徴</h3>
+            <div class="rte text-sm leading-relaxed">
+              {{ product.metafields.custom.product_feature | metafield_tag }}
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- liquid
+          assign has_any_highlight = false
+          for i in (1..3)
+            assign image_key = "product_highlight_" | append: i | append: "_img"
+            assign label_key = "product_highlight_" | append: i | append: "_label"
+            assign note_key = "product_highlight_" | append: i | append: "_note"
+            if product.metafields.custom[image_key] != blank or product.metafields.custom[label_key] != blank or product.metafields.custom[note_key] != blank
+              assign has_any_highlight = true
+              break
+            endif
+          endfor
+        -%}
+        {%- if has_any_highlight -%}
+        <div class="mt-8">
+          <h3 class="text-lg md:text-xl mb-6 bg-[#1a2530] text-white px-4 py-2">ハイライト</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-4">
+            {%- for i in (1..3) -%}
+              {%- liquid
+                assign image_key = "product_highlight_" | append: i | append: "_img"
+                assign label_key = "product_highlight_" | append: i | append: "_label"
+                assign note_key = "product_highlight_" | append: i | append: "_note"
+                assign image = product.metafields.custom[image_key]
+                assign label = product.metafields.custom[label_key]
+                assign note = product.metafields.custom[note_key]
+              -%}
+              {%- if image != blank or label != blank or note != blank -%}
+                <div>
+                  {%- if image != blank -%}
+                    <div class="relative block aspect-square bg-white">
+                      <img src="{{ image | image_url: width: 400 }}" alt="{{ label | default: 'ハイライト画像' | escape }}" class="absolute inset-0 w-full h-full object-contain">
+                    </div>
+                  {%- endif -%}
+                  {%- if label != blank -%}
+                    <h4 class="font-medium mt-3">{{ label }}</h4>
+                  {%- endif -%}
+                  {%- if note != blank -%}
+                    <p class="text-xs mt-1">{{ note }}</p>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
           </div>
         </div>
+        {%- endif -%}
 
+        {%- comment %} Video Section {% endcomment -%}
+        {%- if product.metafields.custom.product_youtube != blank -%}
+          <div class="mt-8 md:mt-12">
+            <div class="aspect-video bg-black overflow-hidden">
+              <iframe src="https://www.youtube.com/embed/{{ product.metafields.custom.product_youtube.value }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full"></iframe>
+            </div>
+          </div>
+        {%- endif -%}
+        {%- if product.metafields.custom.product_movie != blank -%}
+          <div class="mt-8 md:mt-12">
+            <div class="aspect-video bg-black overflow-hidden">
+              {{ product.metafields.custom.product_movie.value | video_tag: controls: true, class: "w-full h-full" }}
+            </div>
+          </div>
+        {%- endif -%}
       </div>
+
+      <div class="product-info lg:col-span-5 lg:sticky lg:top-24">
+        <div class="bg-white p-6 md:p-8 lg:p-12">
+          <product-form class="product-form">
+            <form method="post" action="/cart/add" id="product-form-{{ section.id }}" accept-charset="UTF-8" class="form" enctype="multipart/form-data" novalidate="novalidate" data-type="add-to-cart-form">
+              <input type="hidden" name="form_type" value="product">
+              <input type="hidden" name="utf8" value="✓">
+              <input type="hidden" name="id" value="{{ current_variant.id }}">
+
+              {%- for block in section.blocks -%}
+                <div {{ block.shopify_attributes }}>
+                {%- case block.type -%}
+                  {%- when 'title' -%}
+                    <h2 class="text-xl md:text-2xl lg:text-3xl leading-tight">{{ product.title | escape }}</h2>
+                    {%- if product.metafields.custom.product_model_no != blank -%}
+                      <p class="mt-2 text-sm text-gray-500">モデルNo: {{ product.metafields.custom.product_model_no }}</p>
+                    {%- endif -%}
+                  {%- when 'price' -%}
+                    <div class="mt-6">
+                      <p class="text-xl font-medium">{{ current_variant.price | money_without_trailing_zeros }} <span class="text-sm font-normal">(税込)</span></p>
+                      {%- if current_variant.compare_at_price > current_variant.price -%}
+                        <s class="block text-gray-500 mt-1">{{ current_variant.compare_at_price | money }}</s>
+                      {%- endif -%}
+                    </div>
+                     {%- if product.description != blank -%}
+                       <div class="mt-6 text-sm md:text-base leading-relaxed rte">
+                         {{ product.description }}
+                       </div>
+                     {%- endif -%}
+                  {%- when 'variant_picker' -%}
+                    {%- unless product.has_only_default_variant -%}
+                      <variant-radios class="mt-6" data-section="{{ section.id }}" data-url="{{ product.url }}">
+                        {%- for option in product.options_with_values -%}
+                          <fieldset class="js-variant-input-wrapper mt-6">
+                            <h3 class="text-sm font-medium mb-2">{{ option.name }}</h3>
+                            <div class="flex items-center gap-x-2">
+                              {%- for value in option.values -%}
+                                <div class="group relative w-10 p-1 rounded-full border-2 border-gray-200 hover:border-sky-500 has-[:checked]:!border-[#1a2530] duration-300">
+                                  {%- liquid
+                                    assign option_index = 'option' | append: option.position
+                                    assign variant_for_value = product.variants | where: option_index, value | first
+                                    assign variant_image_metafield = variant_for_value.metafields.custom.variant_image
+                                    assign variant_color_metafield = variant_for_value.metafields.custom.variant_color
+                                  -%}
+                                  <input type="radio" id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" name="{{ option.name }}" value="{{ value | escape }}" {% if option.selected_value == value %} checked {% endif %} class="sr-only">
+                                  <label
+                                    for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+                                    class="block aspect-square w-full rounded-full cursor-pointer
+                                    {% if variant_image_metafield == blank and variant_color_metafield == blank %}bg-gray-200{% endif %}
+                                    {% if variant_image_metafield != blank %}bg-cover bg-center{% endif %}"
+                                    {% if variant_image_metafield != blank %}
+                                      style="background-image: url({{ variant_image_metafield | image_url: width: 50, height: 50 }});"
+                                    {% elsif variant_color_metafield != blank %}
+                                      style="background-color: {{ variant_color_metafield }};"
+                                    {% endif %}
+                                  >
+                                    <span class="sr-only">{{ value }}</span>
+                                  </label>
+                                </div>
+                              {%- endfor -%}
+                            </div>
+                          </fieldset>
+                        {%- endfor -%}
+                         <script type="application/json">{{ product.variants | json }}</script>
+                      </variant-radios>
+                    {%- endunless -%}
+                  {%- when 'buy_buttons' -%}
+                    <div class="mt-12">
+                      <button type="submit" name="add" class="btn block w-full text-center align-middle !text-white {% if current_variant.available == false %} disabled {% endif %}">
+                        <span class="py-2 !bg-[#0071BE] before:!bg-white before:opacity-50">
+                          <span class="before:!border-white after:!border-white">
+                            {%- if current_variant.available -%}
+                              {{ 'products.product.add_to_cart' | t }}
+                            {%- else -%}
+                              {{ 'products.product.sold_out' | t }}
+                            {%- endif -%}
+                          </span>
+                        </span>
+                      </button>
+                    </div>
+                {%- endcase -%}
+                </div>
+              {%- endfor -%}
+            </form>
+          </product-form>
+        </div>
+      </div>
+
     </div>
-  </section>
+
+    <!-- こちらもいかがですか？ -->
+    {%- liquid
+      assign custom_recommends = product.metafields.custom.product_recommends.value
+    -%}
+    {%- if custom_recommends != blank -%}
+    <div class="mt-12 md:mt-24">
+        <h3 class="text-lg md:text-xl font-medium mb-6 bg-[#1a2530] text-white px-4 py-2 text-center">こちらもいかがですか？</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4 md:gap-x-3 lg:gap-x-6 gap-y-8 mt-4">
+            {%- for product_item in custom_recommends -%}
+                <a href="{{ product_item.url }}" class="text-left block text-black">
+                    <span class="card group relative block !h-auto pt-[124%] overflow-hidden mb-4 bg-white">
+                        <img src="{{ product_item.featured_image | image_url: width: 550 }}" alt="{{ product_item.featured_image.alt | escape }}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" loading="lazy">
+                    </span>
+                    <span class="block text-xs sm:text-sm">{{ product_item.title }}</span>
+                    <span class="block mt-1 font-medium">{{ product_item.price | money }}</span>
+                </a>
+            {%- endfor -%}
+        </div>
+    </div>
+    {%- endif -%}
+
+    <!-- この製品を購入した人はこちらも購入しています -->
+    {%- if recommendations.products_count > 0 -%}
+      <div class="mt-12 md:mt-24">
+          <h3 class="text-lg md:text-xl font-medium mb-6 bg-[#1a2530] text-white px-4 py-2 text-center">この製品を購入した人はこちらも購入しています</h3>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4 md:gap-x-3 lg:gap-x-6 gap-y-8 mt-4">
+              {%- for product in recommendations.products -%}
+                  <a href="{{ product.url }}" class="text-left block text-black">
+                      <span class="card group relative block !h-auto pt-[124%] overflow-hidden mb-4 bg-white">
+                          <img src="{{ product.featured_image | image_url: width: 550 }}" alt="{{ product.featured_image.alt | escape }}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" loading="lazy">
+                      </span>
+                      <span class="block text-xs sm:text-sm">{{ product.title }}</span>
+                      <span class="block mt-1 font-medium">{{ product.price | money }}</span>
+                  </a>
+              {%- endfor -%}
+          </div>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{%- style -%}
+  #image-modal {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+  }
+  #image-modal.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    display: flex; /* hidden クラスを上書きして表示 */
+  }
+{%- endstyle -%}
+<div id="image-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+  <div class="relative bg-white p-4 rounded-lg max-w-3xl max-h-full overflow-auto">
+    <button id="close-modal" class="absolute top-2 right-2 text-gray-800 hover:text-gray-600 text-2xl font-bold leading-none">&times;</button>
+    <img id="modal-image" src="" alt="Product Image" class="max-w-full max-h-[80vh] object-contain">
+  </div>
 </div>
 
 <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
@@ -176,6 +383,49 @@
     { "type": "description_tab", "name": "製品説明(タブ)", "limit": 1 }
   ],
   "settings": [
+    {
+      "type": "header",
+      "content": "ヒーローセクションの設定"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image_desktop",
+      "label": "背景画像（PC）",
+      "info": "未設定の場合はデフォルトの画像が適用されます。"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image_mobile",
+      "label": "背景画像（スマホ）"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "ページタイトル",
+      "info": "未設定の場合はコレクション名が適用されます。"
+    },
+    {
+      "type": "text",
+      "id": "heading_english",
+      "label": "英語表記",
+      "info": "未設定の場合はコレクション名が適用されます。"
+    },
+    {
+      "type": "header",
+      "content": "全体設定"
+    },
+    {
+      "type": "checkbox",
+      "id": "background_image_switch",
+      "label": "背景画像を設定する",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "背景画像",
+      "info": "※背景画像を設定する場合のみ有効です。※背景画像が未指定の場合はデフォルト画像が設定されます。"
+    },
     {
       "type": "select",
       "id": "gallery_layout",

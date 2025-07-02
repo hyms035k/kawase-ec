@@ -260,4 +260,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ===== モーダルウィンドウ制御 =====
+    const mainProductImageContainer = document.querySelector('[id^="main-product-image-container-"]');
+    const imageModal = document.getElementById('image-modal');
+    const modalImage = document.getElementById('modal-image');
+    const closeModalButton = document.getElementById('close-modal');
+
+    if (mainProductImageContainer && imageModal && modalImage && closeModalButton) {
+      mainProductImageContainer.addEventListener('click', () => {
+        const mainImage = mainProductImageContainer.querySelector('img');
+        if (mainImage) {
+          modalImage.src = mainImage.src;
+          imageModal.classList.add('is-open');
+        }
+      });
+
+      closeModalButton.addEventListener('click', () => {
+        imageModal.classList.remove('is-open');
+      });
+
+      imageModal.addEventListener('click', (event) => {
+        if (event.target === imageModal) {
+          imageModal.classList.remove('is-open');
+        }
+      });
+    }
 });

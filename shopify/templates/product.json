@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -13,30 +22,24 @@
         },
         "variant_picker": {
           "type": "variant_picker",
-          "settings": {
-            "picker_type": "button"
-          }
+          "settings": {}
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {}
         },
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
-            "show_dynamic_checkout": false
+            "show_dynamic_checkout": true
           }
         },
-        "description_tab": {
-          "type": "description_tab",
+        "description": {
+          "type": "description",
           "settings": {}
         },
-        "feature_tab": {
-          "type": "feature_tab",
-          "settings": {}
-        },
-        "highlight_tab": {
-          "type": "highlight_tab",
-          "settings": {}
-        },
-        "video_tab": {
-          "type": "video_tab",
+        "share": {
+          "type": "share",
           "settings": {}
         }
       },
@@ -44,39 +47,41 @@
         "title",
         "price",
         "variant_picker",
+        "quantity_selector",
         "buy_buttons",
-        "description_tab",
-        "feature_tab",
-        "highlight_tab",
-        "video_tab"
+        "description",
+        "share"
       ],
       "settings": {
+        "background_image_desktop": "shopify://shop_images/hero_products.jpg",
+        "title": "商品詳細",
+        "heading_english": "Catalog Detail",
+        "background_image_switch": false,
+        "gallery_layout": "stacked",
         "enable_video_looping": false
       }
     },
-    "product-recommendations": {
-      "type": "product-recommendations",
+    "related-products": {
+      "type": "related-products",
       "settings": {
-        "heading": "こちらもいかがですか？",
-        "columns_desktop": 4
+        "heading": "You may also like",
+        "heading_size": "h2",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "padding_top": 36,
+        "padding_bottom": 28
       }
-    },
-    "complementary-products": {
-      "type": "complementary-products",
-      "settings": {
-        "heading": "この製品を購入した人はこちらも購入しています",
-        "columns_desktop": 4
-      }
-    },
-    "bottom-banner": {
-      "type": "bottom-banner",
-      "settings": {}
     }
   },
   "order": [
     "main",
-    "product-recommendations",
-    "complementary-products",
-    "bottom-banner"
+    "related-products"
   ]
 }

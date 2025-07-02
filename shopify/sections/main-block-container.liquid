@@ -71,6 +71,8 @@
 </section>
 {% endfor %}
 
+
+
 {% comment %} メッセージセクション {% endcomment %}
 {%- liquid
   assign message_background_image = section.settings.message_background_image
@@ -137,9 +139,12 @@
   </div>
 </section>
 
+
+
+{% comment %} メインコンテンツ {% endcomment %}
 {%- liquid
-  assign bg_image = 'top__block2nd_bg.jpg' | asset_url
-  if section.settings.background_image != blank
+  assign bg_image = 'main_bg_default.jpg' | asset_url
+  if section.settings.background_image_switch == true and section.settings.background_image != blank
     assign bg_image = section.settings.background_image | image_url: width: 1920
   endif
 -%}

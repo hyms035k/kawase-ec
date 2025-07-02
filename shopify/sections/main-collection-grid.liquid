@@ -11,6 +11,7 @@
   assign columns_desktop = section.settings.columns_desktop
 -%}
 
+{% comment %} ヒーローセクション {% endcomment %}
 {% for block in section.blocks %}
   {%- case block.type -%}
     {%- when 'hero' -%}
@@ -92,9 +93,18 @@
   {%- endcase -%}
 {% endfor %}
 
+
+
+{% comment %} メインコンテンツ {% endcomment %}
+{%- liquid
+  assign bg_image = 'main_bg_default.jpg' | asset_url
+  if section.settings.background_image_switch == true and section.settings.background_image != blank
+    assign bg_image = section.settings.background_image | image_url: width: 1920
+  endif
+-%}
 {%- style -%}
   #MainContent-body-{{ section.id }} {
-    background-image: url('{{ "main_bg_default.jpg" | asset_url }}');
+    background-image: url('{{ bg_image }}');
   }
 {%- endstyle -%}
 
@@ -249,6 +259,22 @@
 {
   "name": "コレクション商品グリッド",
   "settings": [
+    {
+      "type": "header",
+      "content": "全体設定"
+    },
+    {
+      "type": "checkbox",
+      "id": "background_image_switch",
+      "label": "背景画像を設定する",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "背景画像",
+      "info": "※背景画像を設定する場合のみ有効です。※背景画像が未指定の場合はデフォルト画像が設定されます。"
+    },
     {
       "type": "range",
       "id": "products_per_page",

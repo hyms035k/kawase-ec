@@ -27,6 +27,7 @@
         "hero_z7khrQ"
       ],
       "settings": {
+        "background_image_switch": false,
         "products_per_page": 12,
         "columns_desktop": 3,
         "enable_filtering": true,
