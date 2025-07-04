@@ -25,7 +25,7 @@
     -%}
 
     <product-form
-      class="product-form"
+      class="product-form block mt-12"
       data-hide-errors="{{ gift_card_recipient_feature_active }}"
       data-section-id="{{ section.id }}"
     >
@@ -74,7 +74,7 @@
             id="ProductSubmitButton-{{ section_id }}"
             type="submit"
             name="add"
-            class="product-form__submit button button--full-width {% if show_dynamic_checkout %}button--secondary{% else %}button--primary{% endif %}"
+            class="product-form__submit btn block w-full text-center align-middle !text-white {% if show_dynamic_checkout %}button--secondary{% else %}button--primary{% endif %}"
             {% if product.selected_or_first_available_variant.available == false
               or quantity_rule_soldout
               or product.selected_or_first_available_variant == null
@@ -82,14 +82,16 @@
               disabled
             {% endif %}
           >
-            <span>
-              {%- if product.selected_or_first_available_variant == null -%}
-                {{ 'products.product.unavailable' | t }}
-              {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
-                {{ 'products.product.sold_out' | t }}
-              {%- else -%}
-                {{ 'products.product.add_to_cart' | t }}
-              {%- endif -%}
+            <span class="btn-outline py-2{% if quantity_rule_soldout %} !bg-[#bbbbbb] cursor-default before:!hidden{% else %} !bg-[#0071BE] before:!bg-white before:opacity-50{% endif %}">
+              <span class="btn-inline before:!border-white after:!border-white">
+                {%- if product.selected_or_first_available_variant == null -%}
+                  {{ 'products.product.unavailable' | t }}
+                {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
+                  {{ 'products.product.sold_out' | t }}
+                {%- else -%}
+                  {{ 'products.product.add_to_cart' | t }}
+                {%- endif -%}
+              </span>
             </span>
             {%- render 'loading-spinner' -%}
           </button>

@@ -20,34 +20,40 @@
           "type": "price",
           "settings": {}
         },
-        "variant_picker": {
-          "type": "variant_picker",
-          "settings": {}
-        },
         "quantity_selector": {
           "type": "quantity_selector",
           "settings": {}
         },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
-            "show_dynamic_checkout": true
+            "show_dynamic_checkout": false,
+            "show_gift_card_recipient": false
           }
         },
         "description": {
           "type": "description",
+          "disabled": true,
           "settings": {}
         },
         "share": {
           "type": "share",
+          "disabled": true,
           "settings": {}
         }
       },
       "block_order": [
         "title",
         "price",
-        "variant_picker",
         "quantity_selector",
+        "variant_picker",
         "buy_buttons",
         "description",
         "share"
@@ -58,11 +64,14 @@
         "heading_english": "Catalog Detail",
         "background_image_switch": false,
         "gallery_layout": "stacked",
-        "enable_video_looping": false
+        "enable_video_looping": false,
+        "bottom_banner_image": "shopify://shop_images/eva_guiter.jpg",
+        "bottom_banner_link": "#"
       }
     },
     "related-products": {
       "type": "related-products",
+      "disabled": true,
       "settings": {
         "heading": "You may also like",
         "heading_size": "h2",
@@ -75,8 +84,8 @@
         "show_secondary_image": true,
         "show_vendor": false,
         "show_rating": false,
-        "padding_top": 36,
-        "padding_bottom": 28
+        "padding_top": 0,
+        "padding_bottom": 0
       }
     }
   },

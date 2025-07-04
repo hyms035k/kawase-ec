@@ -288,6 +288,54 @@
     {{ 'base.css' | asset_url | stylesheet_tag }}
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
+    {% comment %}
+    GLightbox CSS - Added 2025-07-03
+    {% endcomment %}
+    {{ 'glightbox.min.css' | asset_url | stylesheet_tag }}
+    {% style %}
+      /* モーダルウィンドウの調整 */
+      .glightbox-container {
+        background-color: rgba(26,37,48,0.8);
+      }
+      .glightbox-clean .gprev,
+      .glightbox-clean .gnext {
+        display: none !important;
+      }
+      .glightbox-clean .gclose {
+        transition: 0.3s;
+        background-color: #1a2530 !important;
+        border-radius: 50% !important;
+        border: solid 2px #fff;
+      }
+      .glightbox-clean .gclose:hover {
+        background-color: #0ea5e9 !important;
+      }
+      .glightbox-clean .gclose svg {
+        width: 13px;
+      }
+      .gslide-image img {
+        max-width: calc(100vw - 30px);
+        max-height: calc(100dvh - 60px);
+        box-shadow: 0 0 30px rgba(0,0,0,0.25);
+      }
+      @media (min-width: 768px) {
+        .gslide-image img {
+          max-width: calc(100vw - 60px);
+        }
+      }
+      @media (min-width: 992px) {
+        .gslide-image img {
+          max-height: calc(100vh - 60px);
+        }
+      }
+      @media (min-width: 1366px) {
+        .glightbox-clean .gclose {
+          top: 30px;
+          right: 60px;
+        }
+      }
+    {% endstyle %}
+
     {%- if settings.cart_type == 'drawer' -%}
       {{ 'component-cart-drawer.css' | asset_url | stylesheet_tag }}
       {{ 'component-cart.css' | asset_url | stylesheet_tag }}
@@ -338,6 +386,11 @@
 
     {%- if settings.cart_type == 'drawer' -%}
       {%- render 'cart-drawer' -%}
+    {%- endif -%}
+
+    {% comment %} Cart Notification - Added 2025-07-03 {% endcomment %}
+    {%- if settings.cart_type == 'notification' -%}
+      {%- render 'cart-notification' -%}
     {%- endif -%}
 
     {% sections 'header-group' %}
@@ -406,7 +459,17 @@
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
+    {% comment %}
+    GLightbox JS - Added 2025-07-03
+    {% endcomment %}
+    <script src="{{ 'glightbox.min.js' | asset_url }}" defer></script>
     <script src="{{ 'script.min.js' | asset_url }}" defer="defer"></script>
 
-  </body>
-</html>
+    {% comment %} Cart Notification JS and CSS - Added 2025-07-03 {% endcomment %}
+    {%- if settings.cart_type == 'notification' -%}
+      <link rel="stylesheet" href="{{ 'component-cart-notification.css' | asset_url }}" media="print" onload="this.media='all'">
+      <script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
+
+   </body>
+ </html>

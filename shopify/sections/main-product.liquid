@@ -60,168 +60,195 @@
   }
 {%- endstyle -%}
 
+{%- liquid
+  assign product_form_id = 'product-form-' | append: section.id
+-%}
+
+<script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+{%- if product.quantity_price_breaks_configured? -%}
+  <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
 <section id="MainContent-body-{{ section.id }}" class="MainContent-body bg-cover bg-top">
-  <div class="container block-box">
 
-    <div class="lg:hidden mb-8">
-      {%- for block in section.blocks -%}
-        <div {{ block.shopify_attributes }}>
-        {%- case block.type -%}
-          {%- when 'title' -%}
-            <h2 class="text-2xl leading-tight">{{ product.title | escape }}</h2>
-            {%- if product.metafields.custom.product_model_no != blank -%}
-              <p class="mt-2 text-sm text-gray-500">モデルNo: {{ product.metafields.custom.product_model_no }}</p>
-            {%- endif -%}
-          {%- when 'price' -%}
-            <div class="mt-4">
-              <p class="text-xl font-medium">{{ current_variant.price | money_without_trailing_zeros }} <span class="text-sm font-normal">(税込)</span></p>
-              {%- if current_variant.compare_at_price > current_variant.price -%}
-                <s class="block text-gray-500 mt-1">{{ current_variant.compare_at_price | money }}</s>
+  <product-info
+    id="MainProduct-{{ section.id }}"
+    class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}"
+    data-section="{{ section.id }}"
+    data-product-id="{{ product.id }}"
+    data-update-url="true"
+    data-url="{{ product.url }}"
+    {% if section.settings.image_zoom == 'hover' %}
+      data-zoom-on-hover
+    {% endif %}
+  >
+
+    <div
+      id="ProductInfo-{{ section.id }}"
+      class="product__info-container container block-box"
+    >
+
+      <div class="lg:hidden mb-8">
+        {%- for block in section.blocks -%}
+          <div {{ block.shopify_attributes }}>
+          {%- case block.type -%}
+            {%- when 'title' -%}
+              <h2 class="text-2xl leading-tight">{{ product.title | escape }}</h2>
+              {%- if product.metafields.custom.product_model_no != blank -%}
+                <p class="mt-2 text-sm text-gray-500">モデルNo: {{ product.metafields.custom.product_model_no }}</p>
               {%- endif -%}
-            </div>
-        {%- endcase -%}
-        </div>
-      {%- endfor -%}
-    </div>
-
-
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 lg:items-start">
-
-      <div class="product-details lg:col-span-7">
-        <product-media-gallery
-          class="block product__media-gallery"
-          data-desktop-layout="thumbnail"
-          data-mobile-layout="slider"
-        >
-          <div class="relative group cursor-pointer">
-            <div id="main-product-image-container-{{ section.id }}" class="relative w-full pt-[81.3802083%] bg-white overflow-hidden">
-              <img src="{{ product.featured_media | image_url }}" alt="{{ product.featured_media.alt | escape }}" class="product-main-image is-active absolute inset-0 w-full h-full bg-white object-contain p-4 transition-opacity duration-500 ease-in-out">
-            </div>
-            <button class="absolute top-4 right-4 w-12 h-12 bg-white/50 rounded-full flex items-center justify-center border border-[#cccccc] group-hover:border-[#1A2530] group-hover:bg-white duration-300">
-              <span class="sr-only">拡大表示</span>
-              <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 group-hover:w-6 group-hover:h-6 duration-300"><path fill-rule="evenodd" d="M13.8,6.6c.3,0,.6.3.6.6v6.6c0,.3-.3.6-.6.6-.3,0-.6-.3-.6-.6v-6.6c0-.3.3-.6.6-.6ZM17.8,10.5c0,.3-.3.6-.6.6h-6.6c-.3,0-.6-.3-.6-.6,0-.3.3-.6.6-.6h6.6c.3,0,.6.3.6.6ZM19.7,16.4c3.3-3.2,3.3-8.5,0-11.8-3.2-3.3-8.5-3.3-11.8,0-3.3,3.2-3.3,8.5,0,11.8,3.2,3.3,8.5,3.3,11.8,0ZM20.6,3.8c3.7,3.7,3.7,9.7,0,13.5-3.7,3.7-9.6,3.7-13.4,0l-5.6,5.5c-.2.2-.6.2-.8,0-.2-.2-.2-.6,0-.8l5.6-5.6c-3-3.7-2.7-9.2.7-12.7C10.9,0,16.9,0,20.6,3.8Z"  clip-rule="evenodd" /></svg>
-            </button>
+            {%- when 'price' -%}
+              <div class="mt-4">
+                <p class="text-xl font-medium">{{ current_variant.price | money_without_trailing_zeros }} <span class="text-sm font-normal">(税込)</span></p>
+                {%- if current_variant.compare_at_price > current_variant.price -%}
+                  <s class="block text-gray-500 mt-1">{{ current_variant.compare_at_price | money }}</s>
+                {%- endif -%}
+              </div>
+          {%- endcase -%}
           </div>
-
-          {%- liquid
-            assign main_images = product.media | where: "media_type", "image"
-          -%}
-          {%- if product.media.size > 1 -%}
-            <div class="grid grid-cols-4 gap-1 md:gap-2 mt-3 md:mt-6">
-              {%- for media in product.media -%}
-                <a href="{{ media.preview_image | image_url }}" class="product-thumbnail block border-2 {% if forloop.first %}border-sky-500{% else %}border-transparent{% endif %} hover:border-sky-500 transition" data-media-id="{{ media.id }}">
-                  <span class="relative block aspect-square overflow-hidden bg-white">
-                    <img src="{{ media.preview_image | image_url: width: 200, height: 200, crop: false }}" alt="{{ media.alt | escape }}" class="absolute inset-0 w-full h-full object-contain">
-                  </span>
-                </a>
-              {%- endfor -%}
-            </div>
-          {%- endif -%}
-        </product-media-gallery>
-
-        {%- comment -%}
-          商品説明や特徴などのタブコンテンツはここにレンダリングされます。
-          実際のタブ切り替えロジックは別途JavaScriptで実装が必要です。
-        {%- endcomment -%}
-        {%- comment -%}
-          製品説明、特徴、ハイライト
-        {%- endcomment -%}
-        {%- if product.metafields.custom.product_note != blank -%}
-          <div class="mt-8">
-            <h3 class="text-lg md:text-xl font-medium mb-4 md:mb-6 bg-[#1a2530] text-white px-4 py-2">製品説明</h3>
-            <div class="rte text-sm leading-relaxed">
-              {{ product.metafields.custom.product_note | metafield_tag }}
-            </div>
-          </div>
-        {%- endif -%}
-
-        {%- if product.metafields.custom.product_feature != blank -%}
-          <div class="mt-8">
-            <h3 class="text-lg md:text-xl font-medium mb-4 md:mb-6 bg-[#1a2530] text-white px-4 py-2">特徴</h3>
-            <div class="rte text-sm leading-relaxed">
-              {{ product.metafields.custom.product_feature | metafield_tag }}
-            </div>
-          </div>
-        {%- endif -%}
-
-        {%- liquid
-          assign has_any_highlight = false
-          for i in (1..3)
-            assign image_key = "product_highlight_" | append: i | append: "_img"
-            assign label_key = "product_highlight_" | append: i | append: "_label"
-            assign note_key = "product_highlight_" | append: i | append: "_note"
-            if product.metafields.custom[image_key] != blank or product.metafields.custom[label_key] != blank or product.metafields.custom[note_key] != blank
-              assign has_any_highlight = true
-              break
-            endif
-          endfor
-        -%}
-        {%- if has_any_highlight -%}
-        <div class="mt-8">
-          <h3 class="text-lg md:text-xl mb-6 bg-[#1a2530] text-white px-4 py-2">ハイライト</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-4">
-            {%- for i in (1..3) -%}
-              {%- liquid
-                assign image_key = "product_highlight_" | append: i | append: "_img"
-                assign label_key = "product_highlight_" | append: i | append: "_label"
-                assign note_key = "product_highlight_" | append: i | append: "_note"
-                assign image = product.metafields.custom[image_key]
-                assign label = product.metafields.custom[label_key]
-                assign note = product.metafields.custom[note_key]
-              -%}
-              {%- if image != blank or label != blank or note != blank -%}
-                <div>
-                  {%- if image != blank -%}
-                    <div class="relative block aspect-square bg-white">
-                      <img src="{{ image | image_url: width: 400 }}" alt="{{ label | default: 'ハイライト画像' | escape }}" class="absolute inset-0 w-full h-full object-contain">
-                    </div>
-                  {%- endif -%}
-                  {%- if label != blank -%}
-                    <h4 class="font-medium mt-3">{{ label }}</h4>
-                  {%- endif -%}
-                  {%- if note != blank -%}
-                    <p class="text-xs mt-1">{{ note }}</p>
-                  {%- endif -%}
-                </div>
-              {%- endif -%}
-            {%- endfor -%}
-          </div>
-        </div>
-        {%- endif -%}
-
-        {%- comment %} Video Section {% endcomment -%}
-        {%- if product.metafields.custom.product_youtube != blank -%}
-          <div class="mt-8 md:mt-12">
-            <div class="aspect-video bg-black overflow-hidden">
-              <iframe src="https://www.youtube.com/embed/{{ product.metafields.custom.product_youtube.value }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full"></iframe>
-            </div>
-          </div>
-        {%- endif -%}
-        {%- if product.metafields.custom.product_movie != blank -%}
-          <div class="mt-8 md:mt-12">
-            <div class="aspect-video bg-black overflow-hidden">
-              {{ product.metafields.custom.product_movie.value | video_tag: controls: true, class: "w-full h-full" }}
-            </div>
-          </div>
-        {%- endif -%}
+        {%- endfor -%}
       </div>
 
-      <div class="product-info lg:col-span-5 lg:sticky lg:top-24">
-        <div class="bg-white p-6 md:p-8 lg:p-12">
-          <product-form class="product-form">
-            <form method="post" action="/cart/add" id="product-form-{{ section.id }}" accept-charset="UTF-8" class="form" enctype="multipart/form-data" novalidate="novalidate" data-type="add-to-cart-form">
-              <input type="hidden" name="form_type" value="product">
-              <input type="hidden" name="utf8" value="✓">
-              <input type="hidden" name="id" value="{{ current_variant.id }}">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 lg:items-start">
 
-              {%- for block in section.blocks -%}
-                <div {{ block.shopify_attributes }}>
+        <div class="product-details lg:col-span-7">
+          <product-media-gallery
+            class="block product__media-gallery"
+            data-desktop-layout="thumbnail"
+            data-mobile-layout="slider"
+          >
+            <a href="{{ product.featured_media | image_url: width: 800, height: 800, crop: false }}" class="glightbox" data-type="image" data-gallery="product-gallery">
+              <div class="relative group cursor-pointer">
+                <div id="main-product-image-container-{{ section.id }}" class="relative w-full pt-[81.3802083%] bg-white overflow-hidden">
+                  <img src="{{ product.featured_media | image_url }}" alt="{{ product.featured_media.alt | escape }}" class="product-main-image is-active absolute inset-0 w-full h-full bg-white object-contain p-4 transition-opacity duration-500 ease-in-out">
+                </div>
+                <button class="absolute top-4 right-4 w-12 h-12 bg-white/50 rounded-full flex items-center justify-center border border-[#cccccc] group-hover:border-[#1A2530] group-hover:bg-white duration-300">
+                  <span class="sr-only">拡大表示</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 group-hover:w-6 group-hover:h-6 duration-300"><path fill-rule="evenodd" d="M13.8,6.6c.3,0,.6.3.6.6v6.6c0,.3-.3.6-.6.6-.3,0-.6-.3-.6-.6v-6.6c0-.3.3-.6.6-.6ZM17.8,10.5c0,.3-.3.6-.6.6h-6.6c-.3,0-.6-.3-.6-.6,0-.3.3-.6.6-.6h6.6c.3,0,.6.3.6.6ZM19.7,16.4c3.3-3.2,3.3-8.5,0-11.8-3.2-3.3-8.5-3.3-11.8,0-3.3,3.2-3.3,8.5,0,11.8,3.2,3.3,8.5,3.3,11.8,0ZM20.6,3.8c3.7,3.7,3.7,9.7,0,13.5-3.7,3.7-9.6,3.7-13.4,0l-5.6,5.5c-.2.2-.6.2-.8,0-.2-.2-.2-.6,0-.8l5.6-5.6c-3-3.7-2.7-9.2.7-12.7C10.9,0,16.9,0,20.6,3.8Z"  clip-rule="evenodd" /></svg>
+                </button>
+              </div>
+            </a>
+
+            {%- liquid
+              assign main_images = product.media | where: "media_type", "image"
+            -%}
+            {%- if product.media.size > 1 -%}
+              <div class="grid grid-cols-4 gap-1 md:gap-2 mt-3 md:mt-6">
+                {%- for media in product.media -%}
+                  <a href="{{ media.preview_image | image_url: 'master' }}" class="glightbox product-thumbnail block border-2 {% if forloop.first %}border-sky-500{% else %}border-transparent{% endif %} hover:border-sky-500 transition" data-type="image" data-gallery="product-gallery" data-media-id="{{ media.id }}">
+                    <span class="relative block aspect-square overflow-hidden bg-white">
+                      <img src="{{ media.preview_image | image_url: width: 200, height: 200, crop: false }}" alt="{{ media.alt | escape }}" class="absolute inset-0 w-full h-full object-contain">
+                    </span>
+                  </a>
+                {% endfor %}
+              </div>
+            {%- endif -%}
+
+          </product-media-gallery>
+
+          {%- comment -%}
+            商品説明や特徴などのタブコンテンツはここにレンダリングされます。
+            実際のタブ切り替えロジックは別途JavaScriptで実装が必要です。
+          {%- endcomment -%}
+          {%- comment -%}
+            製品説明、特徴、ハイライト
+          {%- endcomment -%}
+          {%- if product.description != blank -%}
+            <div class="mt-8">
+              <h3 class="text-lg md:text-xl font-medium mb-4 md:mb-6 bg-[#1a2530] text-white px-4 py-2">製品説明</h3>
+              <div class="rte text-sm leading-relaxed">
+                {{ product.description }}
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- if product.metafields.custom.product_feature != blank -%}
+            <div class="mt-8">
+              <h3 class="text-lg md:text-xl font-medium mb-4 md:mb-6 bg-[#1a2530] text-white px-4 py-2">特徴</h3>
+              <div class="rte text-sm leading-relaxed">
+                {{ product.metafields.custom.product_feature | metafield_tag }}
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- liquid
+            assign has_any_highlight = false
+            for i in (1..3)
+              assign image_key = "product_highlight_" | append: i | append: "_img"
+              assign label_key = "product_highlight_" | append: i | append: "_label"
+              assign note_key = "product_highlight_" | append: i | append: "_note"
+              if product.metafields.custom[image_key] != blank or product.metafields.custom[label_key] != blank or product.metafields.custom[note_key] != blank
+                assign has_any_highlight = true
+                break
+              endif
+            endfor
+          -%}
+          {%- if has_any_highlight -%}
+          <div class="mt-8">
+            <h3 class="text-lg md:text-xl mb-6 bg-[#1a2530] text-white px-4 py-2">ハイライト</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-4">
+              {%- for i in (1..3) -%}
+                {%- liquid
+                  assign image_key = "product_highlight_" | append: i | append: "_img"
+                  assign label_key = "product_highlight_" | append: i | append: "_label"
+                  assign note_key = "product_highlight_" | append: i | append: "_note"
+                  assign image = product.metafields.custom[image_key]
+                  assign label = product.metafields.custom[label_key]
+                  assign note = product.metafields.custom[note_key]
+                -%}
+                {%- if image != blank or label != blank or note != blank -%}
+                  <div>
+                    {%- if image != blank -%}
+                      <div class="relative block aspect-square bg-white">
+                        <img src="{{ image | image_url: width: 400 }}" alt="{{ label | default: 'ハイライト画像' | escape }}" class="absolute inset-0 w-full h-full object-contain">
+                      </div>
+                    {%- endif -%}
+                    {%- if label != blank -%}
+                      <h4 class="font-medium mt-3">{{ label }}</h4>
+                    {%- endif -%}
+                    {%- if note != blank -%}
+                      <p class="text-xs mt-1">{{ note }}</p>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+          {%- endif -%}
+
+          {%- comment %} Video Section {% endcomment -%}
+          {%- if product.metafields.custom.product_youtube != blank -%}
+            <div class="mt-8 md:mt-12">
+              <div class="aspect-video bg-black overflow-hidden">
+                <iframe src="https://www.youtube.com/embed/{{ product.metafields.custom.product_youtube.value }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full"></iframe>
+              </div>
+            </div>
+          {%- endif -%}
+          {%- if product.metafields.custom.product_movie != blank -%}
+            <div class="mt-8 md:mt-12">
+              <div class="aspect-video bg-black overflow-hidden">
+                {{ product.metafields.custom.product_movie.value | video_tag: controls: true, class: "w-full h-full" }}
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+
+        <div class="lg:col-span-5 lg:sticky lg:top-24">
+          <div class="bg-white p-6 md:p-8 lg:p-12">
+            {%- for block in section.blocks -%}
+              <div {{ block.shopify_attributes }}>
                 {%- case block.type -%}
+                  {%- when '@app' -%}
+                    {% render block %}
+
                   {%- when 'title' -%}
                     <h2 class="text-xl md:text-2xl lg:text-3xl leading-tight">{{ product.title | escape }}</h2>
                     {%- if product.metafields.custom.product_model_no != blank -%}
                       <p class="mt-2 text-sm text-gray-500">モデルNo: {{ product.metafields.custom.product_model_no }}</p>
                     {%- endif -%}
+
                   {%- when 'price' -%}
                     <div class="mt-6">
                       <p class="text-xl font-medium">{{ current_variant.price | money_without_trailing_zeros }} <span class="text-sm font-normal">(税込)</span></p>
@@ -229,30 +256,298 @@
                         <s class="block text-gray-500 mt-1">{{ current_variant.compare_at_price | money }}</s>
                       {%- endif -%}
                     </div>
-                     {%- if product.description != blank -%}
-                       <div class="mt-6 text-sm md:text-base leading-relaxed rte">
-                         {{ product.description }}
-                       </div>
-                     {%- endif -%}
+                    {% comment %}
+                    {%- if product.description != blank -%}
+                      <div class="mt-6 text-sm md:text-base leading-relaxed rte">
+                        {{ product.description }}
+                      </div>
+                    {%- endif -%}
+                    {% endcomment %}
+
+                  {%- when 'quantity_selector' -%}
+                    {%- liquid
+                      if product.selected_or_first_available_variant.quantity_rule.min > product.selected_or_first_available_variant.inventory_quantity and check_against_inventory
+                        assign quantity_rule_soldout = true
+                      endif
+                    -%}
+                    {% unless product.selected_or_first_available_variant.available == false
+                      or quantity_rule_soldout
+                      or product.selected_or_first_available_variant == null
+                    %}
+                      <div
+                        id="Quantity-Form-{{ section.id }}"
+                        class="product-form__input product-form__quantity mt-6{% if settings.inputs_shadow_vertical_offset != 0 and settings.inputs_shadow_vertical_offset < 0 %} product-form__quantity-top{% endif %}"
+                        {{ block.shopify_attributes }}
+                      >
+                        {% comment %} TODO: enable theme-check once `item_count_for_variant` is accepted as valid filter {% endcomment %}
+                        {% # theme-check-disable %}
+                        {%- assign cart_qty = cart
+                          | item_count_for_variant: product.selected_or_first_available_variant.id
+                        -%}
+                        {% # theme-check-enable %}
+                        <label class="quantity__label form__label text-sm font-medium mb-2" for="Quantity-{{ section.id }}">
+                          {{ 'products.product.quantity.label' | t }}
+                          <span class="quantity__rules-cart{% if cart_qty == 0 %} hidden{% endif %}">
+                            {%- render 'loading-spinner' -%}
+                            {% comment %}
+                            <span
+                              >(
+                              {{- 'products.product.quantity.in_cart_html' | t: quantity: cart_qty -}}
+                              )</span
+                            >
+                            {% endcomment %}
+                          </span>
+                        </label>
+                        <div class="price-per-item__container">
+                          <quantity-input class="quantity w-[120px] h-10 min-h-min" data-url="{{ product.url }}" data-section="{{ section.id }}">
+                            <button class="quantity__button w-6" name="minus" type="button">
+                              <span class="visually-hidden">
+                                {{- 'products.product.quantity.decrease' | t: product: product.title | escape -}}
+                              </span>
+                              <span class="svg-wrapper !w-[50%]">
+                                {{- 'icon-minus.svg' | inline_asset_content -}}
+                              </span>
+                            </button>
+                            <input
+                              class="quantity__input text-base"
+                              type="number"
+                              name="quantity"
+                              id="Quantity-{{ section.id }}"
+                              data-cart-quantity="{{ cart_qty }}"
+                              data-min="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
+                              min="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
+                              {% if product.selected_or_first_available_variant.quantity_rule.max != null %}
+                                data-max="{{ product.selected_or_first_available_variant.quantity_rule.max }}"
+                                max="{{ product.selected_or_first_available_variant.quantity_rule.max }}"
+                              {% endif %}
+                              step="{{ product.selected_or_first_available_variant.quantity_rule.increment }}"
+                              value="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
+                              form="{{ product_form_id }}"
+                            >
+                            <button class="quantity__button w-6" name="plus" type="button">
+                              <span class="visually-hidden">
+                                {{- 'products.product.quantity.increase' | t: product: product.title | escape -}}
+                              </span>
+                              <span class="svg-wrapper !w-[50%]">
+                                {{- 'icon-plus.svg' | inline_asset_content -}}
+                              </span>
+                            </button>
+                          </quantity-input>
+                          {%- liquid
+                            assign volume_pricing_array = product.selected_or_first_available_variant.quantity_price_breaks | sort: 'quantity' | reverse
+                            assign current_qty_for_volume_pricing = cart_qty | plus: product.selected_or_first_available_variant.quantity_rule.min
+                            if cart_qty > 0
+                              assign current_qty_for_volume_pricing = cart_qty | plus: product.selected_or_first_available_variant.quantity_rule.increment
+                            endif
+                          -%}
+                          {%- if product.quantity_price_breaks_configured? -%}
+                            <price-per-item
+                              id="Price-Per-Item-{{ section.id }}"
+                              data-section-id="{{ section.id }}"
+                              data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+                            >
+                              {%- if product.selected_or_first_available_variant.quantity_price_breaks.size > 0 -%}
+                                {%- assign variant_price_compare = product.selected_or_first_available_variant.compare_at_price -%}
+                                <div class="price-per-item">
+                                  {%- if variant_price_compare -%}
+                                    <dl class="price-per-item--current">
+                                      <dt class="visually-hidden">
+                                        {{ 'products.product.price.regular_price' | t }}
+                                      </dt>
+                                      <dd>
+                                        <s class="variant-item__old-price">
+                                          {{ variant_price_compare | money_with_currency }}
+                                        </s>
+                                      </dd>
+                                    </dl>
+                                  {%- endif -%}
+                                  {%- if current_qty_for_volume_pricing < volume_pricing_array.last.minimum_quantity -%}
+                                    {%- assign variant_price = product.selected_or_first_available_variant.price
+                                      | money_with_currency
+                                    -%}
+                                    <span class="price-per-item--current">
+                                      {{- 'products.product.volume_pricing.price_at_each_html' | t: price: variant_price -}}
+                                    </span>
+                                  {%- else -%}
+                                    {%- for price_break in volume_pricing_array -%}
+                                      {%- if current_qty_for_volume_pricing >= price_break.minimum_quantity -%}
+                                        {%- assign price_break_price = price_break.price | money_with_currency -%}
+                                        <span class="price-per-item--current">
+                                          {{-
+                                            'products.product.volume_pricing.price_at_each_html'
+                                            | t: price: price_break_price
+                                          -}}
+                                        </span>
+                                        {%- break -%}
+                                      {%- endif -%}
+                                    {%- endfor -%}
+                                  {%- endif -%}
+                                </div>
+                              {%- else -%}
+                                {%- assign variant_price = product.selected_or_first_available_variant.price
+                                  | money_with_currency
+                                -%}
+                                {%- assign variant_price_compare = product.selected_or_first_available_variant.compare_at_price -%}
+                                <div class="price-per-item">
+                                  {%- if variant_price_compare -%}
+                                    <dl class="price-per-item--current">
+                                      <dt class="visually-hidden">
+                                        {{ 'products.product.price.regular_price' | t }}
+                                      </dt>
+                                      <dd>
+                                        <s class="variant-item__old-price">
+                                          {{ variant_price_compare | money_with_currency }}
+                                        </s>
+                                      </dd>
+                                      <dt class="visually-hidden">
+                                        {{ 'products.product.price.sale_price' | t }}
+                                      </dt>
+                                      <dd>
+                                        <span class="price-per-item--current">
+                                          {{- 'products.product.volume_pricing.price_at_each_html' | t: price: variant_price -}}
+                                        </span>
+                                      </dd>
+                                    </dl>
+                                  {%- else -%}
+                                    <span class="price-per-item--current">
+                                      {{- 'products.product.volume_pricing.price_at_each_html' | t: price: variant_price -}}
+                                    </span>
+                                  {%- endif -%}
+                                </div>
+                              {%- endif -%}
+                            </price-per-item>
+                          {%- endif -%}
+                        </div>
+                        <div class="quantity__rules caption" id="Quantity-Rules-{{ section.id }}">
+                          {%- if product.selected_or_first_available_variant.quantity_rule.increment > 1 -%}
+                            <span class="divider">
+                              {{-
+                                'products.product.quantity.multiples_of'
+                                | t: quantity: product.selected_or_first_available_variant.quantity_rule.increment
+                              -}}
+                            </span>
+                          {%- endif -%}
+                          {%- if product.selected_or_first_available_variant.quantity_rule.min > 1 -%}
+                            <span class="divider">
+                              {{-
+                                'products.product.quantity.minimum_of'
+                                | t: quantity: product.selected_or_first_available_variant.quantity_rule.min
+                              -}}
+                            </span>
+                          {%- endif -%}
+                          {%- if product.selected_or_first_available_variant.quantity_rule.max != null -%}
+                            <span class="divider">
+                              {{-
+                                'products.product.quantity.maximum_of'
+                                | t: quantity: product.selected_or_first_available_variant.quantity_rule.max
+                              -}}
+                            </span>
+                          {%- endif -%}
+                        </div>
+                        {%- if product.quantity_price_breaks_configured? -%}
+                          <volume-pricing class="parent-display" id="Volume-{{ section.id }}">
+                            {%- if product.selected_or_first_available_variant.quantity_price_breaks.size > 0 -%}
+                              <span class="caption-large">{{ 'products.product.volume_pricing.title' | t }}</span>
+                              <ul class="list-unstyled">
+                                <li>
+                                  <span>{{ product.selected_or_first_available_variant.quantity_rule.min }}+</span>
+                                  {%- assign price = product.selected_or_first_available_variant.price
+                                    | money_with_currency
+                                  -%}
+                                  <span data-text="{{ 'products.product.volume_pricing.price_at_each_html' | t: price: variant_price }}">
+                                    {{- 'sections.quick_order_list.each' | t: money: price -}}
+                                  </span>
+                                </li>
+                                {%- for price_break in product.selected_or_first_available_variant.quantity_price_breaks -%}
+                                  {%- assign price_break_price = price_break.price | money_with_currency -%}
+                                  <li class="{%- if forloop.index >= 3 -%}show-more-item hidden{%- endif -%}">
+                                    <span>
+                                      {{- price_break.minimum_quantity -}}
+                                      <span aria-hidden="true">+</span></span
+                                    >
+                                    <span data-text="{{ 'products.product.volume_pricing.price_at_each_html' | t: price: price_break_price }}">
+                                      {{- 'sections.quick_order_list.each' | t: money: price_break_price -}}
+                                    </span>
+                                  </li>
+                                {%- endfor -%}
+                              </ul>
+                              {%- if product.selected_or_first_available_variant.quantity_price_breaks.size >= 3 -%}
+                                <show-more-button>
+                                  <button
+                                    class="button-show-more link underlined-link"
+                                    id="Show-More-{{ section.id }}"
+                                    type="button"
+                                  >
+                                    <span class="label-show-more label-text"
+                                      ><span aria-hidden="true">+ </span>{{ 'products.facets.show_more' | t }}
+                                    </span>
+                                  </button>
+                                </show-more-button>
+                              {%- endif -%}
+                            {%- endif -%}
+                          </volume-pricing>
+                        {%- endif -%}
+                      </div>
+                    {% endunless %}
                   {%- when 'variant_picker' -%}
+                    {% comment %}
+                    {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
+                    {% endcomment %}
                     {%- unless product.has_only_default_variant -%}
-                      <variant-radios class="mt-6" data-section="{{ section.id }}" data-url="{{ product.url }}">
+                      <variant-selects
+                        class="mt-6"
+                        id="variant-selects-{{ section.id }}"
+                        data-section="{{ section.id }}"
+                        {{ block.shopify_attributes }}
+                      >
                         {%- for option in product.options_with_values -%}
-                          <fieldset class="js-variant-input-wrapper mt-6">
-                            <h3 class="text-sm font-medium mb-2">{{ option.name }}</h3>
+                          <fieldset class="js product-form__input product-form__input--swatch mt-6">
+                            <legend class="form__label text-sm font-medium mb-2">
+                              {{ option.name }}:
+                              <span data-selected-value>
+                                {{- option.selected_value -}}
+                              </span>
+                            </legend>
                             <div class="flex items-center gap-x-2">
                               {%- for value in option.values -%}
-                                <div class="group relative w-10 p-1 rounded-full border-2 border-gray-200 hover:border-sky-500 has-[:checked]:!border-[#1a2530] duration-300">
+                                <div class="group relative w-10 p-1 rounded-full border-2 border-gray-200 hover:border-sky-500 has-[:checked]:!border-[#1a2530] duration-300" title="{{ value }}">
                                   {%- liquid
+                                    assign option_disabled = true
+                                    if value.available
+                                      assign option_disabled = false
+                                    endif
+
                                     assign option_index = 'option' | append: option.position
                                     assign variant_for_value = product.variants | where: option_index, value | first
                                     assign variant_image_metafield = variant_for_value.metafields.custom.variant_image
                                     assign variant_color_metafield = variant_for_value.metafields.custom.variant_color
                                   -%}
-                                  <input type="radio" id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" name="{{ option.name }}" value="{{ value | escape }}" {% if option.selected_value == value %} checked {% endif %} class="sr-only">
+
+                                  {%- capture input_id -%}
+                                    {{ section.id }}-{{ option.position }}-{{ forloop.index0 -}}
+                                  {%- endcapture -%}
+
+                                  {%- capture input_name -%}
+                                    {{ option.name }}-{{ option.position }}
+                                  {%- endcapture -%}
+
+                                  {%- capture input_dataset -%}
+                                    data-product-url="{{ value.product_url }}"
+                                    data-option-value-id="{{ value.id }}"
+                                  {%- endcapture -%}
+
+                                  <input
+                                    type="radio"
+                                    id="{{ input_id }}"
+                                    name="{{ input_name }}"
+                                    value="{{ value | escape }}"
+                                    form="{{ product_form_id }}"
+                                    class="sr-only"
+                                    {% if value.selected %} checked{% endif %}
+                                    {% if option_disabled %} disabled{% endif %} {{ input_dataset }}>
                                   <label
-                                    for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
-                                    class="block aspect-square w-full rounded-full cursor-pointer
+                                    for="{{ input_id }}"
+                                    class="swatch-input__label block aspect-square w-full rounded-full cursor-pointer
                                     {% if variant_image_metafield == blank and variant_color_metafield == blank %}bg-gray-200{% endif %}
                                     {% if variant_image_metafield != blank %}bg-cover bg-center{% endif %}"
                                     {% if variant_image_metafield != blank %}
@@ -268,75 +563,84 @@
                             </div>
                           </fieldset>
                         {%- endfor -%}
-                         <script type="application/json">{{ product.variants | json }}</script>
-                      </variant-radios>
+                        <script type="application/json" data-selected-variant>
+                          {{ product.selected_or_first_available_variant | json }}
+                        </script>
+                      </variant-selects>
                     {%- endunless -%}
                   {%- when 'buy_buttons' -%}
-                    <div class="mt-12">
-                      <button type="submit" name="add" class="btn block w-full text-center align-middle !text-white {% if current_variant.available == false %} disabled {% endif %}">
-                        <span class="py-2 !bg-[#0071BE] before:!bg-white before:opacity-50">
-                          <span class="before:!border-white after:!border-white">
-                            {%- if current_variant.available -%}
-                              {{ 'products.product.add_to_cart' | t }}
-                            {%- else -%}
-                              {{ 'products.product.sold_out' | t }}
-                            {%- endif -%}
-                          </span>
-                        </span>
-                      </button>
-                    </div>
+                    {%- render 'buy-buttons',
+                      block: block,
+                      product: product,
+                      product_form_id: product_form_id,
+                      section_id: section.id,
+                      show_pickup_availability: true
+                    -%}
                 {%- endcase -%}
-                </div>
-              {%- endfor -%}
-            </form>
-          </product-form>
+              </div>
+            {%- endfor -%}
+          </div>
         </div>
+
       </div>
 
-    </div>
-
-    <!-- こちらもいかがですか？ -->
-    {%- liquid
-      assign custom_recommends = product.metafields.custom.product_recommends.value
-    -%}
-    {%- if custom_recommends != blank -%}
-    <div class="mt-12 md:mt-24">
-        <h3 class="text-lg md:text-xl font-medium mb-6 bg-[#1a2530] text-white px-4 py-2 text-center">こちらもいかがですか？</h3>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4 md:gap-x-3 lg:gap-x-6 gap-y-8 mt-4">
-            {%- for product_item in custom_recommends -%}
-                <a href="{{ product_item.url }}" class="text-left block text-black">
-                    <span class="card group relative block !h-auto pt-[124%] overflow-hidden mb-4 bg-white">
-                        <img src="{{ product_item.featured_image | image_url: width: 550 }}" alt="{{ product_item.featured_image.alt | escape }}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" loading="lazy">
-                    </span>
-                    <span class="block text-xs sm:text-sm">{{ product_item.title }}</span>
-                    <span class="block mt-1 font-medium">{{ product_item.price | money }}</span>
-                </a>
-            {%- endfor -%}
-        </div>
-    </div>
-    {%- endif -%}
-
-    <!-- この製品を購入した人はこちらも購入しています -->
-    {%- if recommendations.products_count > 0 -%}
+      <!-- こちらもいかがですか？ -->
+      {%- liquid
+        assign custom_recommends = product.metafields.custom.product_recommends.value
+      -%}
+      {%- if custom_recommends != blank -%}
       <div class="mt-12 md:mt-24">
-          <h3 class="text-lg md:text-xl font-medium mb-6 bg-[#1a2530] text-white px-4 py-2 text-center">この製品を購入した人はこちらも購入しています</h3>
+          <h3 class="text-lg md:text-xl font-medium mb-6 bg-[#1a2530] text-white px-4 py-2 text-center">こちらもいかがですか？</h3>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4 md:gap-x-3 lg:gap-x-6 gap-y-8 mt-4">
-              {%- for product in recommendations.products -%}
-                  <a href="{{ product.url }}" class="text-left block text-black">
+              {%- for product_item in custom_recommends -%}
+                  <a href="{{ product_item.url }}" class="text-left block text-black">
                       <span class="card group relative block !h-auto pt-[124%] overflow-hidden mb-4 bg-white">
-                          <img src="{{ product.featured_image | image_url: width: 550 }}" alt="{{ product.featured_image.alt | escape }}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" loading="lazy">
+                          <img src="{{ product_item.featured_image | image_url: width: 550 }}" alt="{{ product_item.featured_image.alt | escape }}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" loading="lazy">
                       </span>
-                      <span class="block text-xs sm:text-sm">{{ product.title }}</span>
-                      <span class="block mt-1 font-medium">{{ product.price | money }}</span>
+                      <span class="block text-xs sm:text-sm">{{ product_item.title }}</span>
+                      <span class="block mt-1 font-medium">{{ product_item.price | money }}</span>
                   </a>
               {%- endfor -%}
           </div>
       </div>
-    {%- endif -%}
+      {%- endif -%}
 
-  </div>
+      <!-- この製品を購入した人はこちらも購入しています -->
+      {%- if recommendations.products_count > 0 -%}
+        <div class="mt-12 md:mt-24">
+            <h3 class="text-lg md:text-xl font-medium mb-6 bg-[#1a2530] text-white px-4 py-2 text-center">この製品を購入した人はこちらも購入しています</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4 md:gap-x-3 lg:gap-x-6 gap-y-8 mt-4">
+                {%- for product in recommendations.products -%}
+                    <a href="{{ product.url }}" class="text-left block text-black">
+                        <span class="card group relative block !h-auto pt-[124%] overflow-hidden mb-4 bg-white">
+                            <img src="{{ product.featured_image | image_url: width: 550 }}" alt="{{ product.featured_image.alt | escape }}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" loading="lazy">
+                        </span>
+                        <span class="block text-xs sm:text-sm">{{ product.title }}</span>
+                        <span class="block mt-1 font-medium">{{ product.price | money }}</span>
+                    </a>
+                {%- endfor -%}
+            </div>
+        </div>
+      {%- endif -%}
+
+      {% comment %} Other Banner - Added 2025-07-03 {% endcomment %}
+      {% if section.settings.bottom_banner_image != blank %}
+        <div id="other-banner" class="mt-12 md:mt-24 md:flex justify-center">
+          <a href="{{ section.settings.bottom_banner_link | default: "#" }}" class="block group basis-7/12 bg-white">
+              <img src="{{ section.settings.bottom_banner_image | image_url: width: 800 }}" alt="{{ section.settings.bottom_banner_image.alt | default: 'Banner' | escape }}" class="duration-300 group-hover:opacity-50">
+          </a>
+        </div>
+      {% endif %}
+
+    </div>
+    <script type="application/ld+json">
+      {{ product | structured_data }}
+    </script>
+  </product-info>
 </section>
 
+{% comment %}
+GLightbox replacement - Commented out existing modal style 2025-07-03
 {%- style -%}
   #image-modal {
     opacity: 0;
@@ -349,6 +653,9 @@
     display: flex; /* hidden クラスを上書きして表示 */
   }
 {%- endstyle -%}
+{% endcomment %}
+{% comment %}
+GLightbox replacement - Commented out existing modal HTML 2025-07-03
 <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
   <div class="relative bg-white p-4 rounded-lg max-w-3xl max-h-full overflow-auto">
     <button id="close-modal" class="absolute top-2 right-2 text-gray-800 hover:text-gray-600 text-2xl font-bold leading-none">&times;</button>
@@ -358,14 +665,59 @@
 
 <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'product-media-gallery.js' | asset_url }}" defer="defer"></script>
+{% endcomment %}
 
 {% schema %}
 {
   "name": "商品ページ",
   "blocks": [
+    { "type": "@app" },
     { "type": "title", "name": "商品名", "limit": 1 },
     { "type": "price", "name": "価格", "limit": 1 },
-    { "type": "variant_picker", "name": "バリエーション選択", "limit": 1 },
+    {
+      "type": "variant_picker",
+      "name": "バリエーション選択",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "picker_type",
+          "options": [
+            {
+              "value": "dropdown",
+              "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type.options__1.label"
+            },
+            {
+              "value": "button",
+              "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type.options__2.label"
+            }
+          ],
+          "default": "button",
+          "label": "t:sections.main-product.blocks.variant_picker.settings.picker_type.label"
+        },
+        {
+          "id": "swatch_shape",
+          "label": "t:sections.main-product.blocks.variant_picker.settings.swatch_shape.label",
+          "type": "select",
+          "info": "t:sections.main-product.blocks.variant_picker.settings.swatch_shape.info",
+          "options": [
+            {
+              "value": "circle",
+              "label": "t:sections.main-product.blocks.variant_picker.settings.swatch_shape.options__1.label"
+            },
+            {
+              "value": "square",
+              "label": "t:sections.main-product.blocks.variant_picker.settings.swatch_shape.options__2.label"
+            },
+            {
+              "value": "none",
+              "label": "t:sections.main-product.blocks.variant_picker.settings.swatch_shape.options__3.label"
+            }
+          ],
+          "default": "circle"
+        }
+      ]
+    },
     { "type": "quantity_selector", "name": "数量セレクター", "limit": 1 },
     { "type": "buy_buttons", "name": "購入ボタン", "limit": 1,
       "settings": [
@@ -374,6 +726,13 @@
           "id": "show_dynamic_checkout",
           "default": false,
           "label": "動的チェックアウトボタンを表示"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_gift_card_recipient",
+          "default": true,
+          "label": "t:sections.main-product.blocks.buy_buttons.settings.show_gift_card_recipient.label",
+          "info": "t:sections.main-product.blocks.buy_buttons.settings.show_gift_card_recipient.info"
         }
       ]
     },
@@ -441,6 +800,20 @@
       "id": "enable_video_looping",
       "default": true,
       "label": "ビデオをループ再生する"
+    },
+    {
+      "type": "header",
+      "content": "末尾のバナー"
+    },
+    {
+      "type": "image_picker",
+      "id": "bottom_banner_image",
+      "label": "バナー画像"
+    },
+    {
+      "type": "url",
+      "id": "bottom_banner_link",
+      "label": "バナーのリンク先"
     }
   ]
 }

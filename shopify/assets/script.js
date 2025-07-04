@@ -260,29 +260,51 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ===== モーダルウィンドウ制御 =====
-    const mainProductImageContainer = document.querySelector('[id^="main-product-image-container-"]');
-    const imageModal = document.getElementById('image-modal');
-    const modalImage = document.getElementById('modal-image');
-    const closeModalButton = document.getElementById('close-modal');
-
-    if (mainProductImageContainer && imageModal && modalImage && closeModalButton) {
-      mainProductImageContainer.addEventListener('click', () => {
-        const mainImage = mainProductImageContainer.querySelector('img');
-        if (mainImage) {
-          modalImage.src = mainImage.src;
-          imageModal.classList.add('is-open');
-        }
-      });
-
-      closeModalButton.addEventListener('click', () => {
-        imageModal.classList.remove('is-open');
-      });
-
-      imageModal.addEventListener('click', (event) => {
-        if (event.target === imageModal) {
-          imageModal.classList.remove('is-open');
+    // GLightbox 初期化 - Added 2025-07-03
+    // DOMContentLoaded イベントリスナー内で GLightbox を初期化
+    if (typeof GLightbox !== 'undefined') {
+      GLightbox({
+        selector: '.glightbox',
+        loop: true,
+        zoomable: true,
+        autoplayVideos: true,
+        openEffect: 'zoom',
+        closeEffect: 'zoom',
+        cssEfects: {
+          zoom: {
+            in: 'zoomIn',
+            out: 'zoomOut'
+          }
         }
       });
     }
-});
+
+    // ===== 商品詳細ページ：選択バリアントIDの同期機能 =====
+    // このコードは、AJAXカートを無効にし、直接カートページへ遷移する場合に、
+    // 選択されたバリエーションが正しくカートにPOSTされるようにするためのものです。
+    // 商品情報コンテナが存在する場合のみ実行
+    /*
+    const productInfo = document.querySelector('.product-info');
+    if (!productInfo) return;
+
+    // バリエーション選択のカスタム要素を取得
+    const variantPicker = productInfo.querySelector('variant-selects');
+    // フォーム内の、送信されるIDを保持する隠しフィールドを取得
+    const variantIdInput = productInfo.querySelector('input[name="id"]');
+
+    if (variantPicker && variantIdInput) {
+        // 'variant:change' というイベントを監視
+        variantPicker.addEventListener('variant:change', (event) => {
+            console.dir(event);
+            // イベントの詳細(detail)から、選択されたバリアントの情報を取得
+            const selectedVariant = event.detail.variant;
+
+            // バリアント情報が存在すれば、隠しフィールドの値を更新
+            if (selectedVariant) {
+                variantIdInput.value = selectedVariant.id;
+            }
+        });
+    }
+    */
+
+ });

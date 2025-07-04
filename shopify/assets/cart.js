@@ -139,7 +139,9 @@ class CartItems extends HTMLElement {
       {
         id: 'main-cart-footer',
         section: document.getElementById('main-cart-footer').dataset.id,
-        selector: '.js-contents',
+
+        // HACK: main-cart.liquidへの統合に伴い、セレクタの重複を避けるため '#main-cart-footer' を追加。
+        selector: '#main-cart-footer .js-contents',
       },
     ];
   }
@@ -183,6 +185,7 @@ class CartItems extends HTMLElement {
           this.getSectionsToRender().forEach((section) => {
             const elementToReplace =
               document.getElementById(section.id).querySelector(section.selector) || document.getElementById(section.id);
+
             elementToReplace.innerHTML = this.getSectionInnerHTML(
               parsedState.sections[section.section],
               section.selector
