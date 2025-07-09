@@ -1,60 +1,94 @@
-{{ 'section-contact-form.css' | asset_url | stylesheet_tag }}
+{% comment %}
+ 各ページのベースとなる雛形テンプレートです。
+ 共通となる基本構造を網羅しています。
+ 複製先では、このコメントアウトは削除してください。
+{% endcomment %}
 
+{% comment %} ヒーローセクション {% endcomment %}
+{%- liquid
+  assign hero_bg = "hero_products.jpg" | asset_url
+  if section.settings.background_image_desktop != blank
+    assign hero_bg = section.settings.background_image_desktop | image_url: width: 1920
+  endif
+
+  if section.settings.background_image_mobile != blank
+    assign hero_bg_sp = section.settings.background_image_mobile | image_url: width: 750
+  endif
+-%}
 {%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  #hero-section-{{ section.id }} {
+    background-image: url('{{ hero_bg }}');
   }
-
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
+  {% if hero_bg_sp != blank %}
+    @media screen and (max-width: 767px) {
+      #hero-section-{{ section.id }} {
+        background-image: url('{{ hero_bg_sp }}');
+      }
     }
+  {% endif %}
+{%- endstyle -%}
+
+<section
+  id="hero-section-{{ section.id }}"
+  class="hero-section relative bg-cover bg-center -mx-2 md:-mx-[30px] pt-[45px] md:pt-[55px] xl:pt-[65px]"
+>
+  <div class="container py-20">
+    <div class="text-center text-[#ffe8c9]">
+      <p class="font-serif text-4xl lg:text-5xl xl:text-[70px] leading-tight lg:leading-none">{{ page.title | escape }}</p>
+      <h2 class="outside-double-border flex items-center mx-auto md:w-36 lg:w-48 xl:w-64 lg:text-lg xl:text-[20px] font-medium leading-tight mt-8">{{ page_title }}</h2>
+    </div>
+  </div>
+</section>
+
+
+
+{% comment %} メインコンテンツ {% endcomment %}
+{%- liquid
+  assign bg_image = 'main_bg_default.jpg' | asset_url
+  if section.settings.background_image_switch == true and section.settings.background_image != blank
+    assign bg_image = section.settings.background_image | image_url: width: 1920
+  endif
+-%}
+{%- style -%}
+  #MainContent-body-{{ section.id }} {
+    background-image: url('{{ bg_image }}');
+  }
+  #MainContent-body-{{ section.id }} .rte ul {
+    list-style: disc outside;
+    padding-left: 1.5rem;
   }
 {%- endstyle -%}
 
-<div class="color-{{ section.settings.color_scheme }} gradient">
-  <div class="contact page-width page-width--narrow section-{{ section.id }}-padding">
-    {%- if section.settings.heading != blank -%}
-      <h2 class="title title-wrapper--no-top-margin inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-        {{ section.settings.heading }}
-      </h2>
-    {%- else -%}
-      <h2 class="visually-hidden">{{ 'templates.contact.form.title' | t }}</h2>
-    {%- endif -%}
-    {%- liquid
-      assign contact_form_class = 'isolate'
-      if settings.animations_reveal_on_scroll
-        assign contact_form_class = 'isolate scroll-trigger animate--slide-in'
-      endif
-    -%}
-    {%- form 'contact', id: 'ContactForm', class: contact_form_class -%}
+<section id="MainContent-body-{{ section.id }}" class="MainContent-body bg-cover bg-top">
+  <div class="container block-box">
+    {%- form 'contact', id: 'ContactForm', class: 'isolate' -%}
       {%- if form.posted_successfully? -%}
-        <h2 class="form-status form-status-list form__message" tabindex="-1" autofocus>
+        <h2 class="form-status form-status-list form__message text-xl justify-center" tabindex="-1" autofocus>
           {{- 'icon-success.svg' | inline_asset_content -}}
           {{ 'templates.contact.form.post_success' | t }}
         </h2>
       {%- elsif form.errors -%}
-        <div class="form__message">
-          <h2 class="form-status caption-large text-body" role="alert" tabindex="-1" autofocus>
+        <div class="form__message justify-center">
+          <h2 class="form-status caption-large text-body flex justify-center items-center text-xl" role="alert" tabindex="-1" autofocus>
             {{- 'icon-error.svg' | inline_asset_content -}}
             {{ 'templates.contact.form.error_heading' | t }}
           </h2>
         </div>
-        <ul class="form-status-list caption-large" role="list">
-          <li>
-            <a href="#ContactForm-email" class="link">
-              {{ form.errors.translated_fields.email | capitalize }}
-              {{ form.errors.messages.email }}
-            </a>
-          </li>
-        </ul>
+        <div class="flex justify-center">
+          <ul class="form-status-list caption-large text-base text-red-700 list-outside list-disc mt-4 mb-8" role="list">
+            <li>
+              <a href="#ContactForm-email" class="link">
+                {{ form.errors.translated_fields.email | capitalize }}
+                {{ form.errors.messages.email }}
+              </a>
+            </li>
+          </ul>
+        </div>
       {%- endif -%}
-      <div class="contact__fields">
-        <div class="field">
+      <div class="contact__fields md:w-[75%] lg:w-[60%] xl:w-[50%] mx-auto">
+        <div class="field !m-0">
           <input
-            class="field__input"
+            class="field__input !text-base"
             autocomplete="name"
             type="text"
             id="ContactForm-name"
@@ -62,14 +96,14 @@
             value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
             placeholder="{{ 'templates.contact.form.name' | t }}"
           >
-          <label class="field__label" for="ContactForm-name">{{ 'templates.contact.form.name' | t }}</label>
+          <label class="field__label !text-base !text-[#999]" for="ContactForm-name">{{ 'templates.contact.form.name' | t }}</label>
         </div>
-        <div class="field field--with-error">
+        <div class="field field--with-error !mt-3">
           <input
             autocomplete="email"
             type="email"
             id="ContactForm-email"
-            class="field__input"
+            class="field__input !text-base"
             name="contact[email]"
             spellcheck="false"
             autocapitalize="off"
@@ -81,7 +115,7 @@
             {% endif %}
             placeholder="{{ 'templates.contact.form.email' | t }}"
           >
-          <label class="field__label" for="ContactForm-email">
+          <label class="field__label !text-base !text-[#999]" for="ContactForm-email">
             {{- 'templates.contact.form.email' | t }}
             <span aria-hidden="true">*</span></label
           >
@@ -98,120 +132,116 @@
             </small>
           {%- endif -%}
         </div>
-      </div>
-      <div class="field">
-        <input
-          type="tel"
-          id="ContactForm-phone"
-          class="field__input"
-          autocomplete="tel"
-          name="contact[{{ 'templates.contact.form.phone' | t }}]"
-          pattern="[0-9\-]*"
-          value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
-          placeholder="{{ 'templates.contact.form.phone' | t }}"
-        >
-        <label class="field__label" for="ContactForm-phone">{{ 'templates.contact.form.phone' | t }}</label>
-      </div>
-      <div class="field">
-        <textarea
-          rows="10"
-          id="ContactForm-body"
-          class="text-area field__input"
-          name="contact[{{ 'templates.contact.form.comment' | t }}]"
-          placeholder="{{ 'templates.contact.form.comment' | t }}"
-        >
-          {{- form.body -}}
-        </textarea>
-        <label class="form__label field__label" for="ContactForm-body">
-          {{- 'templates.contact.form.comment' | t -}}
-        </label>
-      </div>
-      <div class="contact__button">
-        <button type="submit" class="button">
-          {{ 'templates.contact.form.send' | t }}
-        </button>
+        <div class="field !mt-3">
+          <input
+            type="tel"
+            id="ContactForm-phone"
+            class="field__input !text-base"
+            autocomplete="tel"
+            name="contact[{{ 'templates.contact.form.phone' | t }}]"
+            pattern="[0-9\-]*"
+            value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+            placeholder="{{ 'templates.contact.form.phone' | t }}"
+          >
+          <label class="field__label !text-base !text-[#999]" for="ContactForm-phone">{{ 'templates.contact.form.phone' | t }}</label>
+        </div>
+        <div class="field !mt-3">
+          <textarea
+            rows="10"
+            id="ContactForm-body"
+            class="text-area field__input !text-base"
+            name="contact[{{ 'templates.contact.form.comment' | t }}]"
+            placeholder="{{ 'templates.contact.form.comment' | t }}"
+          >
+            {{- form.body -}}
+          </textarea>
+          <label class="form__label field__label !text-base !text-[#999]" for="ContactForm-body">
+            {{- 'templates.contact.form.comment' | t -}}
+          </label>
+        </div>
+        <div class="contact__button mt-8 !text-center">
+          <button type="submit" class="btn !inline-block text-center align-middle !text-white min-w-[240px] !m-0 !p-0 !bg-transparent !border-none before:!hidden after:!hidden !text-base">
+            <span class="btn-outline py-2 !bg-[#0071BE] before:!bg-white before:opacity-50">
+              <span class="btn-inline before:!border-white after:!border-white">
+                {{ 'templates.contact.form.send' | t }}
+              </span>
+            </span>
+          </button>
+        </div>
       </div>
     {%- endform -%}
+
+    {% if section.settings.bottom_banner_image != blank %}
+      <div id="other-banner" class="block-box pb-0 md:flex justify-center">
+        <a href="{{ section.settings.bottom_banner_link | default: "#" }}" class="block group basis-7/12 bg-white">
+            <img src="{{ section.settings.bottom_banner_image | image_url: width: 800 }}" alt="{{ section.settings.bottom_banner_image.alt | default: 'Banner' | escape }}" class="duration-300 group-hover:opacity-50">
+        </a>
+      </div>
+    {% endif %}
+
   </div>
-</div>
+</section>
 
 {% schema %}
 {
   "name": "t:sections.contact-form.name",
-  "tag": "section",
-  "class": "section",
-  "disabled_on": {
-    "groups": ["header", "footer"]
-  },
   "settings": [
     {
-      "type": "inline_richtext",
-      "id": "heading",
-      "default": "t:sections.contact-form.settings.title.default",
-      "label": "t:sections.contact-form.settings.title.label"
+      "type": "header",
+      "content": "ヒーローセクションの設定"
     },
     {
-      "type": "select",
-      "id": "heading_size",
-      "options": [
-        {
-          "value": "h2",
-          "label": "t:sections.all.heading_size.options__1.label"
-        },
-        {
-          "value": "h1",
-          "label": "t:sections.all.heading_size.options__2.label"
-        },
-        {
-          "value": "h0",
-          "label": "t:sections.all.heading_size.options__3.label"
-        },
-        {
-          "value": "hxl",
-          "label": "t:sections.all.heading_size.options__4.label"
-        },
-        {
-          "value": "hxxl",
-          "label": "t:sections.all.heading_size.options__5.label"
-        }
-      ],
-      "default": "h1",
-      "label": "t:sections.all.heading_size.label"
+      "type": "image_picker",
+      "id": "background_image_desktop",
+      "label": "背景画像（PC）",
+      "info": "未設定の場合はデフォルトの画像が適用されます。"
     },
     {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:sections.all.colors.label",
-      "default": "scheme-1"
+      "type": "image_picker",
+      "id": "background_image_mobile",
+      "label": "背景画像（スマホ）"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "ページタイトル",
+      "info": "未設定の場合はコレクション名が適用されます。"
+    },
+    {
+      "type": "text",
+      "id": "heading_english",
+      "label": "英語表記",
+      "info": "未設定の場合はコレクション名が適用されます。"
     },
     {
       "type": "header",
-      "content": "t:sections.all.padding.section_padding_heading"
+      "content": "全体設定"
     },
     {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
-      "default": 36
+      "type": "checkbox",
+      "id": "background_image_switch",
+      "label": "背景画像を設定する",
+      "default": false
     },
     {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
-      "default": 36
-    }
-  ],
-  "presets": [
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "背景画像",
+      "info": "※背景画像を設定する場合のみ有効です。※背景画像が未指定の場合はデフォルト画像が設定されます。"
+    },
     {
-      "name": "t:sections.contact-form.presets.name"
+      "type": "header",
+      "content": "末尾のバナー"
+    },
+    {
+      "type": "image_picker",
+      "id": "bottom_banner_image",
+      "label": "バナー画像"
+    },
+    {
+      "type": "url",
+      "id": "bottom_banner_link",
+      "label": "バナーのリンク先"
     }
   ]
 }

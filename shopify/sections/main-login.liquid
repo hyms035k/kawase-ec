@@ -1,16 +1,66 @@
+{% comment %}
+  **会員ページ/ログイン**
+  #**要件定義**
+  - 元のテンプレート(‵shopify/.backup/sections/main-login.liquid‵)から、必要な部品を移植します。
+  - Dawn基底のShopifyとの連動の仕組みはそのまま活かす
+{% endcomment %}
+
 {{ 'customer.css' | asset_url | stylesheet_tag }}
 
-{%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
+{% comment %} ヒーローセクション {% endcomment %}
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
 
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
+  assign hero_bg = "hero_products.jpg" | asset_url
+  if section.settings.hero_desktop != blank
+    assign hero_bg = section.settings.hero_desktop | image_url: width: 1920
+  endif
+
+  if section.settings.hero_mobile != blank
+    assign hero_bg_sp = section.settings.hero_mobile | image_url: width: 750
+  endif
+-%}
+{%- style -%}
+  #hero-section-{{ block.id }} {
+    background-image: url('{{ hero_bg }}');
+  }
+  {% if hero_bg_sp != blank %}
+    @media screen and (max-width: 767px) {
+      #hero-section-{{ block.id }} {
+        background-image: url('{{ hero_bg_sp }}');
+      }
     }
+  {% endif %}
+{%- endstyle -%}
+
+<section
+  id="hero-section-{{ block.id }}"
+  class="hero-section relative bg-cover bg-center -mx-2 md:-mx-[30px] pt-[45px] md:pt-[55px] xl:pt-[65px]"
+>
+  <div class="container py-20">
+    <div class="text-center text-[#ffe8c9]">
+      <p class="font-serif text-4xl lg:text-5xl xl:text-[70px] leading-tight lg:leading-none">{{ section.settings.heading_english | default: 'Login' }}</p>
+      <h2 class="outside-double-border flex items-center mx-auto md:w-36 lg:w-48 xl:w-64 lg:text-lg xl:text-[20px] font-medium leading-tight mt-8">{{ section.settings.title | default: '会員ログイン' }}</h2>
+    </div>
+  </div>
+</section>
+
+
+
+{% comment %} メインコンテンツ {% endcomment %}
+{%- liquid
+  assign bg_image = 'main_bg_default.jpg' | asset_url
+  if section.settings.background_image_switch == true and section.settings.background_image != blank
+    assign bg_image = section.settings.background_image | image_url: width: 1920
+  endif
+-%}
+{%- style -%}
+  #MainContent-body-{{ section.id }} {
+    background-image: url('{{ bg_image }}');
+  }
+  #MainContent-body-{{ section.id }} .rte ul {
+    list-style: disc outside;
+    padding-left: 1.5rem;
   }
 {%- endstyle -%}
 
@@ -18,136 +68,160 @@
   {%- assign hide_shop_login_button = true -%}
 {%- endif -%}
 
-<div class="customer login section-{{ section.id }}-padding">
-  <h1 id="recover" tabindex="-1">
-    {{ 'customer.recover_password.title' | t }}
-  </h1>
-  <div>
-    <p>
-      {{ 'customer.recover_password.subtext' | t }}
-    </p>
+<section id="MainContent-body-{{ section.id }}" class="MainContent-body bg-cover bg-top">
+  <div class="container block-box login">
 
-    {%- form 'recover_customer_password' -%}
-      {% assign recover_success = form.posted_successfully? %}
-      <div class="field">
-        <input
-          type="email"
-          value=""
-          name="email"
-          id="RecoverEmail"
-          autocorrect="off"
-          autocapitalize="off"
-          autocomplete="email"
-          {% if form.errors %}
-            aria-invalid="true"
-            aria-describedby="RecoverEmail-email-error"
-            autofocus
-          {% endif %}
-          placeholder="{{ 'customer.login_page.email' | t }}"
-        >
-        <label for="RecoverEmail">
-          {{ 'customer.login_page.email' | t }}
-        </label>
-      </div>
-      {%- if form.errors -%}
-        <small id="RecoverEmail-email-error" class="form__message">
-          <span class="svg-wrapper">
-            {{- 'icon-error.svg' | inline_asset_content -}}
-          </span>
-          {{ form.errors.messages.form }}
-        </small>
-      {%- endif -%}
+    {% comment %} パスワードをお忘れですか？ {% endcomment %}
+    <h1 id="recover" tabindex="-1" class="!text-xl md:!text-2xl !font-medium text-center">
+      {{ 'customer.recover_password.title' | t }}
+    </h1>
+    <div class="md:!text-center text-sm md:text-base">
+      <p>
+        {{ 'customer.recover_password.subtext' | t }}
+      </p>
 
-      <button>
-        {{ 'customer.login_page.submit' | t }}
-      </button>
+      {%- form 'recover_customer_password' -%}
+        {% assign recover_success = form.posted_successfully? %}
+        <div class="md:w-[80%] lg:w-[60%] xl:w-[50%] mx-auto">
+          <div class="field !block md:!flex">
+            <label for="RecoverEmail" class="md:w-[150px] flex justify-start items-center p-3 text-[#ffe8c9] bg-[#4d667f] whitespace-nowrap">
+              メールアドレス
+            </label>
+            <input
+              type="email"
+              value=""
+              name="email"
+              id="RecoverEmail"
+              class="w-full md:w-[calc(100%_-_150px)] flex-grow p-3"
+              autocorrect="off"
+              autocapitalize="off"
+              autocomplete="email"
+              {% if form.errors %}
+                aria-invalid="true"
+                aria-describedby="RecoverEmail-email-error"
+                autofocus
+              {% endif %}
+              placeholder="メールアドレスを入力してください"
+            >
+          </div>
+        </div>
+        {%- if form.errors -%}
+          <small id="RecoverEmail-email-error" class="form__message">
+            <span class="svg-wrapper">
+              {{- 'icon-error.svg' | inline_asset_content -}}
+            </span>
+            {{ form.errors.messages.form }}
+          </small>
+        {%- endif -%}
 
-      <a href="#login">
-        {{ 'customer.login_page.cancel' | t }}
-      </a>
-    {%- endform -%}
-  </div>
+        <div class="mt-8 mb-4 text-center">
+          <button class="btn inline-block text-center align-middle !text-white min-w-[200px]">
+            <span class="btn-outline py-2 !bg-[#0071BE] before:!bg-white before:opacity-50">
+              <span class="btn-inline before:!border-white after:!border-white">
+                {{ 'customer.login_page.submit' | t }}
 
-  <h1 id="login" tabindex="-1">
-    {{ 'customer.login_page.title' | t }}
-  </h1>
-  <div>
-    {%- if recover_success == true -%}
-      <h3 class="form__message" tabindex="-1" autofocus>
-        <span class="svg-wrapper">
-          {{- 'icon-success.svg' | inline_asset_content -}}
-        </span>
-        {{ 'customer.recover_password.success' | t }}
-      </h3>
-    {%- endif -%}
-    {%- form 'customer_login', novalidate: 'novalidate' -%}
-      {%- if form.errors -%}
-        <h2 class="form__message" tabindex="-1" autofocus>
-          <span class="visually-hidden">{{ 'accessibility.error' | t }} </span>
-          <span class="svg-wrapper">
-            {{- 'icon-error.svg' | inline_asset_content -}}
-          </span>
-          {{ 'templates.contact.form.error_heading' | t }}
-        </h2>
-        {{ form.errors | default_errors }}
-      {%- endif -%}
-
-      {%- if shop.features.login_with_shop_classic_customer_accounts? -%}
-        <section name="sign-in-with-shop-provider">
-          {{ shop | login_button: hide_button: hide_shop_login_button }}
-
-          {%- unless hide_shop_login_button -%}
-            <p>
-              {{ 'customer.login_page.alternate_provider_separator' | t }}
-            </p>
-          {%- endunless -%}
-        </section>
-      {%- endif -%}
-
-      <div class="field">
-        <input
-          type="email"
-          name="customer[email]"
-          id="CustomerEmail"
-          autocomplete="email"
-          autocorrect="off"
-          autocapitalize="off"
-          {% if form.errors contains 'form' %}
-            aria-invalid="true"
-          {% endif %}
-          placeholder="{{ 'customer.login_page.email' | t }}"
-        >
-        <label for="CustomerEmail">
-          {{ 'customer.login_page.email' | t }}
-        </label>
-      </div>
-
-      {%- if form.password_needed -%}
-        <div class="field">
-          <input
-            type="password"
-            value=""
-            name="customer[password]"
-            id="CustomerPassword"
-            autocomplete="current-password"
-            {% if form.errors contains 'form' %}
-              aria-invalid="true"
-            {% endif %}
-            placeholder="{{ 'customer.login_page.password' | t }}"
-          >
-          <label for="CustomerPassword">
-            {{ 'customer.login_page.password' | t }}
-          </label>
+              </span>
+            </span>
+          </button>
         </div>
 
-        <a href="#recover">
-          {{ 'customer.login_page.forgot_password' | t }}
+        <a href="#login">
+          {{ 'customer.login_page.cancel' | t }}
         </a>
-      {%- endif -%}
+      {%- endform -%}
+    </div>
 
-      <button>
-        {{ 'customer.login_page.sign_in' | t }}
-      </button>
+    <h1 id="login" tabindex="-1" class="!text-2xl !font-medium text-center">
+      {{ 'customer.login_page.title' | t }}
+    </h1>
+    <div>
+      {%- if recover_success == true -%}
+        <h3 class="form__message" tabindex="-1" autofocus>
+          <span class="svg-wrapper">
+            {{- 'icon-success.svg' | inline_asset_content -}}
+          </span>
+          {{ 'customer.recover_password.success' | t }}
+        </h3>
+      {%- endif -%}
+      {%- form 'customer_login', novalidate: 'novalidate' -%}
+        {%- if form.errors -%}
+          <h2 class="form__message" tabindex="-1" autofocus>
+            <span class="visually-hidden">{{ 'accessibility.error' | t }} </span>
+            <span class="svg-wrapper">
+              {{- 'icon-error.svg' | inline_asset_content -}}
+            </span>
+            {{ 'templates.contact.form.error_heading' | t }}
+          </h2>
+          {{ form.errors | default_errors }}
+        {%- endif -%}
+
+        {%- if shop.features.login_with_shop_classic_customer_accounts? -%}
+          <section name="sign-in-with-shop-provider">
+            {{ shop | login_button: hide_button: hide_shop_login_button }}
+
+            {%- unless hide_shop_login_button -%}
+              <p>
+                {{ 'customer.login_page.alternate_provider_separator' | t }}
+              </p>
+            {%- endunless -%}
+          </section>
+        {%- endif -%}
+
+        <div class="md:w-[80%] lg:w-[60%] xl:w-[50%] mx-auto mt-8">
+          <div class="field !block md:!flex">
+            <label for="CustomerEmail" class="md:w-[150px] flex justify-start items-center p-3 text-[#ffe8c9] bg-[#4d667f] whitespace-nowrap">
+              メールアドレス
+            </label>
+            <input
+              type="email"
+              name="customer[email]"
+              id="CustomerEmail"
+              class="w-full md:w-[calc(100%_-_150px)] flex-grow p-3"
+              autocomplete="email"
+              autocorrect="off"
+              autocapitalize="off"
+              {% if form.errors contains 'form' %}
+                aria-invalid="true"
+              {% endif %}
+              placeholder="メールアドレスを入力してください"
+            >
+          </div>
+
+        {%- if form.password_needed -%}
+          <div class="field !block md:!flex">
+            <label for="CustomerPassword" class="md:w-[150px] flex justify-start items-center p-3 text-[#ffe8c9] bg-[#4d667f] whitespace-nowrap">
+              {{ 'customer.login_page.password' | t }}
+            </label>
+            <input
+              type="password"
+              value=""
+              name="customer[password]"
+              id="CustomerPassword"
+              class="w-full md:w-[calc(100%_-_150px)] flex-grow p-3"
+              autocomplete="current-password"
+              {% if form.errors contains 'form' %}
+                aria-invalid="true"
+              {% endif %}
+              placeholder="{{ 'customer.login_page.password' | t }}"
+            >
+          </div>
+
+          <a href="#recover">
+            {{ 'customer.login_page.forgot_password' | t }}
+          </a>
+        {%- endif -%}
+      </div>
+
+      <div class="mt-8 mb-4 text-center">
+        <button class="btn inline-block text-center align-middle !text-white min-w-[200px]">
+          <span class="btn-outline py-2 !bg-[#0071BE] before:!bg-white before:opacity-50">
+            <span class="btn-inline before:!border-white after:!border-white">
+              {{ 'customer.login_page.sign_in' | t }}
+
+            </span>
+          </span>
+        </button>
+      </div>
 
       <a href="{{ routes.account_register_url }}">
         {{ 'customer.login_page.create_account' | t }}
@@ -167,41 +241,79 @@
       {%- endform -%}
     </div>
   {%- endif -%}
-</div>
+
+  {% comment %} Other Banner {% endcomment %}
+  {% if section.settings.bottom_banner_image != blank %}
+    <div id="other-banner" class="mt-12 md:mt-24 md:flex justify-center">
+      <a href="{{ section.settings.bottom_banner_link | default: "#" }}" class="block group basis-7/12 bg-white">
+          <img src="{{ section.settings.bottom_banner_image | image_url: width: 800 }}" alt="{{ section.settings.bottom_banner_image.alt | default: 'Banner' | escape }}" class="duration-300 group-hover:opacity-50">
+      </a>
+    </div>
+  {% endif %}
+
+  </div>
+</section>
 
 {% schema %}
 {
   "name": "t:sections.main-login.name",
   "settings": [
     {
-      "type": "checkbox",
-      "id": "enable_shop_login_button",
-      "label": "t:sections.main-login.shop_login_button.enable",
-      "default": true
+      "type": "header",
+      "content": "ヒーローセクションの設定"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image_desktop",
+      "label": "背景画像（PC）",
+      "info": "未設定の場合はデフォルトの画像が適用されます。"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image_mobile",
+      "label": "背景画像（スマホ）"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "ページタイトル",
+      "info": "未設定の場合はコレクション名が適用されます。"
+    },
+    {
+      "type": "text",
+      "id": "heading_english",
+      "label": "英語表記",
+      "info": "未設定の場合はコレクション名が適用されます。"
     },
     {
       "type": "header",
-      "content": "t:sections.all.padding.section_padding_heading"
+      "content": "全体設定"
     },
     {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
-      "default": 36
+      "type": "checkbox",
+      "id": "background_image_switch",
+      "label": "背景画像を設定する",
+      "default": false
     },
     {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
-      "default": 36
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "背景画像",
+      "info": "※背景画像を設定する場合のみ有効です。※背景画像が未指定の場合はデフォルト画像が設定されます。"
+    },
+    {
+      "type": "header",
+      "content": "末尾のバナー"
+    },
+    {
+      "type": "image_picker",
+      "id": "bottom_banner_image",
+      "label": "バナー画像"
+    },
+    {
+      "type": "url",
+      "id": "bottom_banner_link",
+      "label": "バナーのリンク先"
     }
   ]
 }

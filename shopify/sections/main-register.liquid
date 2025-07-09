@@ -1,137 +1,205 @@
 {{ 'customer.css' | asset_url | stylesheet_tag }}
 
-{%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
+{% comment %} ヒーローセクション {% endcomment %}
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
 
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
+  assign hero_bg = "hero_products.jpg" | asset_url
+  if section.settings.hero_desktop != blank
+    assign hero_bg = section.settings.hero_desktop | image_url: width: 1920
+  endif
+
+  if section.settings.hero_mobile != blank
+    assign hero_bg_sp = section.settings.hero_mobile | image_url: width: 750
+  endif
+-%}
+{%- style -%}
+  #hero-section-{{ block.id }} {
+    background-image: url('{{ hero_bg }}');
+  }
+  {% if hero_bg_sp != blank %}
+    @media screen and (max-width: 767px) {
+      #hero-section-{{ block.id }} {
+        background-image: url('{{ hero_bg_sp }}');
+      }
     }
+  {% endif %}
+{%- endstyle -%}
+
+<section
+  id="hero-section-{{ block.id }}"
+  class="hero-section relative bg-cover bg-center -mx-2 md:-mx-[30px] pt-[45px] md:pt-[55px] xl:pt-[65px]"
+>
+  <div class="container py-20">
+    <div class="text-center text-[#ffe8c9]">
+      <p class="font-serif text-4xl lg:text-5xl xl:text-[70px] leading-tight lg:leading-none">{{ section.settings.heading_english | default: 'Login' }}</p>
+      <h2 class="outside-double-border flex items-center mx-auto md:w-36 lg:w-48 xl:w-64 lg:text-lg xl:text-[20px] font-medium leading-tight mt-8">{{ section.settings.title | default: '会員ログイン' }}</h2>
+    </div>
+  </div>
+</section>
+
+
+
+{% comment %} メインコンテンツ {% endcomment %}
+{%- liquid
+  assign bg_image = 'main_bg_default.jpg' | asset_url
+  if section.settings.background_image_switch == true and section.settings.background_image != blank
+    assign bg_image = section.settings.background_image | image_url: width: 1920
+  endif
+-%}
+{%- style -%}
+  #MainContent-body-{{ section.id }} {
+    background-image: url('{{ bg_image }}');
+  }
+  #MainContent-body-{{ section.id }} .rte ul {
+    list-style: disc outside;
+    padding-left: 1.5rem;
   }
 {%- endstyle -%}
 
-<div class="customer register section-{{ section.id }}-padding">
-  <h1>
-    {{ 'customer.register.title' | t }}
-  </h1>
-  {%- form 'create_customer', novalidate: 'novalidate' -%}
-    {%- if form.errors -%}
-      <h2 class="form__message" tabindex="-1" autofocus>
-        <span class="svg-wrapper">
-          {{- 'icon-error.svg' | inline_asset_content -}}
-        </span>
-        {{ 'templates.contact.form.error_heading' | t }}
-      </h2>
-      <ul>
-        {%- for field in form.errors -%}
-          <li>
-            {%- if field == 'form' -%}
-              {{ form.errors.messages[field] }}
-            {%- else -%}
-              <a href="#RegisterForm-{{ field }}">
-                {{ form.errors.translated_fields[field] | capitalize }}
+<section id="MainContent-body-{{ section.id }}" class="MainContent-body bg-cover bg-top">
+  <div class="container block-box customer register">
+    <h1 class="!text-xl md:!text-2xl !font-medium text-center">
+      {{ 'customer.register.title' | t }}
+    </h1>
+    {%- form 'create_customer', novalidate: 'novalidate' -%}
+      {%- if form.errors -%}
+        <h2 class="form__message" tabindex="-1" autofocus>
+          <span class="svg-wrapper">
+            {{- 'icon-error.svg' | inline_asset_content -}}
+          </span>
+          {{ 'templates.contact.form.error_heading' | t }}
+        </h2>
+        <ul>
+          {%- for field in form.errors -%}
+            <li>
+              {%- if field == 'form' -%}
                 {{ form.errors.messages[field] }}
-              </a>
-            {%- endif -%}
-          </li>
-        {%- endfor -%}
-      </ul>
-    {%- endif -%}
-    <div class="field">
-      <input
-        type="text"
-        name="customer[first_name]"
-        id="RegisterForm-FirstName"
-        {% if form.first_name %}
-          value="{{ form.first_name }}"
-        {% endif %}
-        autocomplete="given-name"
-        placeholder="{{ 'customer.register.first_name' | t }}"
-      >
-      <label for="RegisterForm-FirstName">
-        {{ 'customer.register.first_name' | t }}
-      </label>
-    </div>
-    <div class="field">
-      <input
-        type="text"
-        name="customer[last_name]"
-        id="RegisterForm-LastName"
-        {% if form.last_name %}
-          value="{{ form.last_name }}"
-        {% endif %}
-        autocomplete="family-name"
-        placeholder="{{ 'customer.register.last_name' | t }}"
-      >
-      <label for="RegisterForm-LastName">
-        {{ 'customer.register.last_name' | t }}
-      </label>
-    </div>
-    <div class="field">
-      <input
-        type="email"
-        name="customer[email]"
-        id="RegisterForm-email"
-        {% if form.email %}
-          value="{{ form.email }}"
-        {% endif %}
-        spellcheck="false"
-        autocapitalize="off"
-        autocomplete="email"
-        aria-required="true"
-        {% if form.errors contains 'email' %}
-          aria-invalid="true"
-          aria-describedby="RegisterForm-email-error"
-        {% endif %}
-        placeholder="{{ 'customer.register.email' | t }}"
-      >
-      <label for="RegisterForm-email">
-        {{ 'customer.register.email' | t }}
-      </label>
-    </div>
-    {%- if form.errors contains 'email' -%}
-      <span id="RegisterForm-email-error" class="form__message">
-        <span class="svg-wrapper">
-          {{- 'icon-error.svg' | inline_asset_content -}}
-        </span>
-        {{ form.errors.translated_fields.email | capitalize }}
-        {{ form.errors.messages.email }}.
-      </span>
-    {%- endif -%}
-    <div class="field">
-      <input
-        type="password"
-        name="customer[password]"
-        id="RegisterForm-password"
-        aria-required="true"
-        {% if form.errors contains 'password' %}
-          aria-invalid="true"
-          aria-describedby="RegisterForm-password-error"
-        {% endif %}
-        placeholder="{{ 'customer.register.password' | t }}"
-      >
-      <label for="RegisterForm-password">
-        {{ 'customer.register.password' | t }}
-      </label>
-    </div>
-    {%- if form.errors contains 'password' -%}
-      <span id="RegisterForm-password-error" class="form__message">
-        <span class="svg-wrapper">
-          {{- 'icon-error.svg' | inline_asset_content -}}
-        </span>
-        {{ form.errors.translated_fields.password | capitalize }}
-        {{ form.errors.messages.password }}.
-      </span>
-    {%- endif -%}
-    <button>
-      {{ 'customer.register.submit' | t }}
-    </button>
-  {%- endform -%}
-</div>
+              {%- else -%}
+                <a href="#RegisterForm-{{ field }}">
+                  {{ form.errors.translated_fields[field] | capitalize }}
+                  {{ form.errors.messages[field] }}
+                </a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+      <div class="flex flex-wrap mt-4 gap-3">
+        <div class="field !m-0 !basis-[calc(50%_-_0.375rem)]">
+          <input
+            type="text"
+            class="!text-base"
+            name="customer[last_name]"
+            id="RegisterForm-LastName"
+            {% if form.last_name %}
+              value="{{ form.last_name }}"
+            {% endif %}
+            autocomplete="family-name"
+            placeholder="{{ 'customer.register.last_name' | t }}"
+          >
+          <label class="!text-base !text-[#999]" for="RegisterForm-LastName">
+            {{ 'customer.register.last_name' | t }}
+          </label>
+        </div>
+        <div class="field !m-0 !basis-[calc(50%_-_0.375rem)]">
+          <input
+            type="text"
+            class="!text-base"
+            name="customer[first_name]"
+            id="RegisterForm-FirstName"
+            {% if form.first_name %}
+              value="{{ form.first_name }}"
+            {% endif %}
+            autocomplete="given-name"
+            placeholder="{{ 'customer.register.first_name' | t }}"
+          >
+          <label class="!text-base !text-[#999]" for="RegisterForm-FirstName">
+            {{ 'customer.register.first_name' | t }}
+          </label>
+        </div>
+        <div class="field !m-0">
+          <input
+            type="email"
+            class="!text-base"
+            name="customer[email]"
+            id="RegisterForm-email"
+            {% if form.email %}
+              value="{{ form.email }}"
+            {% endif %}
+            spellcheck="false"
+            autocapitalize="off"
+            autocomplete="email"
+            aria-required="true"
+            {% if form.errors contains 'email' %}
+              aria-invalid="true"
+              aria-describedby="RegisterForm-email-error"
+            {% endif %}
+            placeholder="{{ 'customer.register.email' | t }}"
+          >
+          <label class="!text-base !text-[#999]" for="RegisterForm-email">
+            {{ 'customer.register.email' | t }}
+          </label>
+        </div>
+        {%- if form.errors contains 'email' -%}
+          <span id="RegisterForm-email-error" class="form__message">
+            <span class="svg-wrapper">
+              {{- 'icon-error.svg' | inline_asset_content -}}
+            </span>
+            {{ form.errors.translated_fields.email | capitalize }}
+            {{ form.errors.messages.email }}.
+          </span>
+        {%- endif -%}
+        <div class="field !m-0">
+          <input
+            type="password"
+            class="!text-base"
+            name="customer[password]"
+            id="RegisterForm-password"
+            aria-required="true"
+            {% if form.errors contains 'password' %}
+              aria-invalid="true"
+              aria-describedby="RegisterForm-password-error"
+            {% endif %}
+            placeholder="{{ 'customer.register.password' | t }}"
+          >
+          <label class="!text-base !text-[#999]" for="RegisterForm-password">
+            {{ 'customer.register.password' | t }}
+          </label>
+        </div>
+        {%- if form.errors contains 'password' -%}
+          <span id="RegisterForm-password-error" class="form__message">
+            <span class="svg-wrapper">
+              {{- 'icon-error.svg' | inline_asset_content -}}
+            </span>
+            {{ form.errors.translated_fields.password | capitalize }}
+            {{ form.errors.messages.password }}.
+          </span>
+        {%- endif -%}
+      </div>
+
+      <div class="mt-8 !text-center">
+        <button class="btn !inline-block text-center align-middle !text-white min-w-[240px] !m-0 !p-0 !bg-transparent !border-none before:!hidden after:!hidden !text-base">
+          <span class="btn-outline py-2 !bg-[#0071BE] before:!bg-white before:opacity-50">
+            <span class="btn-inline before:!border-white after:!border-white">
+              {{ 'customer.register.submit' | t }}
+            </span>
+          </span>
+        </button>
+      </div>
+    {%- endform -%}
+
+    {% comment %} Other Banner {% endcomment %}
+    {% if section.settings.bottom_banner_image != blank %}
+      <div id="other-banner" class="mt-12 md:mt-24 md:flex justify-center">
+        <a href="{{ section.settings.bottom_banner_link | default: "#" }}" class="block group basis-7/12 bg-white">
+            <img src="{{ section.settings.bottom_banner_image | image_url: width: 800 }}" alt="{{ section.settings.bottom_banner_image.alt | default: 'Banner' | escape }}" class="duration-300 group-hover:opacity-50">
+        </a>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
 
 {% schema %}
 {
@@ -139,27 +207,60 @@
   "settings": [
     {
       "type": "header",
-      "content": "t:sections.all.padding.section_padding_heading"
+      "content": "ヒーローセクションの設定"
     },
     {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
-      "default": 36
+      "type": "image_picker",
+      "id": "background_image_desktop",
+      "label": "背景画像（PC）",
+      "info": "未設定の場合はデフォルトの画像が適用されます。"
     },
     {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
-      "default": 36
+      "type": "image_picker",
+      "id": "background_image_mobile",
+      "label": "背景画像（スマホ）"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "ページタイトル",
+      "info": "未設定の場合はコレクション名が適用されます。"
+    },
+    {
+      "type": "text",
+      "id": "heading_english",
+      "label": "英語表記",
+      "info": "未設定の場合はコレクション名が適用されます。"
+    },
+    {
+      "type": "header",
+      "content": "全体設定"
+    },
+    {
+      "type": "checkbox",
+      "id": "background_image_switch",
+      "label": "背景画像を設定する",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "背景画像",
+      "info": "※背景画像を設定する場合のみ有効です。※背景画像が未指定の場合はデフォルト画像が設定されます。"
+    },
+    {
+      "type": "header",
+      "content": "末尾のバナー"
+    },
+    {
+      "type": "image_picker",
+      "id": "bottom_banner_image",
+      "label": "バナー画像"
+    },
+    {
+      "type": "url",
+      "id": "bottom_banner_link",
+      "label": "バナーのリンク先"
     }
   ]
 }

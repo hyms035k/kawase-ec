@@ -1,154 +1,353 @@
-{{ 'customer.css' | asset_url | stylesheet_tag }}
+{% comment %} ヒーローセクション {% endcomment %}
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
 
+  assign hero_bg = "hero_products.jpg" | asset_url
+  if section.settings.hero_desktop != blank
+    assign hero_bg = section.settings.hero_desktop | image_url: width: 1920
+  endif
+
+  if section.settings.hero_mobile != blank
+    assign hero_bg_sp = section.settings.hero_mobile | image_url: width: 750
+  endif
+-%}
 {%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  #hero-section-{{ block.id }} {
+    background-image: url('{{ hero_bg }}');
   }
-
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
+  {% if hero_bg_sp != blank %}
+    @media screen and (max-width: 767px) {
+      #hero-section-{{ block.id }} {
+        background-image: url('{{ hero_bg_sp }}');
+      }
     }
+  {% endif %}
+{%- endstyle -%}
+
+<section
+  id="hero-section-{{ block.id }}"
+  class="hero-section relative bg-cover bg-center -mx-2 md:-mx-[30px] pt-[45px] md:pt-[55px] xl:pt-[65px]"
+>
+  <div class="container py-20">
+    <div class="text-center text-[#ffe8c9]">
+      <p class="font-serif text-4xl lg:text-5xl xl:text-[70px] leading-tight lg:leading-none">{{ section.settings.heading_english | default: 'Menber Page' }}{% comment %}デフォルトのテキストは、各ページに合わせたものに変更してください。{% endcomment %}</p>
+      <h2 class="outside-double-border flex items-center mx-auto md:w-36 lg:w-48 xl:w-64 lg:text-lg xl:text-[20px] font-medium leading-tight mt-8">{{ section.settings.title | default: '会員ページ' }}{% comment %}デフォルトのテキストは、各ページに合わせたものに変更してください。{% endcomment %}</h2>
+    </div>
+  </div>
+</section>
+
+
+
+{% comment %} メインコンテンツ {% endcomment %}
+{%- liquid
+  assign bg_image = 'main_bg_default.jpg' | asset_url
+  if section.settings.background_image_switch == true and section.settings.background_image != blank
+    assign bg_image = section.settings.background_image | image_url: width: 1920
+  endif
+-%}
+{%- style -%}
+  #MainContent-body-{{ section.id }} {
+    background-image: url('{{ bg_image }}');
+  }
+  #MainContent-body-{{ section.id }} .rte ul {
+    list-style: disc outside;
+    padding-left: 1.5rem;
   }
 {%- endstyle -%}
 
-<div class="customer account section-{{ section.id }}-padding">
-  <div>
-    <h1 class="customer__title">{{ 'customer.account.title' | t }}</h1>
-    <a href="{{ routes.account_logout_url }}">
-      <span class="svg-wrapper">
-        {{- 'icon-account.svg' | inline_asset_content -}}
-      </span>
-      {{ 'customer.log_out' | t }}
-    </a>
-  </div>
+<section id="MainContent-body-{{ section.id }}" class="MainContent-body bg-cover bg-top">
+  <div class="container block-box">
 
-  <div>
-    <div>
-      <h2>{{ 'customer.orders.title' | t }}</h2>
+    {% comment %} コンテンツ上部 {% endcomment %}
+    <div class="title-wrapper-with-link mt-0 mb-6 !block md:!flex">
+      <h1 class="title title--primary text-xl font-medium text-center md:text-left">会員アカウント</h1>
+      <div class="quick-tab flex justify-center md:justify-end gap-2 lg:gap-4 text-sm mt-4 md:mt-0">
+        <a
+          href="{{ routes.account_logout_url }}"
+          class="btn hover:!text-white text-center"
+        >
+          <span class="!bg-white"><span>{{- 'customer.log_out' | t -}}</span></span>
+        </a>
+      </div>
+    </div>
 
-      {% paginate customer.orders by 20 %}
-        {%- if customer.orders.size > 0 -%}
-          <table role="table" class="order-history">
-            <caption class="visually-hidden">
-              {{ 'customer.orders.title' | t }}
-            </caption>
-            <thead role="rowgroup">
-              <tr role="row">
-                <th id="ColumnOrder" scope="col" role="columnheader">{{ 'customer.orders.order_number' | t }}</th>
-                <th id="ColumnDate" scope="col" role="columnheader">{{ 'customer.orders.date' | t }}</th>
-                <th id="ColumnPayment" scope="col" role="columnheader">{{ 'customer.orders.payment_status' | t }}</th>
-                <th id="ColumnFulfillment" scope="col" role="columnheader">
-                  {{ 'customer.orders.fulfillment_status' | t }}
-                </th>
-                <th id="ColumnTotal" scope="col" role="columnheader">{{ 'customer.orders.total' | t }}</th>
-              </tr>
-            </thead>
-            <tbody role="rowgroup">
-              {%- for order in customer.orders -%}
+
+    <div class="customer account grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 lg:items-start">
+
+      {% comment %} コンテンツ上部 (左) {% endcomment %}
+      <div class="lg:col-span-8 bg-white px-3 py-6 md:!p-8 xl:!p-9 2xl:!p-12">
+        <h2 class="md:text-lg font-medium mb-0 md:mb-4">ご購入履歴</h2>
+
+        {% paginate customer.orders by 20 %}
+          {%- if customer.orders.size > 0 -%}
+            <table role="table" class="order-history !block md:!table w-full">
+              <caption class="visually-hidden">
+                {{ 'customer.orders.title' | t }}
+              </caption>
+              <thead role="rowgroup" class="!hidden md:!table-header-group">
                 <tr role="row">
-                  <td
-                    id="RowOrder"
-                    role="cell"
-                    headers="ColumnOrder"
-                    data-label="{{ 'customer.orders.order_number' | t }}"
-                  >
-                    <a
-                      href="{{ order.customer_url }}"
-                      aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name }}"
-                    >
-                      {{ order.name }}
-                    </a>
-                  </td>
-                  <td headers="RowOrder ColumnDate" role="cell" data-label="{{ 'customer.orders.date' | t }}">
-                    {{ order.created_at | time_tag: format: 'date' }}
-                  </td>
-                  <td
-                    headers="RowOrder ColumnPayment"
-                    role="cell"
-                    data-label="{{ 'customer.orders.payment_status' | t }}"
-                  >
-                    {{ order.financial_status_label }}
-                  </td>
-                  <td
-                    headers="RowOrder ColumnFulfillment"
-                    role="cell"
-                    data-label="{{ 'customer.orders.fulfillment_status' | t }}"
-                  >
-                    {{ order.fulfillment_status_label }}
-                  </td>
-                  <td headers="RowOrder ColumnTotal" role="cell" data-label="{{ 'customer.orders.total' | t }}">
-                    {{ order.total_net_amount | money_with_currency }}
-                  </td>
+                  <th class="!w-auto text-sm text-left !pb-3 !px-2 font-normal !border-b !border-solid !border-[#cccccc]" id="ColumnOrder" scope="col" role="columnheader">{{ 'customer.orders.order_number' | t }}</th>
+                  <th class="!w-auto text-sm text-left !pb-3 !px-2 font-normal !border-b !border-solid !border-[#cccccc]" id="ColumnDate" scope="col" role="columnheader">{{ 'customer.orders.date' | t }}</th>
+                  <th class="!w-auto text-sm text-left !pb-3 !px-2 font-normal !border-b !border-solid !border-[#cccccc]" id="ColumnPayment" scope="col" role="columnheader">{{ 'customer.orders.payment_status' | t }}</th>
+                  <th class="!w-auto text-sm text-left !pb-3 !px-2 font-normal !border-b !border-solid !border-[#cccccc]" id="ColumnFulfillment" scope="col" role="columnheader">
+                    {{ 'customer.orders.fulfillment_status' | t }}
+                  </th>
+                  <th class="!w-auto text-sm text-right !pb-3 !px-2 font-normal !border-b !border-solid !border-[#cccccc]" id="ColumnTotal" scope="col" role="columnheader">{{ 'customer.orders.total' | t }}</th>
                 </tr>
-              {%- endfor -%}
-            </tbody>
-          </table>
-        {%- else -%}
-          <p>{{ 'customer.orders.none' | t }}</p>
-        {%- endif -%}
-
-        {%- if paginate.pages > 1 -%}
-          {%- if paginate.parts.size > 0 -%}
-            <nav class="pagination" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
-              <ul role="list">
-                {%- if paginate.previous -%}
-                  <li>
-                    <a href="{{ paginate.previous.url }}" aria-label="{{ 'general.pagination.previous' | t }}">
-                      <span class="svg-wrapper">
-                        {{- 'icon-caret.svg' | inline_asset_content -}}
-                      </span>
-                    </a>
-                  </li>
-                {%- endif -%}
-
-                {%- for part in paginate.parts -%}
-                  <li>
-                    {%- if part.is_link -%}
-                      <a href="{{ part.url }}" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">
-                        {{- part.title -}}
+              </thead>
+              <tbody role="rowgroup" class="!block md:!table-row-group !divide-y !divide-solid !divide-[#cccccc]">
+                {%- for order in customer.orders -%}
+                  <tr role="row" class="!flex flex-wrap !gap-0 md:!table-row !mb-0">
+                    <td
+                      class="!block md:!table-cell !px-2 !pt-4 md:!py-6"
+                      id="RowOrder"
+                      role="cell"
+                      headers="ColumnOrder"
+                      data-label="{{ 'customer.orders.order_number' | t }}"
+                    >
+                      <a
+                        class="!text-base !text-sky-500 underline"
+                        href="{{ order.customer_url }}"
+                        aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name }}"
+                      >
+                        {{ order.name }}
                       </a>
-                    {%- else -%}
-                      {%- if part.title == paginate.current_page -%}
-                        <span aria-current="page" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">
-                          {{- part.title -}}
-                        </span>
-                      {%- else -%}
-                        <span>{{ part.title }}</span>
-                      {%- endif -%}
-                    {%- endif -%}
-                  </li>
+                    </td>
+                    <td
+                      class="!block md:!table-cell md:!w-44 !px-2 !pt-4 md:!py-6 flex-grow"
+                      headers="RowOrder ColumnDate"
+                      role="cell" data-label="{{ 'customer.orders.date' | t }}"
+                    >
+                      {{ order.created_at | time_tag: format: 'date' }}
+                    </td>
+                    <td
+                      class="!block md:!table-cell md:!w-32 !px-2 !pt-2 md:!py-6 text-sm"
+                      headers="RowOrder ColumnPayment"
+                      role="cell"
+                      data-label="{{ 'customer.orders.payment_status' | t }}"
+                    >
+                      {{ order.financial_status_label }}
+                    </td>
+                    <td
+                      class="!block md:!table-cell md:!w-32 !px-2 !pt-2 md:!py-6 text-sm"
+                      headers="RowOrder ColumnFulfillment"
+                      role="cell"
+                      data-label="{{ 'customer.orders.fulfillment_status' | t }}"
+                    >
+                      {{ order.fulfillment_status_label }}
+                    </td>
+                    <td
+                      class="!block md:!table-cell !w-full md:!w-32 !px-2 !pt-2 !pb-4 md:!py-6 md:text-right"
+                      headers="RowOrder ColumnTotal"
+                      role="cell"
+                      data-label="{{ 'customer.orders.total' | t }}"
+                    >
+                      ￥{{ order.total_net_amount | money_without_currency }}
+                    </td>
+                  </tr>
                 {%- endfor -%}
-
-                {%- if paginate.next -%}
-                  <li>
-                    <a href="{{ paginate.next.url }}" aria-label="{{ 'general.pagination.next' | t }}">
-                      <span class="svg-wrapper">
-                        {{- 'icon-caret.svg' | inline_asset_content -}}
-                      </span>
-                    </a>
-                  </li>
-                {%- endif -%}
-              </ul>
-            </nav>
+              </tbody>
+            </table>
+          {%- else -%}
+            <p>まだご購入商品はありません。</p>
           {%- endif -%}
-        {%- endif -%}
-      {% endpaginate %}
+
+          {%- if paginate.pages > 1 -%}
+            <nav
+              class="pagination-wrapper flex justify-center items-center gap-x-2 md:gap-x-4 mt-12 md:mt-16 text-sm"
+              role="navigation"
+              aria-label="{{ 'general.pagination.label' | t }}"
+            >
+              {%- if paginate.parts.size > 0 -%}
+                {%- if paginate.previous -%}
+                  <a
+                    href="{{ paginate.previous.url }}"
+                    class="!hidden md:!flex
+                      items-center
+                      justify-center
+                      h-8
+                      px-6
+                      rounded-full
+                      border
+                      border-[#1a2530] hover:border-[#34506d]
+                      bg-[#1a2530] hover:bg-[#34506d]
+                      text-[#fff]
+                      transition-colors
+                      duration-300"
+                    aria-label="{{ 'general.pagination.previous' | t }}"
+                  >
+                    <span>前へ</span>
+                  </a>
+                {%- endif -%}
+                {%- for part in paginate.parts -%}
+                  {%- if part.is_link -%}
+                    <a href="{{ part.url }}" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">
+                      {{- part.title -}}
+                    </a>
+                    <a
+                      href="{{ part.url }}"
+                      class="!flex
+                        items-center
+                        justify-center
+                        w-8
+                        h-8
+                        rounded-full
+                        border
+                        border-[#1a2530] hover:border-[#34506d]
+                        hover:bg-[#34506d]
+                        hover:text-[#fff]
+                        transition-colors
+                        duration-300"
+                      aria-label="{{ 'general.pagination.page' | t: number: part.title }}"
+                    >
+                      {{- part.title -}}
+                    </a>
+                  {%- else -%}
+                    {%- if part.title == paginate.current_page -%}
+                      <span class="flex
+                        items-center
+                        justify-center
+                        w-8
+                        h-8
+                        rounded-full
+                        border
+                        border-[#1a2530]
+                        bg-[#1a2530]
+                        text-[#ffe8c9]"
+                        aria-current="page"
+                        aria-label="{{ 'general.pagination.page' | t: number: part.title }}"
+                      >
+                        {{- part.title -}}
+                      </span>
+                    {%- else -%}
+                      <span class="flex
+                        items-center
+                        justify-center
+                        w-8
+                        h-8
+                        rounded-full
+                        border
+                        border-[#1a2530]
+                        bg-[#1a2530]
+                        text-[#ffe8c9]"
+                      >
+                        {{ part.title }}
+                      </span>
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- if paginate.next -%}
+                  <a
+                    href="{{ paginate.next.url }}"
+                    class="hidden md:flex
+                      items-center
+                      justify-center
+                      h-8
+                      px-6
+                      rounded-full
+                      border
+                      border-[#1a2530] hover:border-[#34506d]
+                      bg-[#1a2530] hover:bg-[#34506d]
+                      text-[#ffe8c9]
+                      transition-colors
+                      duration-300"
+                    aria-label="{{ 'general.pagination.next' | t }}"
+                  >
+                    <span>次へ</span>
+                  </a>
+                {%- endif -%}
+              {%- else -%}
+                <span class="flex
+                  items-center
+                  justify-center
+                  w-8
+                  h-8
+                  rounded-full
+                  border
+                  border-[#1a2530]
+                  bg-[#1a2530]
+                  text-[#ffe8c9]"
+                  aria-current="page"
+                  aria-label="1">1</span>
+              {%- endif -%}
+            </nav>
+
+            {%- if paginate.parts.size > 0 -%}
+              <nav class="flex md:hidden justify-center items-center gap-x-2 mt-4 text-sm">
+                {%- if paginate.previous -%}
+                  <a
+                    href="{{ paginate.previous.url }}"
+                    class="hidden md:flex
+                      items-center
+                      justify-center
+                      h-8
+                      px-6
+                      rounded-full
+                      border
+                      border-[#1a2530] hover:border-[#34506d]
+                      bg-[#1a2530] hover:bg-[#34506d]
+                      text-[#ffe8c9]
+                      transition-colors
+                      duration-300"
+                    aria-label="{{ 'general.pagination.previous' | t }}"
+                  >
+                    <span>前へ</span>
+                  </a>
+                {%- endif -%}
+                {%- if paginate.next -%}
+                  <a
+                    href="{{ paginate.next.url }}"
+                    class="hidden md:flex
+                      items-center
+                      justify-center
+                      h-8
+                      px-6
+                      rounded-full
+                      border
+                      border-[#1a2530] hover:border-[#34506d]
+                      bg-[#1a2530] hover:bg-[#34506d]
+                      text-[#ffe8c9]
+                      transition-colors
+                      duration-300"
+                    aria-label="{{ 'general.pagination.next' | t }}"
+                  >
+                    <span>次へ</span>
+                  </a>
+                {%- endif -%}
+              </nav>
+            {%- endif -%}
+          {%- endif -%}
+        {% endpaginate %}
+      </div>
+
+      {% comment %} コンテンツ上部 (右) {% endcomment %}
+      <div class="lg:col-span-4 lg:sticky lg:top-24">
+
+        <div class="bg-white p-6 md:p-8 xl:!p-9 2xl:p-12">
+          <h2 class="md:text-lg font-medium mb-4">{{ 'customer.account.details' | t }}</h2>
+          <div class="mb-4">
+            {{ customer.default_address | format_address }}
+          </div>
+
+          <a href="{{ routes.account_addresses_url }}">
+            {{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})
+          </a>
+        </div>
+      </div>
+
     </div>
 
-    <div>
-      <h2>{{ 'customer.account.details' | t }}</h2>
+    {% comment %} Other Banner {% endcomment %}
+    {% if section.settings.bottom_banner_image != blank %}
+      <div id="other-banner" class="mt-12 md:mt-24 md:flex justify-center">
+        <a href="{{ section.settings.bottom_banner_link | default: "#" }}" class="block group basis-7/12 bg-white">
+            <img src="{{ section.settings.bottom_banner_image | image_url: width: 800 }}" alt="{{ section.settings.bottom_banner_image.alt | default: 'Banner' | escape }}" class="duration-300 group-hover:opacity-50">
+        </a>
+      </div>
+    {% endif %}
 
-      {{ customer.default_address | format_address }}
-
-      <a href="{{ routes.account_addresses_url }}">
-        {{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})
-      </a>
-    </div>
   </div>
-</div>
+</section>
 
 {% schema %}
 {
@@ -156,27 +355,60 @@
   "settings": [
     {
       "type": "header",
-      "content": "t:sections.all.padding.section_padding_heading"
+      "content": "ヒーローセクションの設定"
     },
     {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
-      "default": 36
+      "type": "image_picker",
+      "id": "background_image_desktop",
+      "label": "背景画像（PC）",
+      "info": "未設定の場合はデフォルトの画像が適用されます。"
     },
     {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
-      "default": 36
+      "type": "image_picker",
+      "id": "background_image_mobile",
+      "label": "背景画像（スマホ）"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "ページタイトル",
+      "info": "未設定の場合はコレクション名が適用されます。"
+    },
+    {
+      "type": "text",
+      "id": "heading_english",
+      "label": "英語表記",
+      "info": "未設定の場合はコレクション名が適用されます。"
+    },
+    {
+      "type": "header",
+      "content": "全体設定"
+    },
+    {
+      "type": "checkbox",
+      "id": "background_image_switch",
+      "label": "背景画像を設定する",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "背景画像",
+      "info": "※背景画像を設定する場合のみ有効です。※背景画像が未指定の場合はデフォルト画像が設定されます。"
+    },
+    {
+      "type": "header",
+      "content": "末尾のバナー"
+    },
+    {
+      "type": "image_picker",
+      "id": "bottom_banner_image",
+      "label": "バナー画像"
+    },
+    {
+      "type": "url",
+      "id": "bottom_banner_link",
+      "label": "バナーのリンク先"
     }
   ]
 }

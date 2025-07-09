@@ -283,6 +283,12 @@
         }
       }
       */
+      .shopify-policy__container {
+        background-image: url({{ 'main_bg_default.jpg' | asset_url }});
+      }
+      .shopify-policy__container > .shopify-policy__title {
+        background-image: url({{ "hero_products.jpg" | asset_url }});
+      }
     {% endstyle %}
 
     {{ 'base.css' | asset_url | stylesheet_tag }}

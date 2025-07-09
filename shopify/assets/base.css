@@ -485,6 +485,7 @@ h6:empty {
   display: none;
 }
 
+/*
 .link,
 .customer a {
   cursor: pointer;
@@ -498,6 +499,7 @@ h6:empty {
   font-size: 1.4rem;
   font-family: inherit;
 }
+*/
 
 .link--text {
   color: rgb(var(--color-foreground));
@@ -595,7 +597,7 @@ details > * {
 }
 
 .underlined-link,
-.customer a,
+/*.customer a,*/
 .inline-richtext a {
   text-underline-offset: 0.3rem;
   text-decoration-thickness: 0.1rem;
@@ -603,7 +605,7 @@ details > * {
 }
 
 .underlined-link,
-.customer a {
+/*.customer a*/ {
   color: rgba(var(--color-link), var(--alpha-link));
 }
 
@@ -613,7 +615,7 @@ details > * {
 }
 
 .underlined-link:hover,
-.customer a:hover,
+/*.customer a:hover*/,
 .inline-richtext a:hover {
   color: rgb(var(--color-link));
   text-decoration-thickness: 0.2rem;
