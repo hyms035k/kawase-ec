@@ -18,7 +18,7 @@
             "background_image_desktop": "shopify://shop_images/top__hero_bg.jpg",
             "background_image_mobile": "shopify://shop_images/top__hero_bg_sp.jpg",
             "use_main_visual": true,
-            "logo_image": "shopify://shop_images/logo-min.png",
+            "logo_image": "shopify://shop_images/top__hero_logo-min.png",
             "heading_text": "あらゆる場面に対処できる\n長年の経験と技術",
             "title": "ページタイトル",
             "heading_english": "Page Title"
@@ -38,7 +38,7 @@
         "message_main_image": "shopify://shop_images/top__block1st_image.jpg",
         "message_image_layout": "left",
         "message_content_heading": "音を愛し、心に寄り添う。",
-        "message_content_text": "<p>ここに和文のコメントが入ります。私たちのサービスや製品が、どのようにしてお客様の心に寄り添い、日常に彩りを与えるのか、その思いを込めてお伝えします。</p>",
+        "message_content_text": "<p>1944年の創業以来、私たちは音楽と真摯に向き合い、楽器とともに歩んできました。音に触れることで生まれる、豊かな時間と心のやすらぎ――その力を信じ、届け続けてきた私たちには、長い歴史と経験があります。これからも、音楽を愛するすべての方にとって、変わらぬ信頼を寄せていただける存在であり続けます。</p>",
         "show_new_arrivals": true,
         "show_ranking": true,
         "ranking_collection": "ランキング",
@@ -60,7 +60,7 @@
         "category_banner_4_text_ja": "オリジナル商品",
         "category_banner_4_text_en": "Kawase original",
         "category_banner_4_link": "",
-        "about_text": "<p>カワセ楽器店は、1944年の創業以来、音楽愛好家の皆さまに高品質なアコースティックギターとサービスを提供してまいりました。​長年の経験と技術を活かし、楽器の販売から修理・メンテナンス、オリジナル商品の開発まで幅広く手がけています。​これからも音楽を愛するすべての方々に寄り添い、心に響く音楽体験をお届けしてまいります。</p>",
+        "about_text": "<p>カワセ楽器店は、プロミュージシャンや音楽愛好家の皆さまに高品質なアコースティックギターとサービスを提供してまいりました。​長年の経験と技術を活かし、楽器の販売から修理・メンテナンス、オリジナル商品の開発まで幅広く手がけています。​これからも音楽を愛するすべての方々に寄り添い、心に響く音楽体験をお届けしてまいります。</p>",
         "about_bg_image": "shopify://shop_images/top__block2nd_about.jpg",
         "about_link": "",
         "news_blog": "news",
@@ -77,14 +77,10 @@
         "other_banner_7_text_ja": "ご購入ガイド",
         "other_banner_7_text_en": "Shopping Guide",
         "other_banner_7_link": "",
-        "other_banner_8_image": "shopify://shop_images/top__block2nd_category_7.jpg",
-        "other_banner_8_text_ja": "楽器OEM･ODM",
-        "other_banner_8_text_en": "Instrument OEM･ODM",
-        "other_banner_8_link": "",
-        "other_banner_9_image": "shopify://shop_images/top__block2nd_category_8.jpg",
-        "other_banner_9_text_ja": "グッズOEM･ODM",
-        "other_banner_9_text_en": "Goods OEM･ODM",
-        "other_banner_9_link": ""
+        "other_banner_8_image": "shopify://shop_images/top__block2nd_category_10.jpg",
+        "other_banner_8_text_ja": "コンサートグッズOEM･ODMについて",
+        "other_banner_8_text_en": "Concert OEM･ODM",
+        "other_banner_8_link": ""
       }
     }
   },

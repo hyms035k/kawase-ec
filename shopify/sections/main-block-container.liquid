@@ -326,7 +326,7 @@
 
     {% comment %} --- その他バナーブロック --- {% endcomment %}
     <div id="other-banner" class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8 mt-10 pt-8">
-      {%- for i in (5..9) -%}
+      {%- for i in (5..8) -%}
         {%- liquid
           assign image_setting = 'other_banner_' | append: i | append: '_image'
           assign link_setting = 'other_banner_' | append: i | append: '_link'
@@ -335,7 +335,7 @@
           assign image = section.settings[image_setting]
           assign text_ja = section.settings[text_ja_setting]
           assign banner_class = "category-banner group relative block overflow-hidden h-[35vw] md:h-[126px] lg:h-[170px] xl:h-[238px]"
-          if i == 7
+          if i >= 7
             assign banner_class = "category-banner group relative block overflow-hidden h-[45vw] md:h-[200px] lg:h-[240px] xl:h-[283px] sm:col-span-2"
           endif
         -%}
@@ -347,7 +347,7 @@
               <div class="w-full h-full bg-gray-700 flex items-center justify-center">{{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}</div>
             {%- endif -%}
 
-            {% if i == 7 %}
+            {% if i >= 7 %}
               <span class="border-filter"></span>
               <span class="banner-label !pb-0 !pl-6 md:!pl-12">
                 <span class="block">
@@ -557,14 +557,16 @@
     { "type": "url", "id": "other_banner_7_link", "label": "リンク先" },
     { "type": "header", "content": "▼ バナー [4]" },
     { "type": "image_picker", "id": "other_banner_8_image", "label": "画像" },
-    { "type": "text", "id": "other_banner_8_text_ja", "label": "ラベル", "default": "楽器OEM･ODM" },
-    { "type": "text", "id": "other_banner_8_text_en", "label": "英語表記", "default": "Instrument OEM･ODM" },
+    { "type": "text", "id": "other_banner_8_text_ja", "label": "ラベル", "default": "コンサートグッズOEM･ODMについて" },
+    { "type": "text", "id": "other_banner_8_text_en", "label": "英語表記", "default": "Concert OEM･ODM" },
     { "type": "url", "id": "other_banner_8_link", "label": "リンク先" },
+    /*
     { "type": "header", "content": "▼ バナー [5]" },
     { "type": "image_picker", "id": "other_banner_9_image", "label": "画像" },
     { "type": "text", "id": "other_banner_9_text_ja", "label": "ラベル", "default": "グッズOEM･ODM" },
     { "type": "text", "id": "other_banner_9_text_en", "label": "英語表記", "default": "Goods OEM･ODM" },
     { "type": "url", "id": "other_banner_9_link", "label": "リンク先" }
+    */
   ],
   "blocks": [
     {

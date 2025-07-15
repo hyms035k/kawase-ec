@@ -4,7 +4,7 @@
 
 @layer components {
     .container {
-        @apply relative sm:max-w-[640px] md:max-w-[650px] lg:max-w-[870px] xl:max-w-[1070px] 2xl:max-w-[1200px];
+        @apply relative sm:max-w-[640px] md:max-w-[650px] lg:max-w-[870px] xl:max-w-[1070px] 2xl:max-w-[1200px]
     }
 
     .block-box {

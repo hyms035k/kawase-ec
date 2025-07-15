@@ -1,0 +1,168 @@
+{% comment %}
+  2025/07/15
+  会社概要ページ専用のセクションとして新規作成
+{% endcomment %}
+
+{% comment %} ヒーローセクション {% endcomment %}
+{%- liquid
+  assign hero_bg = "hero_company.jpg" | asset_url
+  if section.settings.hero_desktop != blank
+    assign hero_bg = section.settings.hero_desktop | image_url: width: 1920
+  endif
+
+  if section.settings.hero_mobile != blank
+    assign hero_bg_sp = section.settings.hero_mobile | image_url: width: 750
+  endif
+
+  assign title_english = section.settings.heading_english | default: "Company Information"
+  assign title_japanese = section.settings.title | default: "会社情報"
+-%}
+{%- style -%}
+  #hero-section-{{ section.id }} {
+    background-image: url('{{ hero_bg }}');
+  }
+  {% if hero_bg_sp != blank %}
+    @media screen and (max-width: 767px) {
+      #hero-section-{{ section.id }} {
+        background-image: url('{{ hero_bg_sp }}');
+      }
+    }
+  {% endif %}
+{%- endstyle -%}
+{{ title_english }}
+<section
+  id="hero-section-{{ section.id }}"
+  class="hero-section relative bg-cover bg-center -mx-2 md:-mx-[30px] pt-[45px] md:pt-[55px] xl:pt-[65px]"
+>
+  <div class="container py-20">
+    <div class="text-center text-[#ffe8c9]">
+      <p class="font-serif text-4xl lg:text-5xl xl:text-[70px] leading-tight lg:leading-none">{{ title_english }}</p>
+      <h2 class="outside-double-border flex items-center mx-auto md:w-36 lg:w-48 xl:w-64 lg:text-lg xl:text-[20px] font-medium leading-tight mt-8">{{ title_japanese }}</h2>
+    </div>
+  </div>
+</section>
+
+{% comment %} メインコンテンツ {% endcomment %}
+<section id="MainContent-body-{{ section.id }}" class="MainContent-body bg-[#F7F3EC]">
+  <div class="container block-box">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+      <div class="company-image">
+        <img src="{{ 'company_01.jpg' | asset_url }}" alt="カワセ楽器 店舗外観" class="w-full h-auto">
+      </div>
+      <div class="company-info text-[#333]">
+        <h3 class="font-serif text-3xl lg:text-4xl">company profile</h3>
+        <dl class="mt-6 text-sm lg:text-base">
+          <div class="flex border-t border-gray-300 py-4">
+            <dt class="w-1/4 font-bold">会社名</dt>
+            <dd class="w-3/4">株式会社カワセ楽器株式会社</dd>
+          </div>
+          <div class="flex border-t border-gray-300 py-4">
+            <dt class="w-1/4 font-bold">代表者</dt>
+            <dd class="w-3/4">川瀬 廣明</dd>
+          </div>
+          <div class="flex border-t border-gray-300 py-4">
+            <dt class="w-1/4 font-bold">設立</dt>
+            <dd class="w-3/4">1944年(昭和19年)11月18日</dd>
+          </div>
+          <div class="flex border-t border-gray-300 py-4">
+            <dt class="w-1/4 font-bold">所在地</dt>
+            <dd class="w-3/4">直営店<br>〒101-0052<br>東京都千代田区神田小川町2-4</dd>
+          </div>
+          <div class="flex border-t border-gray-300 py-4">
+            <dt class="w-1/4 font-bold">事業内容</dt>
+            <dd class="w-3/4">楽器の小売販売・楽器修理、調整・輸入楽器及び関連商品の販売・オリジナルブランド商品の開発、制作・インターネット上での通信販売及び情報サービス</dd>
+          </div>
+          <div class="flex border-t border-b border-gray-300 py-4">
+            <dt class="w-1/4 font-bold">取扱商品</dt>
+            <dd class="w-3/4">アコースティックギター、バンジョー、バイオリン、ドブロ、マンドリン、オートハープ、楽譜、教則ビデオ、音楽関連商品 他</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% comment %} MAP {% endcomment %}
+<section class="map-section py-12 bg-[#F7F3EC]">
+  <div class="container text-center">
+    <h3 class="font-serif text-3xl lg:text-4xl text-[#333]">MAP <span class="text-lg lg:text-xl ml-2">アクセス</span></h3>
+    <div class="mt-8">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.488210882108!2d139.7649835793457!3d35.68948682258454!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60188c58ba839999%3A0x338b7555a2a263ba!2z44CSMTAxLTAwNTIg5p2x5Lqs6YO95Y2D5Luj55Sw5Yy656We55Sw5bCP5bed55S677yS4oiS77yU!5e0!3m2!1sja!2sjp!4v1721024423393!5m2!1sja!2sjp" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <a href="https://maps.app.goo.gl/fWcE9sK6v5gH3Y3Z7" target="_blank" class="inline-block bg-[#333] text-white font-bold py-3 px-8 mt-8 rounded-full">GoogleMAPを見る</a>
+  </div>
+</section>
+
+{% comment %} Concert OEM・ODM {% endcomment %}
+<section class="oem-odm-section py-12">
+  <div class="container">
+    <a href="{{ section.settings.oem_banner_link }}" class="block relative">
+      <img src="{{ 'top__block2nd_category_10.jpg' | asset_url }}" alt="Concert OEM・ODM" class="w-full h-auto">
+      <div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white bg-black bg-opacity-30">
+        <p class="text-sm">コンサートグッズOEM・ODMについて</p>
+        <h3 class="font-serif text-3xl lg:text-4xl mt-2">Concert OEM・ODM</h3>
+      </div>
+    </a>
+  </div>
+</section>
+
+{% comment %} Contact {% endcomment %}
+<section class="contact-section py-12" style="background-image: url('{{ 'contact_bg.jpg' | asset_url }}'); background-size: cover; background-position: center;">
+    <div class="container text-center">
+        <h3 class="font-serif text-3xl lg:text-4xl text-white">Contact</h3>
+        <p class="text-white mt-4">ご注文に関するご質問は、お気軽にご相談ください。</p>
+        <a href="{{ routes.contact_url }}" class="inline-block bg-transparent border-2 border-white text-white font-bold py-3 px-8 mt-8 rounded-full hover:bg-white hover:text-[#333] transition-colors">お問い合わせフォーム</a>
+    </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "会社概要ページ",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "ヒーローセクション"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_desktop",
+      "label": "背景画像（PC）",
+      "info": "未設定の場合はデフォルトの画像（hero_company.jpg）が適用されます。"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_mobile",
+      "label": "背景画像（スマホ）"
+    },
+    {
+      "type": "text",
+      "id": "heading_english",
+      "label": "英語表記",
+      "default": "Company Information"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "日本語表記",
+      "default": "会社情報"
+    },
+    {
+      "type": "header",
+      "content": "Concert OEM・ODM バナー"
+    },
+    {
+      "type": "url",
+      "id": "oem_banner_link",
+      "label": "バナーのリンク先"
+    }
+  ],
+  "presets": [
+    {
+      "name": "会社概要ページ"
+    }
+  ]
+}
+{% endschema %}
